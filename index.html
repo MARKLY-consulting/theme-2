@@ -1,166 +1,147 @@
-import React, { Suspense, useRef } from 'react';
-import { Canvas, useFrame } from '@react-three/fiber';
-import { Stage, useGLTF, PerspectiveCamera, Environment, Float } from '@react-three/drei';
-import { motion, useScroll, useTransform } from 'framer-motion';
-
-// --- MODÈLE 3D ---
-function Car({ scrollYProgress }) {
-  const group = useRef();
-  // Modèle d'exemple (Porsche 911). Vous pouvez remplacer par votre propre fichier .glb
-  const { scene } = useGLTF('https://vazxmixjsiawhamofees.supabase.co/storage/v1/object/public/models/porsche-911-930-turbo/model.gltf');
-
-  useFrame(() => {
-    // La voiture tourne sur son axe Y en fonction du défilement
-    const rotation = scrollYProgress.get() * Math.PI * 2;
-    group.current.rotation.y = rotation;
-  });
-
-  return (
-    <Float speed={1.5} rotationIntensity={0.2} floatIntensity={0.5}>
-      <primitive ref={group} object={scene} scale={1.2} position={[0, -0.5, 0]} />
-    </Float>
-  );
-}
-
-// --- COMPOSANT PRINCIPAL ---
-export default function CarShowcase() {
-  const containerRef = useRef(null);
-  
-  // Gestion du scroll
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start start", "end end"]
-  });
-
-  // Transformations pour les textes
-  const heroOpacity = useTransform(scrollYProgress, [0, 0.2], [1, 0]);
-  const heroScale = useTransform(scrollYProgress, [0, 0.2], [1, 0.8]);
-  const detailsOpacity = useTransform(scrollYProgress, [0.3, 0.5, 0.7], [0, 1, 0]);
-
-  return (
-    <div ref={containerRef} style={styles.mainContainer}>
-      
-      {/* Styles injectés pour l'exemple en un seul fichier */}
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;700&display=swap');
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luxury Car Experience</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://unpkg.com/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400&display=swap" rel="stylesheet">
+    
+    <style>
         body { margin: 0; background-color: #050505; color: white; font-family: 'Inter', sans-serif; overflow-x: hidden; }
-      `}</style>
+        canvas { position: fixed; top: 0; left: 0; z-index: 1; pointer-events: none; }
 
-      {/* Scène 3D Fixe en arrière-plan */}
-      <div style={styles.canvasWrapper}>
-        <Canvas dpr={[1, 2]} shadows>
-          <PerspectiveCamera makeDefault position={[0, 0, 5]} fov={45} />
-          <Suspense fallback={null}>
-            <Stage environment="city" intensity={0.5} contactShadow={{ opacity: 0.4, blur: 2 }}>
-              <Car scrollYProgress={scrollYProgress} />
-            </Stage>
-          </Suspense>
-          <Environment preset="night" />
-        </Canvas>
-      </div>
+        section {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 0 10%;
+            position: relative;
+            z-index: 2;
+        }
 
-      {/* CONTENU TEXTUEL (Scrollable) */}
-      
-      {/* Section 1 : Hero */}
-      <section style={styles.section}>
-        <motion.div style={{ ...styles.content, opacity: heroOpacity, scale: heroScale }}>
-          <h1 style={styles.title}>EXCELLENCE <br/> <span style={styles.goldText}>MOTRICE</span></h1>
-          <p style={styles.description}>Redéfinir la performance à travers le design italien pur.</p>
-          <button style={styles.button}>EXPLORER LE MODÈLE</button>
-        </motion.div>
-      </section>
+        .content { max-width: 600px; opacity: 0; transform: translateY(50px); }
+        .hero-content { opacity: 1; transform: translateY(0); }
 
-      {/* Section 2 : Détails techniques */}
-      <section style={{ ...styles.section, justifyContent: 'flex-end' }}>
-        <motion.div style={{ ...styles.content, opacity: detailsOpacity }}>
-          <h2 style={styles.subTitle}>AÉRODYNAMISME</h2>
-          <p style={styles.description}>Un coefficient de traînée réduit pour une stabilité absolue à 300 km/h.</p>
-          <div style={styles.line}></div>
-        </motion.div>
-      </section>
+        h1 { font-family: 'Playfair Display', serif; font-size: clamp(3rem, 8vw, 5rem); margin: 0; line-height: 1.1; }
+        .gold { color: #d4af37; }
+        p { color: #aaa; font-size: 1.2rem; margin: 20px 0; max-width: 400px; }
 
-      {/* Section 3 : Footer / Action */}
-      <section style={styles.section}>
-        <motion.div style={styles.content}>
-          <h2 style={styles.subTitle}>VOTRE VOYAGE COMMENCE</h2>
-          <p style={styles.description}>Configurez votre exemplaire unique dès aujourd'hui.</p>
-          <button style={styles.buttonLight}>RESERVER UN ESSAI</button>
-        </motion.div>
-      </section>
+        .btn {
+            padding: 15px 35px;
+            background: #d4af37;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        
+        .right { justify-content: flex-end; text-align: right; }
+        .right .content { margin-left: auto; }
+    </style>
+</head>
+<body>
 
-    </div>
-  );
-}
+    <canvas id="car-canvas"></canvas>
 
-// --- STYLES (OBJET JS) ---
-const styles = {
-  mainContainer: {
-    position: 'relative',
-    backgroundColor: '#050505',
-  },
-  canvasWrapper: {
-    position: 'fixed',
-    top: 0,
-    left: 0,
-    width: '100vw',
-    height: '100vh',
-    zIndex: 1,
-    pointerEvents: 'none',
-  },
-  section: {
-    height: '100vh',
-    display: 'flex',
-    alignItems: 'center',
-    padding: '0 10%',
-    position: 'relative',
-    zIndex: 2,
-  },
-  content: {
-    maxWidth: '500px',
-  },
-  title: {
-    fontSize: '4.5rem',
-    fontWeight: '700',
-    fontFamily: "'Playfair Display', serif",
-    lineHeight: 1.1,
-    margin: 0,
-  },
-  subTitle: {
-    fontSize: '2.5rem',
-    color: '#d4af37',
-    fontFamily: "'Playfair Display', serif",
-  },
-  goldText: {
-    color: '#d4af37',
-  },
-  description: {
-    fontSize: '1.1rem',
-    lineHeight: '1.6',
-    color: '#aaaaaa',
-    margin: '20px 0',
-  },
-  button: {
-    backgroundColor: '#d4af37',
-    color: 'black',
-    border: 'none',
-    padding: '15px 35px',
-    fontWeight: 'bold',
-    letterSpacing: '1px',
-    cursor: 'pointer',
-    marginTop: '20px',
-  },
-  buttonLight: {
-    backgroundColor: 'transparent',
-    color: 'white',
-    border: '1px solid white',
-    padding: '15px 35px',
-    fontWeight: 'bold',
-    cursor: 'pointer',
-  },
-  line: {
-    width: '60px',
-    height: '2px',
-    backgroundColor: '#d4af37',
-    marginTop: '10px',
-  }
-};
+    <section>
+        <div class="content hero-content">
+            <h1>PERFORMANCE <br><span class="gold">ABSOLUE</span></h1>
+            <p>Découvrez l'ingénierie de pointe alliée au design intemporel.</p>
+            <button class="btn">CONFIGURER</button>
+        </div>
+    </section>
+
+    <section class="right">
+        <div class="content" id="section-2">
+            <h1 class="gold">AÉRODYNAMISME</h1>
+            <p>Chaque ligne est sculptée pour réduire la traînée et augmenter la force d'appui.</p>
+        </div>
+    </section>
+
+    <section>
+        <div class="content" id="section-3">
+            <h1>VITESSE <span class="gold">PURE</span></h1>
+            <p>0 à 100 km/h en seulement 2.7 secondes. Une puissance sans compromis.</p>
+            <button class="btn" style="background: transparent; border: 1px solid white; color: white;">ESSAYER</button>
+        </div>
+    </section>
+
+    <script>
+        // 1. SCÈNE THREE.JS
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('car-canvas'), antialias: true, alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(window.devicePixelRatio);
+
+        // Lumières
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+        scene.add(ambientLight);
+        const spotLight = new THREE.SpotLight(0xffffff, 1);
+        spotLight.position.set(5, 5, 5);
+        scene.add(spotLight);
+
+        // 2. CHARGEMENT DU MODÈLE (Porsche 911 d'exemple)
+        let car;
+        const loader = new THREE.GLTFLoader();
+        loader.load('https://vazxmixjsiawhamofees.supabase.co/storage/v1/object/public/models/porsche-911-930-turbo/model.gltf', (gltf) => {
+            car = gltf.scene;
+            car.scale.set(1.5, 1.5, 1.5);
+            car.rotation.y = Math.PI / 4;
+            scene.add(car);
+            animate();
+        });
+
+        camera.position.z = 5;
+
+        // 3. ANIMATIONS AU SCROLL (GSAP)
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Animation de la voiture (Rotation et Position)
+        ScrollTrigger.create({
+            trigger: "body",
+            start: "top top",
+            end: "bottom bottom",
+            scrub: 1,
+            onUpdate: (self) => {
+                if (car) {
+                    car.rotation.y = self.progress * Math.PI * 2; // Rotation complète
+                    car.position.x = Math.sin(self.progress * 5) * 2; // Léger mouvement latéral
+                }
+            }
+        });
+
+        // Apparition des textes
+        gsap.utils.toArray(".content").forEach(content => {
+            gsap.to(content, {
+                opacity: 1,
+                y: 0,
+                duration: 1,
+                scrollTrigger: {
+                    trigger: content,
+                    start: "top 80%",
+                    end: "top 20%",
+                    scrub: true
+                }
+            });
+        });
+
+        // 4. BOUCLE D'ANIMATION
+        function animate() {
+            requestAnimationFrame(animate);
+            renderer.render(scene, camera);
+        }
+
+        // Ajustement fenêtre
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+    </script>
+</body>
+</html>
