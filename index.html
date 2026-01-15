@@ -3,201 +3,174 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ImmoVision 3D | Architecture de Luxe</title>
+    <title>L'Atelier Architectural | Concept 3D & Design</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,900;1,900&family=Inter:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,600;1,300&family=Plus+Jakarta+Sans:wght@200;400;700&display=swap" rel="stylesheet">
 
     <style>
         :root {
-            --bg: #0a0a0a;
-            --accent: #c5a47e; /* Couleur Or/Sable luxe */
-            --text: #ffffff;
+            --bg: #f8f7f4; /* Blanc cassé / Papier */
+            --accent: #2c3e50; /* Bleu ardoise profond */
+            --gold: #b5a48d; 
+            --text: #1a1a1a;
+            --white: #ffffff;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             background-color: var(--bg);
             color: var(--text);
-            font-family: 'Inter', sans-serif;
+            font-family: 'Plus Jakarta Sans', sans-serif;
             overflow-x: hidden;
-        }
-
-        /* Défilement Fluide */
-        html.lenis { height: auto; }
-        .lenis-smooth { scroll-behavior: auto !important; }
-
-        /* Barre de navigation */
-        nav {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            padding: 30px 50px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            z-index: 100;
-            mix-blend-mode: difference;
-        }
-
-        .logo {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.5rem;
-            font-weight: 900;
-            letter-spacing: 2px;
-        }
-
-        /* Section Hero avec texte derrière */
-        .hero {
-            height: 150vh; /* Plus grand pour l'effet de scroll */
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-        }
-
-        .bg-title {
-            position: absolute;
-            font-family: 'Playfair Display', serif;
-            font-size: 18vw;
-            opacity: 0.1;
-            white-space: nowrap;
-            z-index: 1;
-            pointer-events: none;
-        }
-
-        .image-wrapper {
-            width: 60%;
-            height: 70vh;
-            position: relative;
-            z-index: 2;
-            overflow: hidden;
-            border-radius: 4px;
-            box-shadow: 0 50px 100px rgba(0,0,0,0.5);
-        }
-
-        .image-wrapper img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transform: scale(1.3);
-        }
-
-        .hero-description {
-            position: absolute;
-            bottom: 15%;
-            z-index: 3;
-            text-align: center;
-            max-width: 600px;
-        }
-
-        .hero-description h1 {
-            font-size: 3rem;
-            margin-bottom: 20px;
-        }
-
-        /* Section Services / 3D */
-        .services {
-            padding: 150px 10vw;
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 30px;
-        }
-
-        .card {
-            background: #151515;
-            padding: 50px 30px;
-            border-radius: 0px;
-            border-bottom: 2px solid transparent;
-            transition: 0.5s ease;
-            opacity: 0;
-            transform: translateY(100px);
-        }
-
-        .card:hover {
-            border-bottom: 2px solid var(--accent);
-            background: #1a1a1a;
-        }
-
-        .card h3 {
-            color: var(--accent);
-            margin-bottom: 15px;
-            font-size: 1.5rem;
-        }
-
-        .card p {
             line-height: 1.6;
-            color: #888;
         }
 
-        /* Pied de page */
+        /* Curseur Intelligent */
+        .cursor {
+            width: 12px; height: 12px; background: var(--accent);
+            border-radius: 50%; position: fixed; pointer-events: none;
+            z-index: 999; transition: transform 0.2s;
+        }
+
+        /* Nav */
+        nav {
+            position: fixed; top: 0; width: 100%; padding: 40px 60px;
+            display: flex; justify-content: space-between; z-index: 100;
+        }
+        .logo { font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; font-weight: 600; letter-spacing: -1px; }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh; display: flex; align-items: center; justify-content: center;
+            position: relative; padding: 0 10%;
+        }
+
+        .hero-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(3rem, 8vw, 10rem);
+            line-height: 0.9; z-index: 2; text-align: center;
+        }
+
+        .hero-image {
+            position: absolute; width: 400px; height: 550px;
+            right: 15%; top: 20%; z-index: 1;
+            overflow: hidden; border-radius: 200px 200px 0 0;
+            filter: sepia(0.2) contrast(1.1);
+            box-shadow: 20px 20px 60px rgba(0,0,0,0.05);
+        }
+
+        /* Section 02 : Floating Gallery */
+        .gallery {
+            padding: 100px 5%; display: flex; gap: 40px; align-items: center;
+        }
+        .gal-item { width: 30%; height: 400px; overflow: hidden; background: #eee; }
+        .gal-item img { width: 100%; height: 100%; object-fit: cover; transition: 0.8s ease; }
+
+        /* Section 03 : The Process (Horizontal) */
+        .process {
+            padding: 150px 0; background: var(--white);
+            margin: 100px 0;
+        }
+        .section-tag { text-align: center; color: var(--gold); text-transform: uppercase; letter-spacing: 4px; font-size: 0.8rem; margin-bottom: 20px; }
+        
+        .steps-container {
+            display: flex; justify-content: space-around; padding: 0 10%;
+        }
+        .step { flex: 1; padding: 40px; border-left: 1px solid #eee; }
+        .step-num { font-family: 'Cormorant Garamond', serif; font-size: 3rem; color: #ddd; }
+
+        /* Section 04 : Quote */
+        .quote-section {
+            height: 60vh; display: flex; align-items: center; justify-content: center;
+            text-align: center; padding: 0 20%;
+        }
+        .quote-text { font-family: 'Cormorant Garamond', serif; font-size: 2.5rem; font-style: italic; }
+
+        /* Section 05 : 3D Visualization Room */
+        .room-3d {
+            height: 100vh; background: #222; color: white;
+            display: flex; align-items: center; justify-content: center; position: relative;
+        }
+        .room-overlay { position: absolute; z-index: 2; text-align: center; }
+        .room-bg { width: 100%; height: 100%; object-fit: cover; opacity: 0.5; }
+
+        /* Footer */
         footer {
-            height: 40vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-top: 1px solid #222;
+            padding: 100px 10%; background: var(--white);
+            display: flex; justify-content: space-between; align-items: flex-end;
         }
+        .contact-big { font-size: 5vw; font-family: 'Cormorant Garamond', serif; text-decoration: none; color: var(--text); }
 
-        .cta-btn {
-            padding: 20px 40px;
-            border: 1px solid var(--accent);
-            color: var(--accent);
-            text-decoration: none;
-            text-transform: uppercase;
-            letter-spacing: 5px;
-            transition: 0.3s;
-        }
-
-        .cta-btn:hover {
-            background: var(--accent);
-            color: black;
-        }
+        /* Animations */
+        .reveal { opacity: 0; transform: translateY(50px); }
     </style>
 </head>
 <body>
 
+    <div class="cursor"></div>
+
     <nav>
-        <div class="logo">IMMO•3D</div>
-        <div>PROJETS — CONTACT</div>
+        <div class="logo">L'Atelier.</div>
+        <div style="font-size: 0.8rem; letter-spacing: 2px;">EST. 2026</div>
     </nav>
 
     <main>
         <section class="hero">
-            <div class="bg-title" id="parallax-text">MANSION 2026</div>
-            
-            <div class="image-wrapper">
-                <img src="https://images.unsplash.com/photo-1613490493576-7fde63acd811?q=80&w=2071&auto=format&fit=crop" id="main-img" alt="Luxury Villa">
-            </div>
-
-            <div class="hero-description">
-                <h1>L'art de vivre demain.</h1>
-                <p>Conception de plans 3D et décoration d'intérieur pour propriétés d'exception.</p>
+            <h1 class="hero-title">Rêver l'espace,<br><i>Bâtir le réel.</i></h1>
+            <div class="hero-image">
+                <img src="https://images.unsplash.com/photo-1600607687940-47a04b62d35e?auto=format&fit=crop&w=800" style="width:100%; height:100%; object-fit:cover;" id="hero-img">
             </div>
         </section>
 
-        <section class="services">
-            <div class="card">
-                <h3>01. Plans 3D</h3>
-                <p>Immersion totale dans votre futur chez-vous grâce à nos rendus photoréalistes de haute précision.</p>
+        <div class="section-tag">Projets Récents</div>
+        <section class="gallery">
+            <div class="gal-item reveal"><img src="https://images.unsplash.com/photo-1600566753190-17f0bb2a6c3e?auto=format&fit=crop&w=600"></div>
+            <div class="gal-item reveal" style="margin-top: 100px;"><img src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=600"></div>
+            <div class="gal-item reveal"><img src="https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=600"></div>
+        </section>
+
+        <section class="process">
+            <div class="section-tag">Notre Approche</div>
+            <div class="steps-container">
+                <div class="step reveal">
+                    <div class="step-num">01</div>
+                    <h3>Concept 3D</h3>
+                    <p>Modélisation volumétrique de votre terrain et structure initiale.</p>
+                </div>
+                <div class="step reveal">
+                    <div class="step-num">02</div>
+                    <h3>Curating</h3>
+                    <p>Sélection de matériaux : pierre de travertin, bois brûlé, verre pur.</p>
+                </div>
+                <div class="step reveal">
+                    <div class="step-num">03</div>
+                    <h3>Immersion</h3>
+                    <p>Rendu final 8K et visite virtuelle avant le premier coup de pelle.</p>
+                </div>
             </div>
-            <div class="card">
-                <h3>02. Décoration</h3>
-                <p>Sélection de mobilier iconique et gestion des matériaux nobles pour un intérieur unique.</p>
-            </div>
-            <div class="card">
-                <h3>03. Suivi</h3>
-                <p>De l'esquisse numérique à la pose de la dernière pierre, nous orchestrons votre projet.</p>
+        </section>
+
+        <section class="quote-section">
+            <p class="quote-text reveal">"L'architecture est une musique pétrifiée."</p>
+        </section>
+
+        <section class="room-3d">
+            <img src="https://images.unsplash.com/photo-1600607687644-c7171b42498f?auto=format&fit=crop&w=1600" class="room-bg">
+            <div class="room-overlay">
+                <div class="section-tag" style="color: white;">Expérience</div>
+                <h2 style="font-size: 3rem; font-family: 'Cormorant Garamond', serif;">Vision Panoramique 360°</h2>
+                <br>
+                <a href="#" style="color: white; text-transform: uppercase; font-size: 0.7rem; letter-spacing: 3px;">Explorer le plan</a>
             </div>
         </section>
 
         <footer>
-            <a href="#" class="cta-btn">Lancer votre projet</a>
+            <div>
+                <p>© 2026 L'Atelier Architecture</p>
+                <p>Paris — Marrakech — Dubai</p>
+            </div>
+            <a href="mailto:hello@atelier.com" class="contact-big">Parlons de votre projet.</a>
         </footer>
     </main>
 
@@ -206,48 +179,47 @@
     <script src="https://unpkg.com/@studio-freight/lenis@1.0.33/dist/lenis.min.js"></script>
 
     <script>
-        // 1. Initialisation du défilement fluide (Lenis)
+        // Smooth Scroll
         const lenis = new Lenis();
-        lenis.on('scroll', ScrollTrigger.update);
-        function raf(time) {
-            lenis.raf(time);
-            requestAnimationFrame(raf);
-        }
+        function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
         requestAnimationFrame(raf);
 
-        // 2. Animation Parallaxe du Titre en arrière-plan
-        gsap.to("#parallax-text", {
-            x: -500, // Le texte glisse vers la gauche au scroll
-            scrollTrigger: {
-                trigger: ".hero",
-                start: "top top",
-                end: "bottom top",
-                scrub: 1.5
-            }
+        // Curseur
+        const cursor = document.querySelector('.cursor');
+        window.addEventListener('mousemove', e => {
+            gsap.to(cursor, { x: e.clientX, y: e.clientY, duration: 0.4 });
         });
 
-        // 3. Zoom de l'image principale
-        gsap.to("#main-img", {
-            scale: 1, // L'image reprend sa taille normale
-            scrollTrigger: {
-                trigger: ".hero",
-                start: "top top",
-                end: "bottom top",
-                scrub: true
-            }
+        // Animations
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Hero Parallax
+        gsap.to("#hero-img", {
+            yPercent: 20,
+            scrollTrigger: { trigger: ".hero", scrub: true }
         });
 
-        // 4. Apparition des cartes de services une par une (Stagger)
-        gsap.to(".card", {
-            opacity: 1,
-            y: 0,
-            duration: 1.2,
-            stagger: 0.3,
-            ease: "power4.out",
-            scrollTrigger: {
-                trigger: ".services",
-                start: "top 75%", // Déclenche quand la section arrive à 75% de l'écran
-            }
+        // Reveal sections
+        const reveals = document.querySelectorAll('.reveal');
+        reveals.forEach(el => {
+            gsap.to(el, {
+                opacity: 1, y: 0, duration: 1.5, ease: "power4.out",
+                scrollTrigger: {
+                    trigger: el,
+                    start: "top 85%",
+                }
+            });
+        });
+
+        // Gallery Image Zoom on Scroll
+        document.querySelectorAll('.gal-item img').forEach(img => {
+            gsap.to(img, {
+                scale: 1.2,
+                scrollTrigger: {
+                    trigger: img,
+                    scrub: true
+                }
+            });
         });
     </script>
 </body>
