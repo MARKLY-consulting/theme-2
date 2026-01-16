@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AURORA | Minimalist Audio</title>
+    <title>AURORA | Immobilier d'Exception</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
@@ -11,132 +11,141 @@
     <script src="https://unpkg.com/@studio-freight/lenis@1.0.33/dist/lenis.min.js"></script>
 
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;500;800&display=swap');
         
-        :root { --bg: #ffffff; --text: #000000; --accent: #666666; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); margin: 0; overflow-x: hidden; }
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background: #ffffff; 
+            color: #000000; 
+            overflow-x: hidden; 
+        }
 
-        /* Animation de texte comme dans la vidéo */
-        .reveal-type { opacity: 0; transform: translateY(30px); }
-        
+        .hero-title { font-size: 10vw; line-height: 0.8; font-weight: 800; letter-spacing: -0.04em; }
+
         .bento-grid {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            grid-template-rows: repeat(2, 350px);
-            gap: 20px;
+            grid-template-columns: repeat(6, 1fr);
+            grid-template-rows: repeat(2, 300px);
+            gap: 15px;
         }
 
-        .bento-item {
-            background: #f5f5f7;
-            border-radius: 30px;
+        .property-card {
+            border-radius: 32px;
             overflow: hidden;
             position: relative;
-            transition: transform 0.5s cubic-bezier(0.2, 1, 0.3, 1);
+            background: #f9f9f9;
+            transition: all 0.5s cubic-bezier(0.2, 1, 0.3, 1);
         }
 
-        .bento-item:hover { transform: scale(0.98); }
+        .property-card:hover { transform: scale(0.98); }
+        .property-card img { width: 100%; height: 100%; object-fit: cover; transition: 0.8s; }
+        .property-card:hover img { transform: scale(1.1); }
 
-        .img-cover {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.8s ease;
+        .tag {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 6px 15px;
+            border-radius: 100px;
+            font-size: 10px;
+            font-weight: 800;
+            text-transform: uppercase;
         }
 
-        .bento-item:hover .img-cover { transform: scale(1.1); }
-
-        /* Section sticky pour le focus produit */
-        .sticky-wrapper { height: 300vh; position: relative; }
-        .sticky-content { height: 100vh; sticky: top 0; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-
-        .big-title { font-size: 15vw; font-weight: 900; letter-spacing: -0.05em; line-height: 0.8; }
+        .search-bar {
+            backdrop-filter: blur(20px);
+            background: rgba(255,255,255,0.8);
+            border: 1px solid rgba(0,0,0,0.05);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.05);
+        }
     </style>
 </head>
 <body>
 
-    <nav class="fixed top-0 w-full z-[100] flex justify-between p-8 mix-blend-difference text-white">
-        <div class="font-bold text-xl tracking-tighter uppercase">Aurora.</div>
-        <div class="hidden md:flex space-x-12 text-[10px] font-bold uppercase tracking-widest">
-            <a href="#collection">Collection</a>
-            <a href="#specs">Spécifications</a>
-            <a href="#">Shop</a>
+    <nav class="fixed top-0 w-full z-50 flex justify-between p-8 items-center">
+        <div class="font-bold text-2xl tracking-tighter uppercase">Aurora.</div>
+        <div class="hidden md:flex space-x-10 text-[10px] font-bold uppercase tracking-widest">
+            <a href="#">Vendre</a>
+            <a href="#">Louer</a>
+            <a href="#">Contact</a>
         </div>
+        <button class="bg-black text-white px-6 py-2 rounded-full text-[10px] font-bold uppercase">Espace Client</button>
     </nav>
 
-    <section class="h-screen flex flex-col justify-center items-center text-center bg-white px-6">
-        <h1 class="big-title reveal-type" id="hero-title">AURORA.</h1>
-        <p class="mt-8 text-xl text-gray-400 reveal-type max-w-lg">Le silence n'a jamais été aussi pur. Découvrez le nouveau Sonic Max.</p>
-        <div class="mt-12 reveal-type">
-            <img src="https://images.unsplash.com/photo-1546435770-a3e426bf472b?auto=format&fit=crop&q=80&w=1200" 
-                 alt="Main Headphone" class="w-[600px] h-auto object-contain">
+    <section class="min-h-screen flex flex-col justify-center px-8 md:px-20 pt-20">
+        <h1 class="hero-title reveal">VIVEZ <br> <span class="text-gray-300">L'ARCHITECTURE.</span></h1>
+        
+        <div class="search-bar mt-12 p-4 rounded-full max-w-4xl flex flex-wrap md:flex-nowrap items-center gap-4 reveal">
+            <div class="flex-1 px-6">
+                <p class="text-[10px] font-bold text-gray-400 uppercase">Localisation</p>
+                <input type="text" placeholder="Paris, France" class="bg-transparent w-full outline-none font-medium">
+            </div>
+            <div class="w-px h-10 bg-gray-200 hidden md:block"></div>
+            <div class="flex-1 px-6">
+                <p class="text-[10px] font-bold text-gray-400 uppercase">Type</p>
+                <select class="bg-transparent w-full outline-none font-medium">
+                    <option>Appartement</option>
+                    <option>Villa</option>
+                    <option>Penthouse</option>
+                </select>
+            </div>
+            <button class="bg-black text-white px-10 py-4 rounded-full font-bold text-sm">Rechercher</button>
         </div>
     </section>
 
-    <div class="sticky-wrapper" id="specs">
-        <div class="sticky top-0 h-screen flex items-center overflow-hidden bg-black text-white">
-            <div class="absolute inset-0 flex items-center justify-center">
-                <h2 class="text-[25vw] font-black opacity-10 whitespace-nowrap" id="scroll-text">ACOUSTIQUE</h2>
+    <section class="relative h-[200vh]" id="featured">
+        <div class="sticky top-0 h-screen w-full overflow-hidden flex items-center">
+            <div class="absolute inset-0 z-0">
+                <img src="https://images.unsplash.com/photo-1600607687940-c52af0369996?auto=format&fit=crop&q=80&w=2000" 
+                     class="w-full h-full object-cover scale-110" id="zoom-img">
             </div>
-            <div class="container mx-auto px-10 grid grid-cols-2 z-10">
-                <div class="flex flex-col justify-center">
-                    <span class="text-orange-500 font-bold uppercase tracking-widest text-xs mb-4">Technologie</span>
-                    <h3 class="text-6xl font-bold leading-tight">Spatial Audio.<br>Real-time.</h3>
-                </div>
-                <div class="flex justify-end">
-                    <img src="https://images.unsplash.com/photo-1583394838336-acd977736f90?auto=format&fit=crop&q=80&w=600" 
-                         class="h-[500px] rounded-3xl shadow-2xl" id="focus-img">
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <section class="py-32 px-6 md:px-12 bg-white" id="collection">
-        <div class="max-w-7xl mx-auto">
-            <div class="mb-16">
-                <h2 class="text-4xl font-bold tracking-tight">Complétez votre set.</h2>
-            </div>
-
-            <div class="bento-grid">
-                <div class="col-span-2 row-span-2 bento-item group">
-                    <div class="absolute top-10 left-10 z-10 text-black">
-                        <h3 class="text-3xl font-bold">Sonic Max</h3>
-                        <p class="text-gray-500">Noir Sidéral</p>
-                    </div>
-                    <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&q=80&w=800" class="img-cover">
-                    <div class="absolute bottom-10 right-10 bg-black text-white px-6 py-2 rounded-full font-bold">399€</div>
-                </div>
-
-                <div class="col-span-2 bento-item group">
-                    <div class="absolute top-8 left-8 z-10">
-                        <h3 class="text-2xl font-bold text-white">Aurora Buds</h3>
-                    </div>
-                    <img src="https://images.unsplash.com/photo-1590658268037-6bf12165a8df?auto=format&fit=crop&q=80&w=800" class="img-cover">
-                </div>
-
-                <div class="bento-item">
-                    <div class="p-8">
-                        <h4 class="font-bold">Smart Case</h4>
-                        <p class="text-sm text-gray-400">Cuir de pomme</p>
-                    </div>
-                    <img src="https://images.unsplash.com/photo-1528148313279-cc7080860961?auto=format&fit=crop&q=80&w=400" class="img-cover h-40 mt-auto">
-                </div>
-
-                <div class="bento-item bg-black flex items-center justify-center p-8">
-                    <div class="text-center">
-                        <h3 class="text-white text-xl font-bold mb-4">Prêt pour le futur ?</h3>
-                        <button class="bg-white text-black px-8 py-3 rounded-full font-bold text-sm uppercase tracking-tighter">S'abonner</button>
-                    </div>
-                </div>
+            <div class="relative z-10 px-20 text-white">
+                <span class="font-bold uppercase tracking-widest text-xs">A la une</span>
+                <h2 class="text-7xl font-bold mt-4">Résidence <br> Horizon.</h2>
+                <p class="mt-6 max-w-md opacity-80">Un penthouse unique surplombant la ville, alliant béton brut et verre fumé.</p>
             </div>
         </div>
     </section>
 
-    <footer class="py-20 border-t border-gray-100 text-center">
-        <div class="text-sm font-bold uppercase tracking-[0.5em] text-gray-300">Aurora © 2026</div>
+    <section class="py-32 px-8 md:px-20">
+        <div class="flex justify-between items-end mb-16">
+            <h2 class="text-5xl font-bold tracking-tight">Découvrez <br> nos pépites.</h2>
+            <div class="flex space-x-2">
+                <button class="px-6 py-2 border border-black rounded-full text-xs font-bold uppercase">Vente</button>
+                <button class="px-6 py-2 bg-gray-100 rounded-full text-xs font-bold uppercase">Location</button>
+            </div>
+        </div>
+
+        <div class="bento-grid">
+            <div class="col-span-1 md:col-span-4 row-span-2 property-card reveal-card">
+                <span class="tag">Vente • 2 450 000 €</span>
+                <img src="https://images.unsplash.com/photo-1600566752355-35792bedcfea?auto=format&fit=crop&q=80&w=1200">
+                <div class="absolute bottom-10 left-10 text-white">
+                    <h3 class="text-3xl font-bold">Le Loft industriel</h3>
+                    <p class="text-sm opacity-80">Paris 10ème • 180 m²</p>
+                </div>
+            </div>
+
+            <div class="col-span-1 md:col-span-2 property-card reveal-card">
+                <span class="tag">Location • 3 200 € / mois</span>
+                <img src="https://images.unsplash.com/photo-1493809842364-78817add7ffb?auto=format&fit=crop&q=80&w=800">
+            </div>
+
+            <div class="col-span-1 md:col-span-2 property-card reveal-card">
+                <span class="tag">Vente • 890 000 €</span>
+                <img src="https://images.unsplash.com/photo-1600121848594-d8644e57abab?auto=format&fit=crop&q=80&w=800">
+            </div>
+        </div>
+    </section>
+
+    <footer class="p-20 bg-[#0a0a0a] text-white text-center">
+        <h2 class="text-4xl font-bold mb-8 italic">Prêt pour votre prochain chapitre ?</h2>
+        <p class="text-gray-500 uppercase tracking-widest text-[10px] font-bold">Aurora Real Estate Group © 2026</p>
     </footer>
 
     <script>
-        // 1. Initialisation Smooth Scroll
+        // Smooth Scroll
         const lenis = new Lenis();
         function raf(time) {
             lenis.raf(time);
@@ -144,40 +153,39 @@
         }
         requestAnimationFrame(raf);
 
-        // 2. GSAP Animations
+        // GSAP
         gsap.registerPlugin(ScrollTrigger);
 
-        // Intro Hero
-        gsap.to(".reveal-type", {
-            opacity: 1,
-            y: 0,
-            duration: 1.2,
+        // Intro
+        gsap.from(".reveal", {
+            opacity: 0,
+            y: 50,
             stagger: 0.2,
+            duration: 1.2,
             ease: "expo.out"
         });
 
-        // Animation de la section Sticky (Focus Produit)
-        const scrollTl = gsap.timeline({
+        // Effet de zoom sur l'image à la une au scroll
+        gsap.to("#zoom-img", {
             scrollTrigger: {
-                trigger: ".sticky-wrapper",
-                start: "top top",
-                end: "bottom bottom",
-                scrub: 1
-            }
+                trigger: "#featured",
+                start: "top bottom",
+                end: "bottom top",
+                scrub: true
+            },
+            scale: 1,
+            y: "10%"
         });
 
-        scrollTl.to("#scroll-text", { x: "-50%" }) // Le texte géant défile horizontalement
-                .from("#focus-img", { scale: 0.8, opacity: 0 }, 0); // L'image apparaît
-
-        // Animation Bento Grid
-        gsap.from(".bento-item", {
+        // Apparition des cartes Bento
+        gsap.from(".reveal-card", {
             scrollTrigger: {
                 trigger: ".bento-grid",
                 start: "top 80%",
             },
-            y: 100,
+            y: 60,
             opacity: 0,
-            stagger: 0.1,
+            stagger: 0.2,
             duration: 1,
             ease: "power4.out"
         });
