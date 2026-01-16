@@ -3,1697 +3,261 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AutoÉlégance - Excellence Automobile</title>
+    <title>NEO-ÉLÉGANCE | Future of Motion</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;600;700;800;900&family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    
     <style>
         :root {
-            --primary: #0a0a0a;
-            --secondary: #ffffff;
+            --primary: #050505;
             --accent: #ff2e00;
-            --accent-light: #ff6b3d;
-            --dark: #ffffff;
-            --gray: #888888;
-            --gray-dark: #222222;
+            --gold: #d4af37;
+            --glass: rgba(255, 255, 255, 0.03);
         }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        html, body {
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            background-color: var(--primary); 
+            color: white; 
+            font-family: 'Space Grotesk', sans-serif; 
             overflow-x: hidden;
+            cursor: none;
         }
-        
-        body {
-            font-family: 'Archivo', sans-serif;
-            color: var(--dark);
-            line-height: 1.6;
-            background-color: var(--primary);
-            cursor: default;
-        }
-        
-        /* Effet de particules */
-        #particles-js {
+
+        /* Custom Cursor Ultra-Moderne */
+        .cursor-follower {
             position: fixed;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-        }
-        
-        /* Curseur personnalisé */
-        .cursor {
-            width: 20px;
-            height: 20px;
-            border: 2px solid var(--accent);
+            width: 40px;
+            height: 40px;
+            border: 1px solid var(--accent);
             border-radius: 50%;
-            position: fixed;
             pointer-events: none;
-            z-index: 9999;
+            z-index: 10000;
+            transition: transform 0.15s ease-out;
             mix-blend-mode: difference;
-            transition: transform 0.2s, width 0.2s, height 0.2s;
         }
-        
-        .cursor.hover {
-            transform: scale(2);
-            background-color: rgba(255, 46, 0, 0.2);
+
+        /* --- PRELOADER --- */
+        .loader {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #000; z-index: 10001; display: flex; justify-content: center; align-items: center;
         }
-        
-        h1, h2, h3, h4 {
-            font-family: 'Montserrat', sans-serif;
-            font-weight: 800;
-        }
-        
-        .italic-font {
-            font-style: italic;
-            font-weight: 900;
-            letter-spacing: -1px;
-        }
-        
-        .container {
-            width: 100%;
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 40px;
-        }
-        
-        /* Header - Animation de dévoilement */
-        header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            padding: 30px 0;
-            z-index: 1000;
-            background: linear-gradient(to bottom, rgba(10,10,10,0.95), rgba(10,10,10,0));
-            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-            transform: translateY(-100%);
-        }
-        
-        header.visible {
-            transform: translateY(0);
-        }
-        
-        header.scrolled {
-            background: rgba(10, 10, 10, 0.98);
-            backdrop-filter: blur(20px);
-            padding: 20px 0;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-        }
-        
-        .header-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .logo {
-            font-size: 28px;
-            font-weight: 900;
-            color: var(--secondary);
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            letter-spacing: -0.5px;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .logo span {
-            color: var(--accent);
-            margin-left: 4px;
-        }
-        
-        .logo::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 46, 0, 0.2), transparent);
-            transition: left 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        
-        .logo:hover::before {
-            left: 100%;
-        }
-        
-        nav ul {
-            display: flex;
-            list-style: none;
-            gap: 40px;
-        }
-        
-        nav ul li {
-            overflow: hidden;
-        }
-        
-        nav ul li a {
-            color: var(--secondary);
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 14px;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            position: relative;
-            padding: 8px 0;
-            display: block;
-            transform: translateY(100%);
-            opacity: 0;
-        }
-        
-        /* Hero Section - Effet cinématique */
+        .loader-text { font-family: 'Syncopate'; font-size: 2vw; letter-spacing: 10px; overflow: hidden; }
+
+        /* --- HERO SECTION CINÉMATIQUE --- */
         .hero {
+            height: 140vh; /* Extra height for parallax */
+            display: flex; justify-content: center; align-items: center;
+            position: relative; overflow: hidden;
+        }
+
+        .hero-video-bg {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            object-fit: cover; opacity: 0.4; filter: grayscale(100%) contrast(120%);
+        }
+
+        .big-title {
+            font-family: 'Syncopate', sans-serif;
+            font-size: 12vw;
+            line-height: 0.8;
+            text-align: center;
+            z-index: 10;
+            pointer-events: none;
+            mix-blend-mode: overlay;
+            -webkit-text-stroke: 1px rgba(255,255,255,0.2);
+        }
+
+        .hero-image-center {
+            position: absolute; width: 60%; z-index: 5;
+            filter: drop-shadow(0 20px 50px rgba(255, 46, 0, 0.3));
+        }
+
+        /* --- HORIZONTAL SCROLL SECTION (MODÈLES) --- */
+        .horizontal-wrapper { overflow: hidden; }
+        .horizontal-content {
+            display: flex;
+            width: 300vw; /* 3 modèles */
             height: 100vh;
-            display: flex;
-            align-items: center;
-            position: relative;
-            overflow: hidden;
         }
-        
-        .hero-bg {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
-            z-index: 1;
+
+        .model-section {
+            width: 100vw; height: 100vh;
+            display: flex; align-items: center; justify-content: space-around;
+            padding: 0 5%; flex-shrink: 0;
+            border-right: 1px solid var(--glass);
         }
-        
-        /* Lignes de vitesse animées */
-        .speed-lines {
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 50%;
-            height: 100%;
-            z-index: 1;
-            overflow: hidden;
+
+        .model-info h2 { font-family: 'Syncopate'; font-size: 4vw; margin-bottom: 20px; color: var(--accent); }
+        .model-img-box { width: 50%; position: relative; }
+        .model-img-box img { width: 100%; transform: rotate(-10deg); transition: 0.5s; }
+        .model-section:hover .model-img-box img { transform: rotate(0deg) scale(1.1); }
+
+        /* --- EFFECT: TEXT MASKING --- */
+        .reveal-section {
+            height: 100vh; display: flex; justify-content: center; align-items: center;
+            background: #fff; color: #000;
         }
-        
-        .speed-line {
-            position: absolute;
-            right: 0;
-            width: 2px;
-            height: 100px;
-            background: linear-gradient(to bottom, transparent, var(--accent), transparent);
-            animation: speedLine 2s linear infinite;
-            opacity: 0.3;
-        }
-        
-        .speed-line:nth-child(1) { 
-            right: 10%; 
-            animation-delay: 0s; 
-            height: 80px;
-        }
-        .speed-line:nth-child(2) { 
-            right: 20%; 
-            animation-delay: 0.4s; 
-            height: 120px;
-        }
-        .speed-line:nth-child(3) { 
-            right: 30%; 
-            animation-delay: 0.2s; 
-            height: 100px;
-        }
-        .speed-line:nth-child(4) { 
-            right: 40%; 
-            animation-delay: 0.6s; 
-            height: 90px;
-        }
-        .speed-line:nth-child(5) { 
-            right: 50%; 
-            animation-delay: 0.1s; 
-            height: 110px;
-        }
-        .speed-line:nth-child(6) { 
-            right: 60%; 
-            animation-delay: 0.5s; 
-            height: 85px;
-        }
-        .speed-line:nth-child(7) { 
-            right: 70%; 
-            animation-delay: 0.3s; 
-            height: 95px;
-        }
-        .speed-line:nth-child(8) { 
-            right: 80%; 
-            animation-delay: 0.7s; 
-            height: 105px;
-        }
-        
-        @keyframes speedLine {
-            0% {
-                transform: translateY(-100px);
-                opacity: 0;
-            }
-            10% {
-                opacity: 0.5;
-            }
-            90% {
-                opacity: 0.5;
-            }
-            100% {
-                transform: translateY(100vh);
-                opacity: 0;
-            }
-        }
-        
-        .hero-content {
-            position: relative;
-            z-index: 2;
-            width: 50%;
-            padding-top: 100px;
-        }
-        
-        .hero-title {
-            font-size: 5.5vw;
-            line-height: 0.85;
-            margin-bottom: 40px;
-            color: var(--secondary);
-            text-transform: uppercase;
-            letter-spacing: -2px;
-            overflow: hidden;
-        }
-        
-        .hero-title span {
-            display: inline-block;
-            transform: translateY(100%);
-            opacity: 0;
-        }
-        
-        .hero-title .accent {
-            color: var(--accent);
-            font-style: italic;
-        }
-        
-        .hero-subtitle {
-            font-size: 1.2rem;
-            color: var(--gray);
-            max-width: 500px;
-            margin-bottom: 60px;
-            font-weight: 300;
-            letter-spacing: 1px;
-            line-height: 1.8;
-            opacity: 0;
-            transform: translateY(30px);
-        }
-        
-        .hero-cta {
-            display: flex;
-            gap: 20px;
-            opacity: 0;
-            transform: translateY(30px);
-        }
-        
-        /* Bouton avec effet de liquide */
-        .btn {
-            padding: 18px 36px;
-            background: var(--accent);
-            color: var(--secondary);
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 14px;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            border: none;
-            border-radius: 0;
-            position: relative;
-            overflow: hidden;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            cursor: pointer;
-            display: inline-block;
-        }
-        
-        .btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transition: left 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        
-        .btn:hover::before {
-            left: 100%;
-        }
-        
-        .btn:hover {
-            background: var(--accent-light);
-            transform: translateY(-3px) scale(1.05);
-            box-shadow: 0 20px 40px rgba(255, 46, 0, 0.4);
-        }
-        
-        .btn-outline {
-            background: transparent;
-            border: 2px solid var(--gray);
-            color: var(--secondary);
-        }
-        
-        .btn-outline:hover {
-            background: var(--secondary);
-            color: var(--primary);
-            border-color: var(--secondary);
-        }
-        
-        /* Car Showcase - Effet de révélation 3D */
-        .car-showcase {
-            min-height: 100vh;
-            padding: 150px 0;
-            background: var(--primary);
-            position: relative;
-        }
-        
-        .section-title {
-            text-align: center;
-            margin-bottom: 100px;
-            overflow: hidden;
-        }
-        
-        .section-title h2 {
-            font-size: 4vw;
-            color: var(--secondary);
-            margin-bottom: 20px;
-            text-transform: uppercase;
-            letter-spacing: -2px;
-            transform: translateY(100%);
-            opacity: 0;
-        }
-        
-        .section-title p {
-            font-size: 1.2vw;
-            color: var(--gray);
-            max-width: 600px;
-            margin: 0 auto;
-            transform: translateY(50px);
-            opacity: 0;
-        }
-        
-        .cars-container {
-            perspective: 1000px;
-        }
-        
-        .cars-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 40px;
-            transform-style: preserve-3d;
-        }
-        
-        .car-card {
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: 20px;
-            overflow: hidden;
-            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            transform: rotateY(20deg) translateZ(0);
-            opacity: 0;
-            position: relative;
-        }
-        
-        .car-card:nth-child(even) {
-            transform: rotateY(-20deg) translateZ(0);
-        }
-        
-        .car-card:hover {
-            transform: rotateY(0deg) translateZ(50px) scale(1.05);
-            box-shadow: 
-                0 30px 60px rgba(0, 0, 0, 0.6),
-                0 0 0 1px rgba(255, 46, 0, 0.2);
-            border-color: rgba(255, 46, 0, 0.3);
-        }
-        
-        .car-image {
-            height: 250px;
-            width: 100%;
+        .reveal-text {
+            font-family: 'Syncopate'; font-size: 8vw;
+            background: url('https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=1600&q=80');
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
             background-size: cover;
-            background-position: center;
-            position: relative;
-            transform: scale(1.1);
-            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            background-attachment: fixed;
         }
-        
-        .car-card:hover .car-image {
-            transform: scale(1);
-        }
-        
-        .car-badge {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: var(--accent);
-            color: var(--secondary);
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-            letter-spacing: 1px;
-            transform: translateX(50px);
-            opacity: 0;
-        }
-        
-        .car-info {
-            padding: 30px;
-            transform: translateY(30px);
-            opacity: 0;
-        }
-        
-        .car-info h3 {
-            font-size: 24px;
-            color: var(--secondary);
-            margin-bottom: 10px;
-        }
-        
-        .car-price {
-            font-size: 28px;
-            color: var(--accent);
-            font-weight: 800;
-            margin-bottom: 20px;
-            font-family: 'Montserrat', sans-serif;
-        }
-        
-        .car-specs {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 25px;
-            padding-bottom: 25px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-        
-        .spec {
-            text-align: center;
-            transform: scale(0);
-        }
-        
-        .spec-value {
-            font-size: 18px;
-            color: var(--secondary);
-            font-weight: 600;
-            margin-bottom: 5px;
-        }
-        
-        .spec-label {
-            font-size: 12px;
-            color: var(--gray);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        
-        /* Gallery Section - Toutes les images visibles */
-        .gallery-section {
-            padding: 150px 0;
-            background: linear-gradient(180deg, #0a0a0a 0%, #111111 100%);
+
+        /* --- GLASS-MORPHISM CONTACT --- */
+        .contact-glass {
+            margin: 100px auto; max-width: 1000px;
+            padding: 80px; background: var(--glass);
+            backdrop-filter: blur(40px);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 40px;
             position: relative;
         }
-        
-        .gallery-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
+
+        .contact-glass::after {
+            content: ''; position: absolute; top: -50px; right: -50px;
+            width: 200px; height: 200px; background: var(--accent);
+            filter: blur(120px); z-index: -1;
         }
-        
-        .gallery-item {
-            height: 400px;
-            background: var(--gray-dark);
-            border-radius: 10px;
-            overflow: hidden;
-            position: relative;
-            transform: translateY(50px);
-            opacity: 0;
+
+        .btn-neo {
+            background: white; color: black; padding: 20px 60px;
+            font-family: 'Syncopate'; font-weight: 700; border: none;
+            clip-path: polygon(10% 0, 100% 0, 90% 100%, 0% 100%);
+            transition: 0.4s; cursor: pointer;
         }
-        
-        .gallery-item img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        
-        .gallery-item:hover img {
-            transform: scale(1.1);
-        }
-        
-        .gallery-overlay {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            padding: 30px;
-            background: linear-gradient(transparent, rgba(0, 0, 0, 0.9));
-            transform: translateY(100%);
-            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        
-        .gallery-item:hover .gallery-overlay {
-            transform: translateY(0);
-        }
-        
-        .gallery-overlay h3 {
-            font-size: 20px;
-            color: var(--secondary);
-            margin-bottom: 10px;
-            text-transform: uppercase;
-        }
-        
-        .gallery-overlay p {
-            font-size: 14px;
-            color: var(--gray);
-        }
-        
-        /* Features Section */
-        .features-section {
-            padding: 150px 0;
-            background: var(--primary);
-        }
-        
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 40px;
-        }
-        
-        .feature-card {
-            text-align: center;
-            padding: 50px 30px;
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            transform: translateY(50px);
-            opacity: 0;
-            transition: all 0.4s ease;
-        }
-        
-        .feature-card:hover {
-            transform: translateY(-10px);
-            border-color: rgba(255, 46, 0, 0.2);
-        }
-        
-        .feature-icon {
-            width: 80px;
-            height: 80px;
-            background: rgba(255, 46, 0, 0.1);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 30px;
-        }
-        
-        .feature-icon i {
-            font-size: 32px;
-            color: var(--accent);
-        }
-        
-        .feature-card h3 {
-            font-size: 22px;
-            color: var(--secondary);
-            margin-bottom: 20px;
-            text-transform: uppercase;
-        }
-        
-        .feature-card p {
-            color: var(--gray);
-            line-height: 1.8;
-        }
-        
-        /* Finance Section */
-        .finance-section {
-            padding: 150px 0;
-            background: linear-gradient(135deg, #111111 0%, #0a0a0a 100%);
-        }
-        
-        .calculator-container {
-            max-width: 800px;
-            margin: 0 auto;
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(20px);
-            border-radius: 20px;
-            padding: 60px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            transform: translateY(50px);
-            opacity: 0;
-        }
-        
-        .slider-group {
-            margin-bottom: 50px;
-        }
-        
-        .slider-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-        
-        .slider-label {
-            color: var(--gray);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-size: 14px;
-        }
-        
-        .slider-value {
-            color: var(--secondary);
-            font-size: 24px;
-            font-weight: 700;
-            font-family: 'Montserrat', sans-serif;
-        }
-        
-        .slider {
-            width: 100%;
-            height: 4px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 2px;
-            -webkit-appearance: none;
-            appearance: none;
-        }
-        
-        .slider::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            background: var(--accent);
-            cursor: pointer;
-            border: 3px solid var(--secondary);
-            box-shadow: 0 0 20px rgba(255, 46, 0, 0.5);
-        }
-        
-        .results-container {
-            margin-top: 60px;
-            padding-top: 40px;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-        }
-        
-        .result-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 20px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-        
-        .result-row:last-child {
-            border-bottom: none;
-            font-size: 28px;
-            font-weight: 800;
-            color: var(--accent);
-            padding-top: 30px;
-        }
-        
-        /* Contact Section */
-        .contact-section {
-            padding: 150px 0;
-            background: var(--primary);
-        }
-        
-        .contact-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 100px;
-        }
-        
-        .contact-info h3 {
-            font-size: 24px;
-            color: var(--secondary);
-            margin-bottom: 40px;
-            text-transform: uppercase;
-        }
-        
-        .contact-details {
-            margin-bottom: 50px;
-        }
-        
-        .contact-detail {
-            display: flex;
-            align-items: center;
-            margin-bottom: 25px;
-            color: var(--gray);
-        }
-        
-        .contact-detail i {
-            color: var(--accent);
-            margin-right: 20px;
-            font-size: 20px;
-            width: 24px;
-        }
-        
-        .social-links {
-            display: flex;
-            gap: 15px;
-        }
-        
-        .social-link {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.05);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--secondary);
-            text-decoration: none;
-            transition: all 0.4s ease;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .social-link:hover {
-            background: var(--accent);
-            transform: translateY(-5px);
-            border-color: var(--accent);
-        }
-        
-        .contact-form {
-            display: flex;
-            flex-direction: column;
-            gap: 30px;
-        }
-        
-        .form-group input,
-        .form-group textarea {
-            width: 100%;
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
-            color: var(--secondary);
-            font-family: 'Archivo', sans-serif;
-            font-size: 16px;
-        }
-        
-        .form-group textarea {
-            height: 150px;
-            resize: vertical;
-        }
-        
-        /* Footer */
-        footer {
-            padding: 100px 0 50px;
-            background: linear-gradient(180deg, #0a0a0a 0%, #111111 100%);
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-        }
-        
-        .footer-content {
-            text-align: center;
-            transform: translateY(50px);
-            opacity: 0;
-        }
-        
-        .footer-logo {
-            font-size: 32px;
-            font-weight: 900;
-            color: var(--secondary);
-            margin-bottom: 40px;
-            letter-spacing: -1px;
-        }
-        
-        .footer-logo span {
-            color: var(--accent);
-        }
-        
-        .footer-links {
-            display: flex;
-            justify-content: center;
-            gap: 40px;
-            margin-bottom: 50px;
-            flex-wrap: wrap;
-        }
-        
-        .footer-links a {
-            color: var(--gray);
-            text-decoration: none;
-            text-transform: uppercase;
-            font-size: 12px;
-            letter-spacing: 2px;
-        }
-        
-        .copyright {
-            color: var(--gray);
-            font-size: 14px;
-            margin-top: 50px;
-        }
-        
-        /* Responsive */
-        @media (max-width: 1200px) {
-            .container {
-                padding: 0 30px;
-            }
-            
-            .hero-title {
-                font-size: 6vw;
-            }
-            
-            .hero-content {
-                width: 60%;
-            }
-            
-            .speed-lines {
-                width: 40%;
-            }
-        }
-        
-        @media (max-width: 992px) {
-            nav {
-                display: none;
-            }
-            
-            .hero {
-                flex-direction: column;
-                justify-content: center;
-            }
-            
-            .hero-content {
-                width: 100%;
-                text-align: center;
-            }
-            
-            .hero-title {
-                font-size: 10vw;
-            }
-            
-            .hero-subtitle {
-                font-size: 1.4rem;
-                margin: 0 auto 60px;
-            }
-            
-            .speed-lines {
-                display: none;
-            }
-            
-            .section-title h2 {
-                font-size: 8vw;
-            }
-            
-            .contact-grid {
-                grid-template-columns: 1fr;
-                gap: 60px;
-            }
-        }
-        
-        @media (max-width: 768px) {
-            .hero-title {
-                font-size: 12vw;
-            }
-            
-            .section-title h2 {
-                font-size: 10vw;
-            }
-            
-            .calculator-container {
-                padding: 40px 30px;
-            }
-            
-            .cars-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .features-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .gallery-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .footer-links {
-                gap: 20px;
-            }
-        }
-        
-        @media (max-width: 576px) {
-            .container {
-                padding: 0 20px;
-            }
-            
-            .hero-title {
-                font-size: 15vw;
-            }
-            
-            .hero-cta {
-                flex-direction: column;
-                gap: 15px;
-            }
-            
-            .btn {
-                width: 100%;
-                text-align: center;
-            }
-            
-            .gallery-item {
-                height: 300px;
-            }
-            
-            .footer-links {
-                flex-direction: column;
-                gap: 15px;
-            }
-        }
+        .btn-neo:hover { transform: scale(1.1); background: var(--accent); color: white; }
+
     </style>
 </head>
 <body>
-    <!-- Curseur personnalisé -->
-    <div class="cursor"></div>
 
-    <!-- Particules de fond -->
-    <div id="particles-js"></div>
+    <div class="loader"><div class="loader-text">NEO-MOTION</div></div>
+    <div class="cursor-follower"></div>
 
-    <!-- Header -->
-    <header id="mainHeader">
-        <div class="container header-container">
-            <a href="#home" class="logo">AUTO<span>ÉLÉGANCE</span></a>
-            <nav>
-                <ul>
-                    <li><a href="#home">Accueil</a></li>
-                    <li><a href="#showcase">Modèles</a></li>
-                    <li><a href="#gallery">Galerie</a></li>
-                    <li><a href="#features">Services</a></li>
-                    <li><a href="#finance">Financement</a></li>
-                    <li><a href="#contact">Contact</a></li>
-                </ul>
-            </nav>
+    <header style="position: fixed; width: 100%; padding: 40px; z-index: 1000; display: flex; justify-content: space-between; align-items: center;">
+        <div style="font-family: 'Syncopate'; font-weight: 700; font-size: 1.5rem; letter-spacing: -2px;">N-E<span>.</span></div>
+        <div style="width: 30px; height: 2px; background: white; position: relative;">
+            <div style="width: 20px; height: 2px; background: white; position: absolute; top: 8px; right: 0;"></div>
         </div>
     </header>
 
-    <!-- Hero Section -->
-    <section class="hero" id="home">
-        <div class="hero-bg"></div>
-        
-        <!-- Lignes de vitesse animées -->
-        <div class="speed-lines">
-            <div class="speed-line"></div>
-            <div class="speed-line"></div>
-            <div class="speed-line"></div>
-            <div class="speed-line"></div>
-            <div class="speed-line"></div>
-            <div class="speed-line"></div>
-            <div class="speed-line"></div>
-            <div class="speed-line"></div>
-        </div>
-        
-        <div class="container hero-content">
-            <h1 class="hero-title">
-                <span>L'EXCELLENCE</span>
-                <span class="accent">AUTOMOBILE</span>
-                <span>RÉINVENTÉE</span>
-            </h1>
-            <p class="hero-subtitle">
-                Découvrez une collection exclusive de véhicules d'exception où innovation, 
-                performance et élégance se rencontrent pour créer l'expérience ultime.
-            </p>
-            <div class="hero-cta">
-                <a href="#showcase" class="btn">DÉCOUVRIR LES MODÈLES</a>
-                <a href="#contact" class="btn btn-outline">PRENDRE RENDEZ-VOUS</a>
+    <section class="hero">
+        <video class="hero-video-bg" autoplay muted loop playsinline>
+            <source src="https://assets.mixkit.co/videos/preview/mixkit-fast-car-driving-on-a-city-street-at-night-1144-large.mp4" type="video/mp4">
+        </video>
+        <h1 class="big-title" id="hero-title-main">ULTIMATE<br>DRIVE</h1>
+        <img src="https://www.pngplay.com/wp-content/uploads/13/Porsche-911-Transparent-Background.png" class="hero-image-center" id="hero-car">
+    </section>
+
+    <section class="reveal-section">
+        <h2 class="reveal-text">PURE ART</h2>
+    </section>
+
+    <div class="horizontal-wrapper">
+        <div class="horizontal-content">
+            <div class="model-section">
+                <div class="model-info">
+                    <h2>01. TURBO S</h2>
+                    <p>L'apogée de la performance pure.</p>
+                    <button class="btn-neo">EXPLORER</button>
+                </div>
+                <div class="model-img-box">
+                    <img src="https://purepng.com/public/uploads/large/purepng.com-porsche-911-carrera-s-carporscheporsche-911-carrera-scar-1701527514330uog1c.png">
+                </div>
             </div>
+            <div class="model-section">
+                <div class="model-info">
+                    <h2>02. GT3 RS</h2>
+                    <p>Né sur circuit, conçu pour la route.</p>
+                    <button class="btn-neo">EXPLORER</button>
+                </div>
+                <div class="model-img-box">
+                    <img src="https://purepng.com/public/uploads/large/purepng.com-porsche-911-car-porscheporsche-911car-170152751336423k4d.png">
+                </div>
+            </div>
+            <div class="model-section">
+                <div class="model-info">
+                    <h2>03. TAYCAN</h2>
+                    <p>L'électrique sous haute tension.</p>
+                    <button class="btn-neo">EXPLORER</button>
+                </div>
+                <div class="model-img-box">
+                    <img src="https://purepng.com/public/uploads/large/purepng.com-silver-porsche-taycan-carporschetaycanporsche-taycan-car-1701527633215fylj7.png">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section style="padding: 100px 0;">
+        <div class="contact-glass">
+            <h2 style="font-family: 'Syncopate'; font-size: 3vw; margin-bottom: 40px;">PRÊT POUR <br><span style="color: var(--accent);">L'AVENIR ?</span></h2>
+            <form style="display: grid; gap: 20px;">
+                <input type="text" placeholder="NOM" style="background: transparent; border: none; border-bottom: 1px solid rgba(255,255,255,0.2); padding: 20px; color: white; outline: none;">
+                <input type="email" placeholder="EMAIL" style="background: transparent; border: none; border-bottom: 1px solid rgba(255,255,255,0.2); padding: 20px; color: white; outline: none;">
+                <button type="submit" class="btn-neo" style="margin-top: 40px; width: fit-content;">ENVOYER</button>
+            </form>
         </div>
     </section>
 
-    <!-- Car Showcase -->
-    <section class="car-showcase" id="showcase">
-        <div class="container">
-            <div class="section-title">
-                <h2>NOS MODÈLES EXCLUSIFS</h2>
-                <p>Découvrez notre sélection de véhicules premium soigneusement sélectionnés</p>
-            </div>
-            
-            <div class="cars-container">
-                <div class="cars-grid">
-                    <!-- Porsche 911 -->
-                    <div class="car-card">
-                        <div class="car-image" style="background-image: url('https://images.unsplash.com/photo-1503376780353-7e6692767b70?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80')">
-                            <div class="car-badge">NOUVEAU</div>
-                        </div>
-                        <div class="car-info">
-                            <h3>Porsche 911 Turbo S</h3>
-                            <div class="car-price">212.000€</div>
-                            <div class="car-specs">
-                                <div class="spec">
-                                    <div class="spec-value">3.8s</div>
-                                    <div class="spec-label">0-100 km/h</div>
-                                </div>
-                                <div class="spec">
-                                    <div class="spec-value">650 ch</div>
-                                    <div class="spec-label">Puissance</div>
-                                </div>
-                                <div class="spec">
-                                    <div class="spec-value">330 km/h</div>
-                                    <div class="spec-label">Vitesse max</div>
-                                </div>
-                            </div>
-                            <button class="btn" style="width: 100%;">CONFIGURER</button>
-                        </div>
-                    </div>
-
-                    <!-- Mercedes Classe C -->
-                    <div class="car-card">
-                        <div class="car-image" style="background-image: url('https://images.unsplash.com/photo-1553440569-bcc63803a83d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80')">
-                            <div class="car-badge">POPULAIRE</div>
-                        </div>
-                        <div class="car-info">
-                            <h3>Mercedes Classe C AMG</h3>
-                            <div class="car-price">68.900€</div>
-                            <div class="car-specs">
-                                <div class="spec">
-                                    <div class="spec-value">4.0s</div>
-                                    <div class="spec-label">0-100 km/h</div>
-                                </div>
-                                <div class="spec">
-                                    <div class="spec-value">510 ch</div>
-                                    <div class="spec-label">Puissance</div>
-                                </div>
-                                <div class="spec">
-                                    <div class="spec-value">290 km/h</div>
-                                    <div class="spec-label">Vitesse max</div>
-                                </div>
-                            </div>
-                            <button class="btn" style="width: 100%;">CONFIGURER</button>
-                        </div>
-                    </div>
-
-                    <!-- BMW X5 -->
-                    <div class="car-card">
-                        <div class="car-image" style="background-image: url('https://images.unsplash.com/photo-1555212697-194d092e3b8f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80')">
-                            <div class="car-badge">IMMÉDIAT</div>
-                        </div>
-                        <div class="car-info">
-                            <h3>BMW X5 M Competition</h3>
-                            <div class="car-price">139.000€</div>
-                            <div class="car-specs">
-                                <div class="spec">
-                                    <div class="spec-value">3.8s</div>
-                                    <div class="spec-label">0-100 km/h</div>
-                                </div>
-                                <div class="spec">
-                                    <div class="spec-value">625 ch</div>
-                                    <div class="spec-label">Puissance</div>
-                                </div>
-                                <div class="spec">
-                                    <div class="spec-value">290 km/h</div>
-                                    <div class="spec-label">Vitesse max</div>
-                                </div>
-                            </div>
-                            <button class="btn" style="width: 100%;">CONFIGURER</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Gallery Section - TOUTES LES IMAGES VISIBLES -->
-    <section class="gallery-section" id="gallery">
-        <div class="container">
-            <div class="section-title">
-                <h2>GALERIE EXCLUSIVE</h2>
-                <p>Découvrez les détails qui font la différence</p>
-            </div>
-            
-            <div class="gallery-grid">
-                <!-- Moteur V8 Biturbo - IMAGE VISIBLE -->
-                <div class="gallery-item">
-                    <img src="https://images.unsplash.com/photo-1593941707882-a5bba53388fe?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80" 
-                         alt="Moteur V8 Biturbo">
-                    <div class="gallery-overlay">
-                        <h3>Moteur V8 Biturbo</h3>
-                        <p>Performance exceptionnelle, technologie de pointe</p>
-                    </div>
-                </div>
-                
-                <!-- Intérieur Premium - IMAGE VISIBLE -->
-                <div class="gallery-item">
-                    <img src="https://images.unsplash.com/photo-1485291571150-772bcfc10da5?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80" 
-                         alt="Intérieur Premium">
-                    <div class="gallery-overlay">
-                        <h3>Intérieur Premium</h3>
-                        <p>Cuir Nappa, finitions carbone, artisanat d'exception</p>
-                    </div>
-                </div>
-                
-                <!-- Éclairage LED Matrix - IMAGE VISIBLE -->
-                <div class="gallery-item">
-                    <img src="https://images.unsplash.com/photo-1514316454345-887d9d6e074c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80" 
-                         alt="Phares LED Matrix">
-                    <div class="gallery-overlay">
-                        <h3>Éclairage LED Matrix</h3>
-                        <p>Technologie d'éclairage adaptatif intelligent</p>
-                    </div>
-                </div>
-                
-                <!-- Jantes Alliage - IMAGE VISIBLE -->
-                <div class="gallery-item">
-                    <img src="https://images.unsplash.com/photo-1558448351-64e5fdf0745c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80" 
-                         alt="Jantes Alliage">
-                    <div class="gallery-overlay">
-                        <h3>Jantes 21" Alliage</h3>
-                        <p>Design aérodynamique, performance maximale</p>
-                    </div>
-                </div>
-                
-                <!-- Tableau de bord numérique - IMAGE VISIBLE -->
-                <div class="gallery-item">
-                    <img src="https://images.unsplash.com/photo-1549399542-7e3f8b79c341?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80" 
-                         alt="Tableau de bord digital">
-                    <div class="gallery-overlay">
-                        <h3>Tableau de Bord Digital</h3>
-                        <p>Écran tactile 12.3", intelligence artificielle intégrée</p>
-                    </div>
-                </div>
-                
-                <!-- Design extérieur - IMAGE VISIBLE -->
-                <div class="gallery-item">
-                    <img src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80" 
-                         alt="Design extérieur">
-                    <div class="gallery-overlay">
-                        <h3>Design Aérodynamique</h3>
-                        <p>Lignes épurées, équilibre parfait entre élégance et performance</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Features Section -->
-    <section class="features-section" id="features">
-        <div class="container">
-            <div class="section-title">
-                <h2>NOS SERVICES EXCLUSIFS</h2>
-                <p>Un accompagnement sur mesure pour votre expérience automobile</p>
-            </div>
-            
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-search"></i>
-                    </div>
-                    <h3>Recherche Personnalisée</h3>
-                    <p>Notre équipe d'experts vous aide à trouver le véhicule parfait selon vos critères.</p>
-                </div>
-                
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-handshake"></i>
-                    </div>
-                    <h3>Achat Sans Stress</h3>
-                    <p>Processus simplifié avec des conseillers dédiés pour vous guider à chaque étape.</p>
-                </div>
-                
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-tools"></i>
-                    </div>
-                    <h3>Entretien Premium</h3>
-                    <p>Service après-vente complet avec techniciens certifiés et pièces d'origine.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Finance Section -->
-    <section class="finance-section" id="finance">
-        <div class="container">
-            <div class="section-title">
-                <h2>SIMULATION DE FINANCEMENT</h2>
-                <p>Calculez vos mensualités avec notre simulateur intelligent</p>
-            </div>
-            
-            <div class="calculator-container">
-                <div class="slider-group">
-                    <div class="slider-header">
-                        <span class="slider-label">Prix du véhicule</span>
-                        <span class="slider-value" id="priceValue">85,000 €</span>
-                    </div>
-                    <input type="range" min="30000" max="200000" value="85000" step="1000" class="slider" id="priceSlider">
-                </div>
-                
-                <div class="slider-group">
-                    <div class="slider-header">
-                        <span class="slider-label">Apport personnel</span>
-                        <span class="slider-value" id="downPaymentValue">15,000 €</span>
-                    </div>
-                    <input type="range" min="0" max="50000" value="15000" step="1000" class="slider" id="downPaymentSlider">
-                </div>
-                
-                <div class="slider-group">
-                    <div class="slider-header">
-                        <span class="slider-label">Durée du prêt</span>
-                        <span class="slider-value" id="termValue">48 mois</span>
-                    </div>
-                    <input type="range" min="12" max="84" value="48" step="12" class="slider" id="termSlider">
-                </div>
-                
-                <div class="slider-group">
-                    <div class="slider-header">
-                        <span class="slider-label">Taux d'intérêt</span>
-                        <span class="slider-value" id="rateValue">4.2%</span>
-                    </div>
-                    <input type="range" min="1" max="10" value="4.2" step="0.1" class="slider" id="rateSlider">
-                </div>
-                
-                <div class="results-container">
-                    <div class="result-row">
-                        <span>Montant à financer</span>
-                        <span id="loanAmount">70,000 €</span>
-                    </div>
-                    <div class="result-row">
-                        <span>Mensualité</span>
-                        <span id="monthlyPayment">1,587 €</span>
-                    </div>
-                    <div class="result-row">
-                        <span>Coût total du crédit</span>
-                        <span id="totalCost">6,176 €</span>
-                    </div>
-                    <div class="result-row">
-                        <span>Coût total du véhicule</span>
-                        <span id="totalCostVehicle">91,176 €</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Contact Section -->
-    <section class="contact-section" id="contact">
-        <div class="container">
-            <div class="section-title">
-                <h2>CONTACTEZ-NOUS</h2>
-                <p>Prêts à vivre l'expérience AutoÉlégance ?</p>
-            </div>
-            
-            <div class="contact-grid">
-                <div class="contact-info">
-                    <h3>PRENEZ RENDEZ-VOUS</h3>
-                    <div class="contact-details">
-                        <div class="contact-detail">
-                            <i class="fas fa-map-marker-alt"></i>
-                            <span>123 Avenue Montaigne, 75008 Paris</span>
-                        </div>
-                        <div class="contact-detail">
-                            <i class="fas fa-phone"></i>
-                            <span>+33 1 23 45 67 89</span>
-                        </div>
-                        <div class="contact-detail">
-                            <i class="fas fa-envelope"></i>
-                            <span>contact@auto-elegance.fr</span>
-                        </div>
-                        <div class="contact-detail">
-                            <i class="fas fa-clock"></i>
-                            <span>Lun - Sam : 9h - 20h</span>
-                        </div>
-                    </div>
-                    <div class="social-links">
-                        <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
-                        <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
-                        <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
-                    </div>
-                </div>
-                <div class="contact-form">
-                    <form id="contactForm">
-                        <div class="form-group">
-                            <input type="text" placeholder="Votre nom complet" required>
-                        </div>
-                        <div class="form-group">
-                            <input type="email" placeholder="Votre adresse email" required>
-                        </div>
-                        <div class="form-group">
-                            <input type="tel" placeholder="Votre téléphone" required>
-                        </div>
-                        <div class="form-group">
-                            <textarea placeholder="Votre message" required></textarea>
-                        </div>
-                        <button type="submit" class="btn" style="width: 100%;">ENVOYER</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer>
-        <div class="container footer-content">
-            <div class="footer-logo">AUTO<span>ÉLÉGANCE</span></div>
-            <div class="footer-links">
-                <a href="#home">Accueil</a>
-                <a href="#showcase">Modèles</a>
-                <a href="#gallery">Galerie</a>
-                <a href="#features">Services</a>
-                <a href="#finance">Financement</a>
-                <a href="#contact">Contact</a>
-            </div>
-            <div class="copyright">
-                © 2023 AutoÉlégance. Tous droits réservés.
-            </div>
-        </div>
-    </footer>
-
-    <!-- Scripts -->
-    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <script>
-        // Initialisation de GSAP
-        gsap.registerPlugin(ScrollTrigger);
-        
-        // Configuration des particules
-        particlesJS('particles-js', {
-            particles: {
-                number: { value: 60, density: { enable: true, value_area: 800 } },
-                color: { value: "#ff2e00" },
-                shape: { type: "circle" },
-                opacity: { value: 0.2, random: true },
-                size: { value: 2, random: true },
-                line_linked: {
-                    enable: true,
-                    distance: 150,
-                    color: "#ff2e00",
-                    opacity: 0.1,
-                    width: 1
-                },
-                move: {
-                    enable: true,
-                    speed: 1,
-                    direction: "none",
-                    random: true,
-                    straight: false,
-                    out_mode: "out",
-                    bounce: false
-                }
+        // 1. Loader & Cursor
+        window.addEventListener('load', () => {
+            gsap.to('.loader', { yPercent: -100, duration: 1.2, ease: "power4.inOut" });
+        });
+
+        const cursor = document.querySelector('.cursor-follower');
+        document.addEventListener('mousemove', (e) => {
+            gsap.to(cursor, { x: e.clientX, y: e.clientY, duration: 0.5 });
+        });
+
+        // 2. Hero Animations
+        gsap.to("#hero-car", {
+            y: -100,
+            scrollTrigger: {
+                trigger: ".hero",
+                start: "top top",
+                scrub: 1
             }
         });
-        
-        // Curseur personnalisé
-        const cursor = document.querySelector('.cursor');
-        document.addEventListener('mousemove', (e) => {
-            cursor.style.left = e.clientX + 'px';
-            cursor.style.top = e.clientY + 'px';
-        });
-        
-        document.querySelectorAll('a, button, .car-card, .feature-card, .gallery-item, .social-link').forEach(el => {
-            el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
-            el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
-        });
-        
-        // Animation du header
-        gsap.to('header', {
-            y: 0,
-            opacity: 1,
-            duration: 1.5,
-            ease: "power4.out",
-            onComplete: () => document.querySelector('header').classList.add('visible')
-        });
-        
-        // Animation des liens de navigation
-        gsap.to('nav ul li a', {
-            y: 0,
-            opacity: 1,
-            duration: 1,
-            stagger: 0.1,
-            ease: "power3.out",
-            delay: 1
-        });
-        
-        // Animation hero section
-        gsap.to('.hero-title span', {
-            y: 0,
-            opacity: 1,
-            duration: 1.2,
-            stagger: 0.3,
-            ease: "power4.out",
-            delay: 0.5
-        });
-        
-        gsap.to('.hero-subtitle', {
-            y: 0,
-            opacity: 1,
-            duration: 1,
-            delay: 1.2,
-            ease: "power3.out"
-        });
-        
-        gsap.to('.hero-cta', {
-            y: 0,
-            opacity: 1,
-            duration: 1,
-            delay: 1.5,
-            ease: "power3.out"
-        });
-        
-        // Header scroll effect
-        window.addEventListener('scroll', () => {
-            const header = document.getElementById('mainHeader');
-            header.classList.toggle('scrolled', window.scrollY > 50);
-        });
-        
-        // Animation car section
-        gsap.to('.section-title h2', {
+
+        gsap.to("#hero-title-main", {
+            y: 400,
+            scale: 1.5,
             scrollTrigger: {
-                trigger: '.car-showcase',
-                start: "top 80%",
-                toggleActions: "play none none none"
-            },
-            y: 0,
-            opacity: 1,
-            duration: 1.2,
-            ease: "power4.out"
+                trigger: ".hero",
+                start: "top top",
+                scrub: 1
+            }
         });
-        
-        gsap.to('.section-title p', {
+
+        // 3. Horizontal Scroll
+        let sections = gsap.utils.toArray(".model-section");
+        gsap.to(sections, {
+            xPercent: -100 * (sections.length - 1),
+            ease: "none",
             scrollTrigger: {
-                trigger: '.car-showcase',
-                start: "top 80%",
-                toggleActions: "play none none none"
-            },
-            y: 0,
-            opacity: 1,
-            duration: 1,
-            delay: 0.3,
-            ease: "power3.out"
+                trigger: ".horizontal-wrapper",
+                pin: true,
+                scrub: 1,
+                end: () => "+=" + document.querySelector(".horizontal-content").offsetWidth
+            }
         });
-        
-        // Animation des cartes voiture
-        gsap.utils.toArray('.car-card').forEach((card, i) => {
-            gsap.to(card, {
-                scrollTrigger: {
-                    trigger: card,
-                    start: "top 85%",
-                    toggleActions: "play none none none"
-                },
-                rotateY: 0,
-                opacity: 1,
-                duration: 1.5,
-                delay: i * 0.2,
-                ease: "power4.out"
-            });
-            
-            gsap.to(card.querySelector('.car-badge'), {
-                scrollTrigger: {
-                    trigger: card,
-                    start: "top 85%",
-                    toggleActions: "play none none none"
-                },
-                x: 0,
-                opacity: 1,
-                duration: 1,
-                delay: i * 0.2 + 0.3,
-                ease: "power3.out"
-            });
-            
-            gsap.to(card.querySelector('.car-info'), {
-                scrollTrigger: {
-                    trigger: card,
-                    start: "top 85%",
-                    toggleActions: "play none none none"
-                },
-                y: 0,
-                opacity: 1,
-                duration: 1,
-                delay: i * 0.2 + 0.5,
-                ease: "power3.out"
-            });
-            
-            // Animation des spécifications
-            gsap.utils.toArray(card.querySelectorAll('.spec')).forEach((spec, j) => {
-                gsap.to(spec, {
-                    scrollTrigger: {
-                        trigger: card,
-                        start: "top 85%",
-                        toggleActions: "play none none none"
-                    },
-                    scale: 1,
-                    duration: 0.6,
-                    delay: i * 0.2 + 0.7 + j * 0.1,
-                    ease: "back.out(1.7)"
-                });
-            });
-        });
-        
-        // Animation gallery section
-        gsap.utils.toArray('.gallery-item').forEach((item, i) => {
-            gsap.to(item, {
-                scrollTrigger: {
-                    trigger: item,
-                    start: "top 85%",
-                    toggleActions: "play none none none"
-                },
-                y: 0,
-                opacity: 1,
-                duration: 1,
-                delay: i * 0.1,
-                ease: "power3.out"
-            });
-        });
-        
-        // Animation features section
-        gsap.utils.toArray('.feature-card').forEach((card, i) => {
-            gsap.to(card, {
-                scrollTrigger: {
-                    trigger: card,
-                    start: "top 85%",
-                    toggleActions: "play none none none"
-                },
-                y: 0,
-                opacity: 1,
-                duration: 1,
-                delay: i * 0.2,
-                ease: "power3.out"
-            });
-        });
-        
-        // Animation finance section
-        gsap.to('.calculator-container', {
+
+        // 4. Reveal Text Animation
+        gsap.from(".reveal-text", {
+            scale: 0.5,
+            opacity: 0,
             scrollTrigger: {
-                trigger: '.finance-section',
+                trigger: ".reveal-section",
                 start: "top 80%",
-                toggleActions: "play none none none"
-            },
-            y: 0,
-            opacity: 1,
-            duration: 1.2,
-            ease: "power3.out"
-        });
-        
-        // Animation footer
-        gsap.to('.footer-content', {
-            scrollTrigger: {
-                trigger: 'footer',
-                start: "top 80%",
-                toggleActions: "play none none none"
-            },
-            y: 0,
-            opacity: 1,
-            duration: 1.2,
-            ease: "power3.out"
-        });
-        
-        // Finance Calculator
-        const priceSlider = document.getElementById('priceSlider');
-        const downPaymentSlider = document.getElementById('downPaymentSlider');
-        const termSlider = document.getElementById('termSlider');
-        const rateSlider = document.getElementById('rateSlider');
-        
-        const priceValue = document.getElementById('priceValue');
-        const downPaymentValue = document.getElementById('downPaymentValue');
-        const termValue = document.getElementById('termValue');
-        const rateValue = document.getElementById('rateValue');
-        
-        const loanAmount = document.getElementById('loanAmount');
-        const monthlyPayment = document.getElementById('monthlyPayment');
-        const totalCost = document.getElementById('totalCost');
-        const totalCostVehicle = document.getElementById('totalCostVehicle');
-        
-        function formatCurrency(amount) {
-            return new Intl.NumberFormat('fr-FR', {
-                style: 'currency',
-                currency: 'EUR',
-                maximumFractionDigits: 0
-            }).format(amount);
-        }
-        
-        function calculatePayment() {
-            const price = parseInt(priceSlider.value);
-            const downPayment = parseInt(downPaymentSlider.value);
-            const term = parseInt(termSlider.value);
-            const rate = parseFloat(rateSlider.value);
-            
-            // Update displayed values
-            priceValue.textContent = formatCurrency(price);
-            downPaymentValue.textContent = formatCurrency(downPayment);
-            termValue.textContent = `${term} mois`;
-            rateValue.textContent = `${rate.toFixed(1)}%`;
-            
-            // Calculate loan details
-            const loan = price - downPayment;
-            const monthlyRate = rate / 100 / 12;
-            const payment = loan * monthlyRate * Math.pow(1 + monthlyRate, term) / (Math.pow(1 + monthlyRate, term) - 1);
-            const totalInterest = (payment * term) - loan;
-            const totalVehicleCost = price + totalInterest;
-            
-            // Update results
-            loanAmount.textContent = formatCurrency(loan);
-            monthlyPayment.textContent = formatCurrency(payment);
-            totalCost.textContent = formatCurrency(totalInterest);
-            totalCostVehicle.textContent = formatCurrency(totalVehicleCost);
-        }
-        
-        [priceSlider, downPaymentSlider, termSlider, rateSlider].forEach(slider => {
-            slider.addEventListener('input', calculatePayment);
-        });
-        
-        calculatePayment();
-        
-        // Smooth scroll pour navigation
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                e.preventDefault();
-                const targetId = this.getAttribute('href');
-                if (targetId === '#') return;
-                
-                const targetElement = document.querySelector(targetId);
-                if (targetElement) {
-                    window.scrollTo({
-                        top: targetElement.offsetTop - 80,
-                        behavior: 'smooth'
-                    });
-                }
-            });
-        });
-        
-        // Contact Form
-        const contactForm = document.getElementById('contactForm');
-        contactForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            // Animation de soumission
-            const submitBtn = this.querySelector('button[type="submit"]');
-            const originalText = submitBtn.textContent;
-            
-            submitBtn.textContent = 'ENVOYÉ !';
-            submitBtn.style.background = '#2a9d8f';
-            
-            setTimeout(() => {
-                this.reset();
-                submitBtn.textContent = originalText;
-                submitBtn.style.background = '';
-            }, 2000);
-        });
-        
-        // Animation des boutons de configuration
-        document.querySelectorAll('.car-card .btn').forEach(button => {
-            button.addEventListener('click', function() {
-                const carName = this.closest('.car-card').querySelector('h3').textContent;
-                alert(`Configuration de ${carName} - Notre équipe vous contactera sous 24h !`);
-            });
-        });
-        
-        // Vérification que toutes les images sont chargées
-        window.addEventListener('load', function() {
-            console.log('✅ Toutes les images sont chargées et visibles !');
+                end: "top 20%",
+                scrub: 1
+            }
         });
     </script>
 </body>
