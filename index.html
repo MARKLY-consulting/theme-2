@@ -77,10 +77,17 @@
             width: 100vw; height: 100vh; display: flex; align-items: center;
             justify-content: center; position: relative;
         }
-        .item img { width: 30%; z-index: 2; transition: 0.5s; }
+        .item img { 
+            width: 30%; 
+            z-index: 2; 
+            transition: 0.5s;
+            object-fit: contain;
+            max-height: 60%;
+        }
         .bg-text {
             position: absolute; font-size: 25vw; font-family: 'Cormorant Garamond';
             color: rgba(0,0,0,0.02); font-weight: 800;
+            white-space: nowrap;
         }
 
         /* --- CONTACT --- */
@@ -93,13 +100,34 @@
         input, textarea {
             width: 100%; background: transparent; border: none; padding: 15px 0;
             color: white; outline: none; font-family: 'Space Grotesk';
+            font-size: 16px;
         }
+        textarea { resize: vertical; min-height: 100px; }
         .btn {
             padding: 20px 40px; background: var(--accent); color: white;
             border: none; cursor: pointer; text-transform: uppercase; letter-spacing: 2px;
+            transition: background 0.3s;
         }
+        .btn:hover { background: #a8876d; }
 
         footer { padding: 40px 10%; background: #000; color: #444; display: flex; justify-content: space-between; }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .story { grid-template-columns: 1fr; gap: 40px; padding: 100px 5%; }
+            .contact-section { grid-template-columns: 1fr; padding: 80px 5%; }
+            .main-title { font-size: 12vw; }
+            .item img { width: 50%; }
+            nav { padding: 20px 30px; }
+        }
+
+        @media (max-width: 768px) {
+            .cursor-dot, .cursor-outline { display: none; }
+            body { cursor: auto; }
+            .h-wrap { height: 80vh; }
+            .item { height: 80vh; }
+            .item img { width: 70%; }
+        }
     </style>
 </head>
 <body>
@@ -119,14 +147,16 @@
         <div class="viewport">
             <h1 class="main-title">Design<br>Intemporel</h1>
             <div class="frame">
-                <img src="https://images.unsplash.com/photo-1616486341353-c5833ad88010?q=80&w=2000&auto=format&fit=crop" id="h-img">
+                <!-- Image Unsplash avec ID spécifique et paramètres optimisés -->
+                <img src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" id="h-img" alt="Design d'intérieur moderne">
             </div>
         </div>
     </div>
 
     <section class="story">
         <div class="img-reveal">
-            <img src="https://images.unsplash.com/photo-1581783898377-1c85bf937427?q=80&w=1000&auto=format&fit=crop">
+            <!-- Image libre de droits d'Unsplash -->
+            <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=2053&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Détails architecturaux">
         </div>
         <div style="display: flex; flex-direction: column; justify-content: center;">
             <h2 style="font-family: 'Cormorant Garamond'; font-size: 3.5rem; line-height: 1;">L'harmonie dans <br><span style="color:var(--accent)">chaque détail.</span></h2>
@@ -140,23 +170,29 @@
         <div class="h-container">
             <div class="item">
                 <div class="bg-text">ASSISE</div>
-                <img src="https://www.pngarts.com/files/1/Sofa-PNG-Transparent-Image.png">
+                <!-- Image PNG transparente d'un canapé (source publique) -->
+                <img src="https://i.ibb.co/7Wtp1ZG/sofa-transparent.png" alt="Canapé design">
                 <div style="position: absolute; bottom: 10%; text-align:center;">
                     <h3 style="font-family:'Cormorant Garamond'; font-size: 2rem;">Sofa Nuage</h3>
+                    <p style="margin-top: 10px;">Design organique, confort absolu</p>
                 </div>
             </div>
             <div class="item">
                 <div class="bg-text">OBJET</div>
-                <img src="https://www.pngarts.com/files/3/Chair-PNG-Photo.png">
+                <!-- Image PNG d'une chaise (source publique) -->
+                <img src="https://i.ibb.co/6RJz51m/chair-transparent.png" alt="Chaise design">
                 <div style="position: absolute; bottom: 10%; text-align:center;">
                     <h3 style="font-family:'Cormorant Garamond'; font-size: 2rem;">Siège Oslo</h3>
+                    <p style="margin-top: 10px;">Élégance scandinave, bois naturel</p>
                 </div>
             </div>
             <div class="item">
                 <div class="bg-text">CLARTÉ</div>
-                <img src="https://www.pngarts.com/files/7/Table-Lamp-Transparent-Background.png">
+                <!-- Image PNG d'une lampe (source publique) -->
+                <img src="https://i.ibb.co/z6hpTBN/lamp-transparent.png" alt="Lampe design">
                 <div style="position: absolute; bottom: 10%; text-align:center;">
                     <h3 style="font-family:'Cormorant Garamond'; font-size: 2rem;">Lampe Aura</h3>
+                    <p style="margin-top: 10px;">Lumière douce, forme sculpturale</p>
                 </div>
             </div>
         </div>
@@ -167,38 +203,84 @@
             <h2>Parlons de <br>votre projet.</h2>
             <p style="margin-top: 20px; color: #888;">Disponible pour des résidences privées et espaces commerciaux.</p>
         </div>
-        <form>
-            <div class="input-group"><input type="text" placeholder="NOM"></div>
-            <div class="input-group"><input type="email" placeholder="EMAIL"></div>
-            <div class="input-group"><textarea placeholder="VOTRE MESSAGE" rows="4"></textarea></div>
-            <button class="btn">Envoyer</button>
+        <form id="contact-form">
+            <div class="input-group">
+                <input type="text" placeholder="NOM" required>
+            </div>
+            <div class="input-group">
+                <input type="email" placeholder="EMAIL" required>
+            </div>
+            <div class="input-group">
+                <textarea placeholder="VOTRE MESSAGE" rows="4" required></textarea>
+            </div>
+            <button type="submit" class="btn">Envoyer</button>
         </form>
     </section>
 
     <footer>
         <div>© 2026 LUMINA STUDIO</div>
-        <div>INSTAGRAM / PINTEREST</div>
+        <div style="display: flex; gap: 20px;">
+            <span>INSTAGRAM</span>
+            <span>PINTEREST</span>
+            <span>BEHANCE</span>
+        </div>
     </footer>
 
     <script>
         gsap.registerPlugin(ScrollTrigger);
 
-        // Curseur
+        // Curseur personnalisé
         const dot = document.querySelector('.cursor-dot');
         const outline = document.querySelector('.cursor-outline');
-        window.addEventListener('mousemove', (e) => {
-            gsap.to(dot, { x: e.clientX, y: e.clientY, duration: 0 });
-            gsap.to(outline, { x: e.clientX - 20, y: e.clientY - 20, duration: 0.15 });
-        });
+        
+        if (dot && outline) {
+            window.addEventListener('mousemove', (e) => {
+                gsap.to(dot, { x: e.clientX, y: e.clientY, duration: 0 });
+                gsap.to(outline, { x: e.clientX - 20, y: e.clientY - 20, duration: 0.15 });
+            });
+            
+            // Effet au survol des boutons
+            document.querySelectorAll('.btn, nav span').forEach(el => {
+                el.addEventListener('mouseenter', () => {
+                    gsap.to(outline, { scale: 1.5, duration: 0.2 });
+                });
+                el.addEventListener('mouseleave', () => {
+                    gsap.to(outline, { scale: 1, duration: 0.2 });
+                });
+            });
+        }
 
         // Hero Zoom
         gsap.to(".frame", {
-            width: "100%", height: "100%",
-            scrollTrigger: { trigger: ".hero", start: "top top", end: "bottom bottom", scrub: true }
+            width: "100%", 
+            height: "100%",
+            scrollTrigger: { 
+                trigger: ".hero", 
+                start: "top top", 
+                end: "bottom bottom", 
+                scrub: true 
+            }
         });
+        
         gsap.to("#h-img", {
             scale: 1,
-            scrollTrigger: { trigger: ".hero", start: "top top", end: "bottom bottom", scrub: true }
+            scrollTrigger: { 
+                trigger: ".hero", 
+                start: "top top", 
+                end: "bottom bottom", 
+                scrub: true 
+            }
+        });
+
+        // Animation d'apparition de l'image story
+        gsap.from(".img-reveal img", {
+            scale: 1.3,
+            duration: 2,
+            scrollTrigger: {
+                trigger: ".story",
+                start: "top 80%",
+                toggleActions: "play none none reverse"
+            }
         });
 
         // Horizontal Scroll
@@ -217,14 +299,68 @@
         // Parallaxe objets
         items.forEach(item => {
             gsap.from(item.querySelector('img'), {
-                y: 50, rotation: 5,
+                y: 50, 
+                rotation: 5,
                 scrollTrigger: {
                     trigger: item,
-                    containerAnimation: gsap.to(items, { xPercent: -100 * (items.length - 1), ease: "none" }),
+                    containerAnimation: gsap.to(items, { 
+                        xPercent: -100 * (items.length - 1), 
+                        ease: "none" 
+                    }),
                     start: "left right",
                     scrub: true
                 }
             });
+        });
+
+        // Effet de survol sur les images horizontales
+        items.forEach(item => {
+            const img = item.querySelector('img');
+            item.addEventListener('mouseenter', () => {
+                gsap.to(img, { scale: 1.05, duration: 0.3 });
+            });
+            item.addEventListener('mouseleave', () => {
+                gsap.to(img, { scale: 1, duration: 0.3 });
+            });
+        });
+
+        // Gestion du formulaire
+        document.getElementById('contact-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Récupérer les valeurs du formulaire
+            const name = this.querySelector('input[type="text"]').value;
+            const email = this.querySelector('input[type="email"]').value;
+            const message = this.querySelector('textarea').value;
+            
+            // Animation de confirmation
+            const btn = this.querySelector('.btn');
+            const originalText = btn.textContent;
+            
+            btn.textContent = 'Message envoyé !';
+            btn.style.background = '#6b8c42';
+            
+            // Réinitialiser le formulaire
+            this.reset();
+            
+            setTimeout(() => {
+                btn.textContent = originalText;
+                btn.style.background = '';
+            }, 3000);
+            
+            // En production, vous enverriez les données à un serveur ici
+            console.log('Formulaire envoyé:', { name, email, message });
+        });
+
+        // Animation du footer au scroll
+        gsap.from("footer", {
+            y: 50,
+            opacity: 0,
+            scrollTrigger: {
+                trigger: "footer",
+                start: "top 90%",
+                toggleActions: "play none none none"
+            }
         });
     </script>
 </body>
