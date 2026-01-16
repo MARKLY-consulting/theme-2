@@ -3,117 +3,1531 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Minimalist | Skincare</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-    <script src="https://unpkg.com/@studio-freight/lenis@1.0.33/dist/lenis.min.js"></script>
-    
+    <title>Élégance & Éclat | Bijoux & Accessoires de Luxe</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Raleway:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;500;800&display=swap');
+        /* Réinitialisation et styles de base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --primary: #d4af37;
+            --secondary: #a67c52;
+            --dark: #1a1a1a;
+            --light: #f8f5f0;
+            --accent: #8b4513;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
         
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f4f4f4;
-            color: #1a1a1a;
+            font-family: 'Raleway', sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background-color: var(--light);
             overflow-x: hidden;
         }
-
-        .product-card {
-            background: #ffffff;
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            border-radius: 24px;
+        
+        h1, h2, h3, h4 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            margin-bottom: 1rem;
         }
-
-        .product-card:hover {
+        
+        h1 {
+            font-size: 3.5rem;
+            line-height: 1.2;
+        }
+        
+        h2 {
+            font-size: 2.8rem;
+            text-align: center;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+        
+        h2:after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background-color: var(--primary);
+        }
+        
+        p {
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+        }
+        
+        section {
+            padding: 5rem 2rem;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background-color: var(--primary);
+            color: var(--dark);
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        
+        .btn:hover {
+            background-color: var(--secondary);
+            transform: translateY(-5px);
+            box-shadow: var(--shadow);
+        }
+        
+        /* Header et Navigation */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            background-color: rgba(26, 26, 26, 0.95);
+            padding: 1rem 0;
+            transition: all 0.5s ease;
+        }
+        
+        header.scrolled {
+            padding: 0.5rem 0;
+            box-shadow: var(--shadow);
+        }
+        
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+        }
+        
+        .logo span {
+            color: var(--light);
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 2rem;
+        }
+        
+        .nav-links a {
+            color: var(--light);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+        
+        .nav-links a:after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--primary);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+        
+        .nav-links a:hover:after {
+            width: 100%;
+        }
+        
+        .cart-icon {
+            position: relative;
+            color: var(--light);
+            font-size: 1.3rem;
+            margin-left: 2rem;
+            cursor: pointer;
+        }
+        
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background-color: var(--primary);
+            color: var(--dark);
+            font-size: 0.7rem;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+        }
+        
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--light);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1700&q=80');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            text-align: center;
+            color: var(--light);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 2;
+            animation: fadeInUp 1.5s ease-out;
+        }
+        
+        .hero h1 {
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 2.5rem;
+            opacity: 0.9;
+        }
+        
+        .hero .btn {
+            margin-top: 1rem;
+            background-color: var(--primary);
+            color: var(--dark);
+            font-size: 1.1rem;
+            padding: 15px 40px;
+        }
+        
+        .floating-elements {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+        
+        .floating-element {
+            position: absolute;
+            font-size: 2rem;
+            color: rgba(212, 175, 55, 0.3);
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .floating-element:nth-child(1) {
+            top: 20%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+        
+        .floating-element:nth-child(2) {
+            top: 60%;
+            left: 85%;
+            animation-delay: 1s;
+        }
+        
+        .floating-element:nth-child(3) {
+            top: 80%;
+            left: 15%;
+            animation-delay: 2s;
+        }
+        
+        .floating-element:nth-child(4) {
+            top: 30%;
+            left: 80%;
+            animation-delay: 3s;
+        }
+        
+        .floating-element:nth-child(5) {
+            top: 70%;
+            left: 5%;
+            animation-delay: 4s;
+        }
+        
+        /* About Section */
+        .about {
+            background-color: var(--light);
+        }
+        
+        .about-content {
+            display: flex;
+            align-items: center;
+            gap: 4rem;
+        }
+        
+        .about-text {
+            flex: 1;
+        }
+        
+        .about-image {
+            flex: 1;
+            position: relative;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+        
+        .about-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: transform 0.5s ease;
+        }
+        
+        .about-image:hover img {
             transform: scale(1.05);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.05);
         }
-
-        .hero-title {
-            font-size: 12vw;
-            line-height: 0.8;
-            letter-spacing: -0.05em;
+        
+        /* Products Section */
+        .products {
+            background-color: #f0ebe5;
+        }
+        
+        .products-filter {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+        
+        .filter-btn {
+            padding: 8px 20px;
+            margin: 0 5px 10px;
+            background-color: transparent;
+            border: 2px solid var(--secondary);
+            color: var(--dark);
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+        
+        .filter-btn.active, .filter-btn:hover {
+            background-color: var(--secondary);
+            color: var(--light);
+        }
+        
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+        
+        .product-card {
+            background-color: var(--light);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        
+        .product-card.animated {
+            opacity: 1;
+            transform: translateY(0);
+            transition: opacity 0.8s ease, transform 0.8s ease, box-shadow 0.3s ease;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        .product-image {
+            height: 250px;
+            overflow: hidden;
+        }
+        
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .product-card:hover .product-image img {
+            transform: scale(1.1);
+        }
+        
+        .product-info {
+            padding: 1.5rem;
+        }
+        
+        .product-info h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .product-price {
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+        }
+        
+        .product-card .btn {
+            width: 100%;
+            text-align: center;
+            padding: 10px;
+            font-size: 0.9rem;
+        }
+        
+        .product-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background-color: var(--primary);
+            color: var(--dark);
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            animation: pulse 2s infinite;
+        }
+        
+        /* Testimonials Section */
+        .testimonials {
+            background-color: var(--light);
+        }
+        
+        .testimonials-slider {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .testimonial-slide {
+            padding: 2rem;
+            text-align: center;
+            display: none;
+            animation: fadeIn 1s ease;
+        }
+        
+        .testimonial-slide.active {
+            display: block;
+        }
+        
+        .testimonial-text {
+            font-size: 1.2rem;
+            font-style: italic;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+        
+        .testimonial-text:before, .testimonial-text:after {
+            content: '"';
+            font-size: 3rem;
+            color: var(--primary);
+            position: absolute;
+            opacity: 0.5;
+        }
+        
+        .testimonial-text:before {
+            top: -20px;
+            left: -10px;
+        }
+        
+        .testimonial-text:after {
+            bottom: -40px;
+            right: -10px;
+        }
+        
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .testimonial-author img {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 15px;
+            border: 3px solid var(--primary);
+        }
+        
+        .slider-controls {
+            display: flex;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+        
+        .slider-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: #ccc;
+            margin: 0 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        .slider-dot.active {
+            background-color: var(--primary);
+        }
+        
+        /* Contact Section */
+        .contact {
+            background-color: #f0ebe5;
+        }
+        
+        .contact-container {
+            display: flex;
+            gap: 4rem;
+        }
+        
+        .contact-info {
+            flex: 1;
+        }
+        
+        .contact-info h3 {
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            color: var(--secondary);
+        }
+        
+        .contact-info p {
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .contact-info i {
+            margin-right: 10px;
+            color: var(--primary);
+            width: 20px;
+        }
+        
+        .contact-form {
+            flex: 1;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-family: 'Raleway', sans-serif;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+        
+        /* Animations supplémentaires */
+        .animated-image {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        
+        .animated-image.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .pulse-animation {
+            animation: pulse 2s infinite;
+        }
+        
+        .shine-effect {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .shine-effect:after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -60%;
+            width: 20%;
+            height: 200%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: rotate(30deg);
+            transition: all 0.6s;
+        }
+        
+        .shine-effect:hover:after {
+            left: 140%;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: var(--light);
+            padding: 4rem 2rem 2rem;
+        }
+        
+        .footer-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .footer-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        
+        .footer-links h3, .footer-newsletter h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        .footer-links h3:after, .footer-newsletter h3:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 2px;
+            background-color: var(--primary);
+        }
+        
+        .footer-links ul {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-links a {
+            color: #bbb;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+        
+        .newsletter-form {
+            display: flex;
+            margin-top: 1rem;
+        }
+        
+        .newsletter-input {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 5px 0 0 5px;
+            font-family: 'Raleway', sans-serif;
+        }
+        
+        .newsletter-btn {
+            background-color: var(--primary);
+            color: var(--dark);
+            border: none;
+            padding: 0 20px;
+            border-radius: 0 5px 5px 0;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+        }
+        
+        .newsletter-btn:hover {
+            background-color: #e6c34c;
+        }
+        
+        .social-icons {
+            display: flex;
+            margin-top: 2rem;
+        }
+        
+        .social-icons a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: var(--light);
+            border-radius: 50%;
+            margin-right: 10px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .social-icons a:hover {
+            background-color: var(--primary);
+            color: var(--dark);
+            transform: translateY(-5px);
+        }
+        
+        .copyright {
+            text-align: center;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #bbb;
+            font-size: 0.9rem;
+        }
+        
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-20px) rotate(10deg);
+            }
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.7);
+            }
+            70% {
+                transform: scale(1.05);
+                box-shadow: 0 0 0 10px rgba(212, 175, 55, 0);
+            }
+            100% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(212, 175, 55, 0);
+            }
+        }
+        
+        @keyframes shimmer {
+            0% {
+                transform: translateX(-100%);
+            }
+            100% {
+                transform: translateX(100%);
+            }
+        }
+        
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .about-content, .contact-container {
+                flex-direction: column;
+            }
+            
+            h1 {
+                font-size: 2.8rem;
+            }
+            
+            h2 {
+                font-size: 2.3rem;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            .nav-links {
+                position: fixed;
+                top: 70px;
+                left: 0;
+                width: 100%;
+                background-color: var(--dark);
+                flex-direction: column;
+                align-items: center;
+                padding: 2rem 0;
+                transform: translateY(-100%);
+                opacity: 0;
+                transition: all 0.3s ease;
+                box-shadow: var(--shadow);
+                z-index: 999;
+            }
+            
+            .nav-links.active {
+                transform: translateY(0);
+                opacity: 1;
+            }
+            
+            .nav-links li {
+                margin: 1rem 0;
+            }
+            
+            .hero-content {
+                padding: 1rem;
+            }
+            
+            section {
+                padding: 3rem 1rem;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            h1 {
+                font-size: 2.3rem;
+            }
+            
+            h2 {
+                font-size: 1.8rem;
+            }
+            
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
-
-    <nav class="fixed top-0 w-full z-50 flex justify-between p-8 mix-blend-difference text-white">
-        <div class="font-bold text-xl">Minimalist</div>
-        <div class="space-x-8 hidden md:flex">
-            <a href="#">Home</a>
-            <a href="#">Products</a>
-            <a href="#">Contact</a>
-        </div>
-        <button class="bg-white text-black px-6 py-2 rounded-full font-medium">Sign Up</button>
-    </nav>
-
-    <section class="min-h-screen flex flex-col items-center justify-center pt-20">
-        <h1 class="hero-title font-extrabold text-center uppercase mb-8 opacity-0" id="main-title">
-            Minimalist
-        </h1>
-        <div class="relative w-64 h-96 opacity-0" id="hero-image">
-            <img src="https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&q=80&w=600" 
-                 alt="Serum" class="w-full h-full object-cover rounded-2xl shadow-2xl">
-        </div>
-    </section>
-
-    <section class="max-w-6xl mx-auto px-4 py-24">
-        <h2 class="text-4xl font-bold mb-12">Our Products</h2>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+    <!-- Header et Navigation -->
+    <header id="header">
+        <div class="nav-container">
+            <a href="#" class="logo">Élégance<span>&Éclat</span></a>
             
-            <div class="product-card p-8 flex flex-col items-center reveal">
-                <img src="https://images.unsplash.com/photo-1601049541289-9b1b7bbbfe19?auto=format&fit=crop&q=80&w=300" class="mb-6 rounded-lg">
-                <h3 class="font-bold text-xl">Daily Sunscreen</h3>
-                <p class="text-gray-500">SPF 50+ Protection</p>
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#home">Accueil</a></li>
+                <li><a href="#about">À propos</a></li>
+                <li><a href="#products">Collection</a></li>
+                <li><a href="#testimonials">Avis</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            
+            <div class="cart-icon" id="cartIcon">
+                <i class="fas fa-shopping-bag"></i>
+                <span class="cart-count">0</span>
             </div>
+        </div>
+    </header>
 
-            <div class="product-card p-8 flex flex-col items-center reveal">
-                <img src="https://images.unsplash.com/photo-1570172619380-2126ad0cff44?auto=format&fit=crop&q=80&w=300" class="mb-6 rounded-lg">
-                <h3 class="font-bold text-xl">Hair Serum</h3>
-                <p class="text-gray-500">Growth Activator</p>
-            </div>
-
-            <div class="product-card p-8 flex flex-col items-center reveal">
-                <img src="https://images.unsplash.com/photo-1556228578-0d85b1a4d571?auto=format&fit=crop&q=80&w=300" class="mb-6 rounded-lg">
-                <h3 class="font-bold text-xl">Face Exfoliator</h3>
-                <p class="text-gray-500">Natural Glow</p>
-            </div>
-
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="floating-elements">
+            <div class="floating-element">✦</div>
+            <div class="floating-element">❖</div>
+            <div class="floating-element">♡</div>
+            <div class="floating-element">✦</div>
+            <div class="floating-element">❖</div>
+        </div>
+        
+        <div class="hero-content">
+            <h1>Bijoux & Accessoires d'Exception</h1>
+            <p>Découvrez notre collection exclusive de bijoux et accessoires qui allient élégance intemporelle et créativité contemporaine. Chaque pièce est conçue pour sublimer votre style.</p>
+            <a href="#products" class="btn">Explorer la Collection</a>
         </div>
     </section>
+
+    <!-- About Section -->
+    <section class="about" id="about">
+        <div class="container">
+            <h2>Notre Histoire</h2>
+            <div class="about-content">
+                <div class="about-text">
+                    <p>Fondée en 2010, Élégance & Éclat est née d'une passion pour l'artisanat d'exception et le design innovant. Notre marque s'est rapidement imposée comme une référence dans l'univers des bijoux et accessoires de luxe.</p>
+                    <p>Chaque pièce de notre collection est méticuleusement conçue par nos artisans expérimentés, alliant techniques traditionnelles et designs contemporains. Nous sélectionnons uniquement les matériaux les plus précieux pour garantir qualité et durabilité.</p>
+                    <p>Notre mission est de créer des bijoux qui racontent une histoire, qui captent la lumière et l'attention, et qui deviennent des trésors personnels pour ceux qui les portent.</p>
+                    <a href="#contact" class="btn pulse-animation">Nous Contacter</a>
+                </div>
+                <div class="about-image shine-effect animated-image">
+                    <img src="https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="Atelier de bijouterie">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section class="products" id="products">
+        <div class="container">
+            <h2>Notre Collection</h2>
+            
+            <div class="products-filter" id="productsFilter">
+                <button class="filter-btn active" data-filter="all">Tous</button>
+                <button class="filter-btn" data-filter="colliers">Colliers</button>
+                <button class="filter-btn" data-filter="bracelets">Bracelets</button>
+                <button class="filter-btn" data-filter="boucles">Boucles d'oreilles</button>
+                <button class="filter-btn" data-filter="bagues">Bagues</button>
+            </div>
+            
+            <div class="products-grid" id="productsGrid">
+                <!-- Les produits seront générés dynamiquement par JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="testimonials" id="testimonials">
+        <div class="container">
+            <h2>Témoignages</h2>
+            
+            <div class="testimonials-slider">
+                <div class="testimonial-slide active">
+                    <div class="testimonial-text">
+                        Les bijoux Élégance & Éclat sont tout simplement magnifiques. J'ai reçu de nombreux compliments sur mon collier en or rose. La qualité est exceptionnelle et le service client impeccable.
+                    </div>
+                    <div class="testimonial-author">
+                        <img src="https://randomuser.me/api/portraits/women/32.jpg" alt="Sophie Martin">
+                        <div>
+                            <h4>Sophie Martin</h4>
+                            <p>Client depuis 2 ans</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="testimonial-slide">
+                    <div class="testimonial-text">
+                        J'ai offert une bague de cette collection à ma femme pour notre anniversaire de mariage. Elle l'adore ! Le design est unique et l'attention portée aux détails est remarquable.
+                    </div>
+                    <div class="testimonial-author">
+                        <img src="https://randomuser.me/api/portraits/men/54.jpg" alt="Thomas Lefèvre">
+                        <div>
+                            <h4>Thomas Lefèvre</h4>
+                            <p>Client satisfait</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="testimonial-slide">
+                    <div class="testimonial-text">
+                        J'ai découvert cette marque il y a quelques mois et depuis, je ne porte plus que leurs créations. Chaque pièce est une œuvre d'art qui complète parfaitement mes tenues.
+                    </div>
+                    <div class="testimonial-author">
+                        <img src="https://randomuser.me/api/portraits/women/65.jpg" alt="Camille Dubois">
+                        <div>
+                            <h4>Camille Dubois</h4>
+                            <p>Influenceuse mode</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="slider-controls" id="sliderControls">
+                <div class="slider-dot active" data-slide="0"></div>
+                <div class="slider-dot" data-slide="1"></div>
+                <div class="slider-dot" data-slide="2"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact" id="contact">
+        <div class="container">
+            <h2>Contactez-Nous</h2>
+            
+            <div class="contact-container">
+                <div class="contact-info">
+                    <h3>Notre Boutique</h3>
+                    <p><i class="fas fa-map-marker-alt"></i> 123 Avenue des Champs-Élysées, 75008 Paris</p>
+                    <p><i class="fas fa-phone"></i> +33 1 23 45 67 89</p>
+                    <p><i class="fas fa-envelope"></i> contact@elegance-eclat.com</p>
+                    
+                    <h3>Horaires d'Ouverture</h3>
+                    <p><i class="fas fa-clock"></i> Lundi - Vendredi: 10h00 - 19h00</p>
+                    <p><i class="fas fa-clock"></i> Samedi: 10h00 - 20h00</p>
+                    <p><i class="fas fa-clock"></i> Dimanche: 11h00 - 18h00</p>
+                </div>
+                
+                <div class="contact-form">
+                    <form id="contactForm">
+                        <div class="form-group">
+                            <label for="name">Nom Complet</label>
+                            <input type="text" id="name" class="form-control" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email">Adresse Email</label>
+                            <input type="email" id="email" class="form-control" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="message">Message</label>
+                            <textarea id="message" class="form-control" rows="5" required></textarea>
+                        </div>
+                        
+                        <button type="submit" class="btn">Envoyer le Message</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-container">
+                <div class="footer-about">
+                    <div class="footer-logo">Élégance&Éclat</div>
+                    <p>Créateurs de bijoux et accessoires d'exception depuis 2010. Chaque pièce est conçue avec passion pour sublimer votre élégance naturelle.</p>
+                    
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-pinterest-p"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-links">
+                    <h3>Liens Rapides</h3>
+                    <ul>
+                        <li><a href="#home">Accueil</a></li>
+                        <li><a href="#about">À propos</a></li>
+                        <li><a href="#products">Collection</a></li>
+                        <li><a href="#testimonials">Témoignages</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-newsletter">
+                    <h3>Newsletter</h3>
+                    <p>Inscrivez-vous à notre newsletter pour recevoir en exclusivité nos nouvelles collections et offres spéciales.</p>
+                    
+                    <form class="newsletter-form" id="newsletterForm">
+                        <input type="email" class="newsletter-input" placeholder="Votre email" required>
+                        <button type="submit" class="newsletter-btn">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2023 Élégance & Éclat. Tous droits réservés. | Conçu avec passion pour les amoureux de la beauté.</p>
+            </div>
+        </div>
+    </footer>
 
     <script>
-        // 1. Initialisation de Lenis (Smooth Scroll)
-        const lenis = new Lenis();
-        function raf(time) {
-            lenis.raf(time);
-            requestAnimationFrame(raf);
-        }
-        requestAnimationFrame(raf);
+        // Données des produits AVEC IMAGES CORRECTES
+        const products = [
+            {
+                id: 1,
+                name: "Collier Éclat Doré",
+                category: "colliers",
+                price: "249€",
+                image: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                description: "Collier en or 18 carats avec pendentif saphir",
+                badge: "Nouveau"
+            },
+            {
+                id: 2,
+                name: "Bracelet Sérénité",
+                category: "bracelets",
+                price: "189€",
+                image: "https://images.unsplash.com/photo-1584917865442-de89df76afd3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                description: "Bracelet en argent sterling avec perles de culture",
+                badge: "Best-seller"
+            },
+            {
+                id: 3,
+                name: "Boucles d'Oreilles Lumière",
+                category: "boucles",
+                price: "159€",
+                image: "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                description: "Boucles d'oreilles en or blanc avec diamants",
+                badge: ""
+            },
+            {
+                id: 4,
+                name: "Bague Éternité",
+                category: "bagues",
+                price: "399€",
+                image: "https://images.unsplash.com/photo-1605100804763-247f67b3557e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                description: "Bague en platine avec diamant central",
+                badge: "Exclusif"
+            },
+            {
+                id: 5,
+                name: "Collier Perles de Lune",
+                category: "colliers",
+                price: "299€",
+                image: "https://images.unsplash.com/photo-1594576722512-582d5577dc56?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                description: "Collier de perles de culture avec fermoir en or",
+                badge: ""
+            },
+            {
+                id: 6,
+                name: "Bracelet Entrelacé",
+                category: "bracelets",
+                price: "129€",
+                image: "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                description: "Bracelet en cuir tressé avec fermoir en argent",
+                badge: ""
+            },
+            {
+                id: 7,
+                name: "Boucles d'Oreilles Étoile",
+                category: "boucles",
+                price: "179€",
+                image: "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                description: "Boucles d'oreilles en forme d'étoile avec zirconium",
+                badge: "Nouveau"
+            },
+            {
+                id: 8,
+                name: "Bague Aurore",
+                category: "bagues",
+                price: "229€",
+                image: "https://images.unsplash.com/photo-1605100804763-247f67b3557e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                description: "Bague en or rose avec améthyste",
+                badge: ""
+            }
+        ];
 
-        // 2. Animations GSAP
-        gsap.registerPlugin(ScrollTrigger);
+        // Variables globales
+        let cartCount = 0;
+        let currentSlide = 0;
+        let slideInterval;
+        let animatedElements = [];
 
-        // Animation d'entrée du titre et de l'image
-        const tl = gsap.timeline();
-        tl.to("#main-title", { opacity: 1, y: -20, duration: 1.5, ease: "power4.out" })
-          .to("#hero-image", { opacity: 1, scale: 1.1, duration: 1, ease: "power2.out" }, "-=1");
+        // Initialisation du site
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialiser les produits
+            renderProducts();
+            
+            // Initialiser le slider des témoignages
+            initTestimonialSlider();
+            
+            // Initialiser les événements
+            initEvents();
+            
+            // Gérer le scroll de l'en-tête
+            window.addEventListener('scroll', handleHeaderScroll);
+            
+            // Observer les éléments pour l'animation
+            initScrollAnimations();
+            
+            // Initialiser l'en-tête
+            handleHeaderScroll();
+        });
 
-        // Animation des cartes au scroll
-        gsap.utils.toArray(".reveal").forEach((card) => {
-            gsap.from(card, {
-                scrollTrigger: {
-                    trigger: card,
-                    start: "top 85%",
-                    toggleActions: "play none none reverse"
-                },
-                opacity: 0,
-                y: 50,
-                duration: 1,
-                ease: "power3.out"
+        // Rendre les produits dans la grille
+        function renderProducts(filter = 'all') {
+            const productsGrid = document.getElementById('productsGrid');
+            productsGrid.innerHTML = '';
+            
+            const filteredProducts = filter === 'all' 
+                ? products 
+                : products.filter(product => product.category === filter);
+            
+            filteredProducts.forEach((product, index) => {
+                const productCard = document.createElement('div');
+                productCard.className = 'product-card';
+                productCard.dataset.category = product.category;
+                
+                // Ajouter un délai d'animation différent pour chaque carte
+                productCard.style.transitionDelay = `${index * 0.1}s`;
+                
+                productCard.innerHTML = `
+                    ${product.badge ? `<div class="product-badge">${product.badge}</div>` : ''}
+                    <div class="product-image">
+                        <img src="${product.image}" alt="${product.name}" loading="lazy">
+                    </div>
+                    <div class="product-info">
+                        <h3>${product.name}</h3>
+                        <p>${product.description}</p>
+                        <div class="product-price">${product.price}</div>
+                        <button class="btn add-to-cart" data-id="${product.id}">
+                            <i class="fas fa-shopping-bag"></i> Ajouter au Panier
+                        </button>
+                    </div>
+                `;
+                
+                productsGrid.appendChild(productCard);
+                
+                // Ajouter à la liste des éléments à animer
+                animatedElements.push(productCard);
             });
+            
+            // Ajouter les événements aux boutons "Ajouter au panier"
+            document.querySelectorAll('.add-to-cart').forEach(button => {
+                button.addEventListener('click', function() {
+                    const productId = parseInt(this.dataset.id);
+                    addToCart(productId);
+                });
+            });
+            
+            // Activer les animations après un court délai
+            setTimeout(() => {
+                animateProducts();
+            }, 300);
+        }
+
+        // Animer les produits
+        function animateProducts() {
+            document.querySelectorAll('.product-card').forEach(card => {
+                card.classList.add('animated');
+            });
+        }
+
+        // Initialiser le slider des témoignages
+        function initTestimonialSlider() {
+            const slides = document.querySelectorAll('.testimonial-slide');
+            const dots = document.querySelectorAll('.slider-dot');
+            
+            // Fonction pour changer de slide
+            function goToSlide(n) {
+                slides[currentSlide].classList.remove('active');
+                dots[currentSlide].classList.remove('active');
+                
+                currentSlide = (n + slides.length) % slides.length;
+                
+                slides[currentSlide].classList.add('active');
+                dots[currentSlide].classList.add('active');
+            }
+            
+            // Événements pour les points de contrôle
+            dots.forEach(dot => {
+                dot.addEventListener('click', function() {
+                    const slideIndex = parseInt(this.dataset.slide);
+                    goToSlide(slideIndex);
+                    resetSlideInterval();
+                });
+            });
+            
+            // Démarrage de l'intervalle automatique
+            startSlideInterval();
+        }
+
+        // Démarrer l'intervalle automatique du slider
+        function startSlideInterval() {
+            slideInterval = setInterval(() => {
+                goToSlide(currentSlide + 1);
+            }, 5000);
+        }
+
+        // Réinitialiser l'intervalle du slider
+        function resetSlideInterval() {
+            clearInterval(slideInterval);
+            startSlideInterval();
+        }
+
+        // Aller à un slide spécifique
+        function goToSlide(n) {
+            const slides = document.querySelectorAll('.testimonial-slide');
+            const dots = document.querySelectorAll('.slider-dot');
+            
+            slides[currentSlide].classList.remove('active');
+            dots[currentSlide].classList.remove('active');
+            
+            currentSlide = (n + slides.length) % slides.length;
+            
+            slides[currentSlide].classList.add('active');
+            dots[currentSlide].classList.add('active');
+        }
+
+        // Initialiser les événements
+        function initEvents() {
+            // Menu mobile
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const navLinks = document.getElementById('navLinks');
+            
+            mobileMenuBtn.addEventListener('click', function() {
+                navLinks.classList.toggle('active');
+                this.innerHTML = navLinks.classList.contains('active') 
+                    ? '<i class="fas fa-times"></i>' 
+                    : '<i class="fas fa-bars"></i>';
+            });
+            
+            // Fermer le menu mobile en cliquant sur un lien
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                link.addEventListener('click', function() {
+                    navLinks.classList.remove('active');
+                    mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+                });
+            });
+            
+            // Filtrage des produits
+            document.querySelectorAll('.filter-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    // Animation sur le bouton cliqué
+                    this.classList.add('pulse-animation');
+                    setTimeout(() => {
+                        this.classList.remove('pulse-animation');
+                    }, 1000);
+                    
+                    // Retirer la classe active de tous les boutons
+                    document.querySelectorAll('.filter-btn').forEach(btn => {
+                        btn.classList.remove('active');
+                    });
+                    
+                    // Ajouter la classe active au bouton cliqué
+                    this.classList.add('active');
+                    
+                    // Filtrer les produits
+                    const filter = this.dataset.filter;
+                    renderProducts(filter);
+                });
+            });
+            
+            // Formulaire de contact
+            const contactForm = document.getElementById('contactForm');
+            contactForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Animation de succès
+                const submitBtn = this.querySelector('.btn');
+                submitBtn.innerHTML = '<i class="fas fa-check"></i> Message Envoyé !';
+                submitBtn.style.backgroundColor = '#4CAF50';
+                
+                setTimeout(() => {
+                    submitBtn.innerHTML = 'Envoyer le Message';
+                    submitBtn.style.backgroundColor = '';
+                    alert('Merci pour votre message ! Nous vous répondrons dans les plus brefs délais.');
+                    contactForm.reset();
+                }, 1500);
+            });
+            
+            // Formulaire de newsletter
+            const newsletterForm = document.getElementById('newsletterForm');
+            newsletterForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const email = this.querySelector('.newsletter-input').value;
+                const submitBtn = this.querySelector('.newsletter-btn');
+                
+                // Animation
+                submitBtn.innerHTML = '<i class="fas fa-check"></i>';
+                submitBtn.style.backgroundColor = '#4CAF50';
+                
+                setTimeout(() => {
+                    alert(`Merci de vous être abonné à notre newsletter avec l'adresse : ${email}`);
+                    this.reset();
+                    submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i>';
+                    submitBtn.style.backgroundColor = '';
+                }, 1000);
+            });
+            
+            // Icône du panier
+            const cartIcon = document.getElementById('cartIcon');
+            cartIcon.addEventListener('click', function() {
+                if (cartCount === 0) {
+                    alert("Votre panier est vide. Ajoutez des articles avant de consulter votre panier.");
+                } else {
+                    alert(`Votre panier contient ${cartCount} article(s). Cette fonctionnalité serait pleinement implémentée dans une version complète du site.`);
+                }
+            });
+        }
+
+        // Gérer le scroll de l'en-tête
+        function handleHeaderScroll() {
+            const header = document.getElementById('header');
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+            
+            // Gérer les animations au défilement
+            handleScrollAnimations();
+        }
+
+        // Initialiser les animations au défilement
+        function initScrollAnimations() {
+            // Ajouter l'image "about" aux éléments animés
+            const aboutImage = document.querySelector('.animated-image');
+            if (aboutImage) {
+                animatedElements.push(aboutImage);
+            }
+            
+            // Ajouter les sections aux éléments animés
+            document.querySelectorAll('section').forEach(section => {
+                animatedElements.push(section);
+            });
+        }
+
+        // Gérer les animations au défilement
+        function handleScrollAnimations() {
+            animatedElements.forEach(element => {
+                if (element) {
+                    const elementPosition = element.getBoundingClientRect().top;
+                    const screenPosition = window.innerHeight / 1.2;
+                    
+                    if (elementPosition < screenPosition) {
+                        element.classList.add('animated');
+                        if (element.classList.contains('animated-image')) {
+                            element.classList.add('visible');
+                        }
+                    }
+                }
+            });
+        }
+
+        // Ajouter un article au panier
+        function addToCart(productId) {
+            cartCount++;
+            document.querySelector('.cart-count').textContent = cartCount;
+            
+            // Animation sur l'icône du panier
+            const cartIcon = document.getElementById('cartIcon');
+            cartIcon.style.transform = 'scale(1.3)';
+            cartIcon.style.color = 'var(--primary)';
+            
+            setTimeout(() => {
+                cartIcon.style.transform = 'scale(1)';
+                setTimeout(() => {
+                    cartIcon.style.color = '';
+                }, 300);
+            }, 300);
+            
+            // Animation de confirmation
+            const productCard = document.querySelector(`.add-to-cart[data-id="${productId}"]`).closest('.product-card');
+            productCard.style.boxShadow = '0 0 20px var(--primary)';
+            
+            setTimeout(() => {
+                productCard.style.boxShadow = '';
+            }, 1000);
+            
+            // Trouver le produit
+            const product = products.find(p => p.id === productId);
+            
+            // Notification visuelle
+            const notification = document.createElement('div');
+            notification.style.position = 'fixed';
+            notification.style.top = '100px';
+            notification.style.right = '20px';
+            notification.style.backgroundColor = 'var(--primary)';
+            notification.style.color = 'var(--dark)';
+            notification.style.padding = '15px 20px';
+            notification.style.borderRadius = '5px';
+            notification.style.boxShadow = 'var(--shadow)';
+            notification.style.zIndex = '10000';
+            notification.style.fontWeight = 'bold';
+            notification.style.transform = 'translateX(150%)';
+            notification.style.transition = 'transform 0.5s ease';
+            notification.innerHTML = `<i class="fas fa-check"></i> ${product.name} ajouté au panier !`;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.transform = 'translateX(0)';
+            }, 10);
+            
+            setTimeout(() => {
+                notification.style.transform = 'translateX(150%)';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 500);
+            }, 3000);
+        }
+
+        // Animation supplémentaire pour les éléments au chargement
+        window.addEventListener('load', function() {
+            // Animation de chargement pour les produits
+            setTimeout(() => {
+                animateProducts();
+            }, 500);
+            
+            // Animation pour l'image "about"
+            const aboutImage = document.querySelector('.animated-image');
+            if (aboutImage) {
+                setTimeout(() => {
+                    aboutImage.classList.add('visible');
+                }, 700);
+            }
+            
+            // Animation de rebond pour le logo
+            const logo = document.querySelector('.logo');
+            setTimeout(() => {
+                logo.style.animation = 'bounce 1s ease';
+                setTimeout(() => {
+                    logo.style.animation = '';
+                }, 1000);
+            }, 1000);
         });
     </script>
 </body>
