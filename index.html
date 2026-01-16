@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LUMINA | Architecture d'Intérieur 3D</title>
+    <title>LUMINA | Design & Harmonie</title>
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,600;1,300&family=Space+Grotesk:wght@300;500&display=swap" rel="stylesheet">
@@ -12,10 +12,9 @@
 
     <style>
         :root {
-            --bg: #fdfbf8;
+            --bg: #f8f6f2;
             --text: #1a1a1a;
             --accent: #bc9c82;
-            --soft-gray: #f2f2f2;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -27,272 +26,206 @@
             cursor: none;
         }
 
-        /* --- CURSEUR CRÉATIF --- */
-        .cursor-outer {
+        /* --- CURSEUR --- */
+        .cursor-dot {
+            position: fixed; width: 8px; height: 8px; background: var(--accent);
+            border-radius: 50%; pointer-events: none; z-index: 10001;
+        }
+        .cursor-outline {
             position: fixed; width: 40px; height: 40px; border: 1px solid var(--accent);
             border-radius: 50%; pointer-events: none; z-index: 10000;
             transition: transform 0.15s ease-out;
         }
-        .cursor-inner {
-            position: fixed; width: 6px; height: 6px; background: var(--accent);
-            border-radius: 50%; pointer-events: none; z-index: 10001;
-        }
 
-        /* --- NAVIGATION --- */
+        /* --- NAV --- */
         nav {
-            position: fixed; width: 100%; padding: 40px;
+            position: fixed; width: 100%; padding: 30px 50px;
             display: flex; justify-content: space-between; z-index: 100;
-            mix-blend-mode: difference; color: white;
-            font-size: 0.8rem; letter-spacing: 3px;
+            font-size: 0.7rem; letter-spacing: 4px; font-weight: 500;
         }
 
-        /* --- HERO: ZOOM 3D EFFECT --- */
+        /* --- HERO ZOOM --- */
         .hero { height: 300vh; position: relative; }
         .viewport {
             position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
             display: flex; align-items: center; justify-content: center;
-            overflow: hidden;
         }
         .main-title {
             font-family: 'Cormorant Garamond', serif;
-            font-size: 8vw; font-weight: 300; font-style: italic;
-            z-index: 10; pointer-events: none; text-align: center;
-            line-height: 0.9;
+            font-size: 9vw; font-weight: 300; font-style: italic;
+            z-index: 10; text-align: center; line-height: 0.8;
+            mix-blend-mode: difference; color: white;
         }
-        .room-frame {
-            position: absolute; width: 45%; height: 65%;
-            overflow: hidden; box-shadow: 0 40px 100px rgba(0,0,0,0.15);
+        .frame {
+            position: absolute; width: 40%; height: 60%;
+            overflow: hidden; box-shadow: 0 30px 80px rgba(0,0,0,0.2);
         }
-        .room-img { width: 100%; height: 100%; object-fit: cover; transform: scale(1.2); }
+        .frame img { width: 100%; height: 100%; object-fit: cover; transform: scale(1.2); }
 
-        /* --- SECTION STORY --- */
+        /* --- SECTION 2 --- */
         .story {
             padding: 150px 10%; display: grid; grid-template-columns: 1fr 1fr;
-            gap: 100px; background: white; position: relative; z-index: 20;
+            gap: 80px; background: white; position: relative; z-index: 20;
         }
-        .story-img-wrap { overflow: hidden; border-radius: 5px; }
-        .story-img { width: 100%; transition: 1.5s; }
-        .elegant-h2 { font-family: 'Cormorant Garamond', serif; font-size: 4.5rem; line-height: 1; margin-bottom: 30px; }
+        .img-reveal { overflow: hidden; height: 500px; }
+        .img-reveal img { width: 100%; height: 100%; object-fit: cover; }
 
-        /* --- HORIZONTAL 3D SHOWCASE --- */
-        .horizontal-section { overflow: hidden; background: var(--soft-gray); }
-        .horizontal-container { display: flex; width: 300vw; }
-        .product-card {
+        /* --- HORIZONTAL --- */
+        .h-wrap { overflow: hidden; background: #efedea; }
+        .h-container { display: flex; width: 300vw; }
+        .item {
             width: 100vw; height: 100vh; display: flex; align-items: center;
             justify-content: center; position: relative;
         }
-        .product-card img { width: 35%; z-index: 2; filter: drop-shadow(0 30px 50px rgba(0,0,0,0.1)); }
-        .product-bg-text {
-            position: absolute; font-size: 20vw; font-family: 'Cormorant Garamond';
-            color: rgba(0,0,0,0.03); font-weight: 700; white-space: nowrap;
+        .item img { width: 30%; z-index: 2; transition: 0.5s; }
+        .bg-text {
+            position: absolute; font-size: 25vw; font-family: 'Cormorant Garamond';
+            color: rgba(0,0,0,0.02); font-weight: 800;
         }
 
-        /* --- SECTION CONTACT LUXE --- */
-        .contact {
-            padding: 150px 10%; background: #1a1a1a; color: white;
-            display: grid; grid-template-columns: 1fr 1.2fr; gap: 80px;
+        /* --- CONTACT --- */
+        .contact-section {
+            padding: 120px 10%; background: #111; color: white;
+            display: grid; grid-template-columns: 1fr 1fr; gap: 60px;
         }
-        .contact-info h2 { font-family: 'Cormorant Garamond', serif; font-size: 4rem; color: var(--accent); }
-        .form-group { margin-bottom: 30px; position: relative; }
-        .form-group input, .form-group textarea {
-            width: 100%; background: transparent; border: none;
-            border-bottom: 1px solid rgba(255,255,255,0.2);
-            padding: 15px 0; color: white; font-family: 'Space Grotesk'; outline: none;
-            transition: 0.3s;
+        .contact-section h2 { font-family: 'Cormorant Garamond', serif; font-size: 4rem; }
+        .input-group { margin-bottom: 30px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        input, textarea {
+            width: 100%; background: transparent; border: none; padding: 15px 0;
+            color: white; outline: none; font-family: 'Space Grotesk';
         }
-        .form-group input:focus { border-bottom-color: var(--accent); }
-        .submit-btn {
-            background: var(--accent); color: white; padding: 20px 50px;
-            border: none; cursor: pointer; font-family: 'Space Grotesk';
-            font-weight: 600; letter-spacing: 2px; text-transform: uppercase;
-            transition: 0.4s;
+        .btn {
+            padding: 20px 40px; background: var(--accent); color: white;
+            border: none; cursor: pointer; text-transform: uppercase; letter-spacing: 2px;
         }
-        .submit-btn:hover { background: #fff; color: #000; transform: translateY(-5px); }
 
-        footer {
-            padding: 50px 10%; background: #111; color: rgba(255,255,255,0.3);
-            display: flex; justify-content: space-between; font-size: 0.8rem;
-        }
+        footer { padding: 40px 10%; background: #000; color: #444; display: flex; justify-content: space-between; }
     </style>
 </head>
 <body>
 
-    <div class="cursor-outer"></div>
-    <div class="cursor-inner"></div>
+    <div class="cursor-dot"></div>
+    <div class="cursor-outline"></div>
 
     <nav>
-        <div style="font-weight: 600;">LUMINA<span>.</span></div>
-        <div style="display: flex; gap: 40px;">
+        <div style="font-weight: 700;">LUMINA.STUDIO</div>
+        <div style="display:flex; gap: 30px;">
+            <span>MENU</span>
             <span>PROJETS</span>
-            <span>STUDIO</span>
-            <span>CONTACT</span>
         </div>
     </nav>
 
     <div class="hero">
         <div class="viewport">
-            <h1 class="main-title">L'Émotion<br>de l'Espace</h1>
-            <div class="room-frame">
-                <img src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1600&q=80" class="room-img" id="hero-img">
+            <h1 class="main-title">Design<br>Intemporel</h1>
+            <div class="frame">
+                <img src="https://images.unsplash.com/photo-1616486341353-c5833ad88010?q=80&w=2000&auto=format&fit=crop" id="h-img">
             </div>
         </div>
     </div>
 
     <section class="story">
-        <div class="story-img-wrap">
-            <img src="https://images.unsplash.com/photo-1616486341353-c5833ad88010?auto=format&fit=crop&w=1000&q=80" class="story-img" id="scroll-img">
+        <div class="img-reveal">
+            <img src="https://images.unsplash.com/photo-1581783898377-1c85bf937427?q=80&w=1000&auto=format&fit=crop">
         </div>
         <div style="display: flex; flex-direction: column; justify-content: center;">
-            <h2 class="elegant-h2">Simplicité <br><span style="color:var(--accent)">Intemporelle.</span></h2>
-            <p style="color: #666; line-height: 1.8; font-size: 1.1rem;">
-                Nous croyons que chaque maison doit être un sanctuaire. Nos designs fusionnent le minimalisme moderne avec la chaleur des textures organiques pour créer une harmonie visuelle unique.
+            <h2 style="font-family: 'Cormorant Garamond'; font-size: 3.5rem; line-height: 1;">L'harmonie dans <br><span style="color:var(--accent)">chaque détail.</span></h2>
+            <p style="margin-top: 30px; color: #777; line-height: 1.8;">
+                Nous concevons des espaces qui capturent la lumière et favorisent le bien-être. Notre approche repose sur l'utilisation de matériaux nobles et une esthétique épurée.
             </p>
-            <div style="margin-top: 40px; font-weight: 500; border-bottom: 2px solid var(--accent); width: fit-content; padding-bottom: 5px;">NOTRE PHILOSOPHIE</div>
         </div>
     </section>
 
-    <div class="horizontal-section">
-        <div class="horizontal-container">
-            <div class="product-card">
-                <div class="product-bg-text">MINIMAL</div>
-                <img src="https://www.pngmart.com/files/7/Modern-Chair-PNG-Transparent-Image.png">
-                <div style="position: absolute; bottom: 100px; text-align: center;">
-                    <h3 style="font-family: 'Cormorant Garamond'; font-size: 2.5rem;">Chaise OSLO</h3>
-                    <p style="letter-spacing: 3px; color: var(--accent);">CHÊNE BLANC</p>
+    <div class="h-wrap">
+        <div class="h-container">
+            <div class="item">
+                <div class="bg-text">ASSISE</div>
+                <img src="https://www.pngarts.com/files/1/Sofa-PNG-Transparent-Image.png">
+                <div style="position: absolute; bottom: 10%; text-align:center;">
+                    <h3 style="font-family:'Cormorant Garamond'; font-size: 2rem;">Sofa Nuage</h3>
                 </div>
             </div>
-            <div class="product-card">
-                <div class="product-bg-text">PURETÉ</div>
-                <img src="https://www.pngmart.com/files/1/Sofa-PNG-Transparent-Image.png">
-                <div style="position: absolute; bottom: 100px; text-align: center;">
-                    <h3 style="font-family: 'Cormorant Garamond'; font-size: 2.5rem;">Divan CLOUD</h3>
-                    <p style="letter-spacing: 3px; color: var(--accent);">COTON ORGANIQUE</p>
+            <div class="item">
+                <div class="bg-text">OBJET</div>
+                <img src="https://www.pngarts.com/files/3/Chair-PNG-Photo.png">
+                <div style="position: absolute; bottom: 10%; text-align:center;">
+                    <h3 style="font-family:'Cormorant Garamond'; font-size: 2rem;">Siège Oslo</h3>
                 </div>
             </div>
-            <div class="product-card">
-                <div class="product-bg-text">LUMIÈRE</div>
-                <img src="https://www.pngmart.com/files/7/Lamp-PNG-File.png">
-                <div style="position: absolute; bottom: 100px; text-align: center;">
-                    <h3 style="font-family: 'Cormorant Garamond'; font-size: 2.5rem;">Lampe AURA</h3>
-                    <p style="letter-spacing: 3px; color: var(--accent);">LAITON BROSSÉ</p>
+            <div class="item">
+                <div class="bg-text">CLARTÉ</div>
+                <img src="https://www.pngarts.com/files/7/Table-Lamp-Transparent-Background.png">
+                <div style="position: absolute; bottom: 10%; text-align:center;">
+                    <h3 style="font-family:'Cormorant Garamond'; font-size: 2rem;">Lampe Aura</h3>
                 </div>
             </div>
         </div>
     </div>
 
-    <section class="contact">
-        <div class="contact-info">
-            <h2>Créons votre <br>sanctuaire.</h2>
-            <p style="margin-top: 30px; opacity: 0.6;">Basé à Paris, disponible pour des projets dans le monde entier.</p>
-            <div style="margin-top: 60px;">
-                <p style="color: var(--accent); margin-bottom: 10px;">EMAIL</p>
-                <p style="font-size: 1.5rem;">hello@lumina.studio</p>
-            </div>
+    <section class="contact-section">
+        <div>
+            <h2>Parlons de <br>votre projet.</h2>
+            <p style="margin-top: 20px; color: #888;">Disponible pour des résidences privées et espaces commerciaux.</p>
         </div>
-        <form class="contact-form">
-            <div class="form-group">
-                <input type="text" placeholder="VOTRE NOM" required>
-            </div>
-            <div class="form-group">
-                <input type="email" placeholder="VOTRE EMAIL" required>
-            </div>
-            <div class="form-group">
-                <textarea placeholder="PARLEZ-NOUS DE VOTRE PROJET" rows="5"></textarea>
-            </div>
-            <button type="submit" class="submit-btn">Envoyer la demande</button>
+        <form>
+            <div class="input-group"><input type="text" placeholder="NOM"></div>
+            <div class="input-group"><input type="email" placeholder="EMAIL"></div>
+            <div class="input-group"><textarea placeholder="VOTRE MESSAGE" rows="4"></textarea></div>
+            <button class="btn">Envoyer</button>
         </form>
     </section>
 
     <footer>
-        <div>LUMINA © 2026</div>
-        <div style="display: flex; gap: 30px;">
-            <span>INSTAGRAM</span>
-            <span>PINTEREST</span>
-            <span>BEHANCE</span>
-        </div>
+        <div>© 2026 LUMINA STUDIO</div>
+        <div>INSTAGRAM / PINTEREST</div>
     </footer>
 
     <script>
         gsap.registerPlugin(ScrollTrigger);
 
-        // --- CURSEUR ---
-        const cOuter = document.querySelector('.cursor-outer');
-        const cInner = document.querySelector('.cursor-inner');
-        
-        document.addEventListener('mousemove', (e) => {
-            gsap.to(cInner, { x: e.clientX, y: e.clientY, duration: 0 });
-            gsap.to(cOuter, { x: e.clientX - 20, y: e.clientY - 20, duration: 0.2 });
+        // Curseur
+        const dot = document.querySelector('.cursor-dot');
+        const outline = document.querySelector('.cursor-outline');
+        window.addEventListener('mousemove', (e) => {
+            gsap.to(dot, { x: e.clientX, y: e.clientY, duration: 0 });
+            gsap.to(outline, { x: e.clientX - 20, y: e.clientY - 20, duration: 0.15 });
         });
 
-        // --- ANIMATION HERO ZOOM ---
-        gsap.to(".room-frame", {
-            width: "100%",
-            height: "100%",
-            scrollTrigger: {
-                trigger: ".hero",
-                start: "top top",
-                end: "bottom bottom",
-                scrub: true
-            }
+        // Hero Zoom
+        gsap.to(".frame", {
+            width: "100%", height: "100%",
+            scrollTrigger: { trigger: ".hero", start: "top top", end: "bottom bottom", scrub: true }
         });
-
-        gsap.to("#hero-img", {
+        gsap.to("#h-img", {
             scale: 1,
-            scrollTrigger: {
-                trigger: ".hero",
-                start: "top top",
-                end: "bottom bottom",
-                scrub: true
-            }
+            scrollTrigger: { trigger: ".hero", start: "top top", end: "bottom bottom", scrub: true }
         });
 
-        gsap.to(".main-title", {
-            y: -200, opacity: 0,
-            scrollTrigger: {
-                trigger: ".hero",
-                start: "top top",
-                end: "center center",
-                scrub: true
-            }
-        });
-
-        // --- STORY REVEAL ---
-        gsap.from("#scroll-img", {
-            scale: 1.5,
-            scrollTrigger: {
-                trigger: ".story",
-                start: "top bottom",
-                end: "bottom top",
-                scrub: true
-            }
-        });
-
-        // --- HORIZONTAL SCROLL ---
-        let cards = gsap.utils.toArray(".product-card");
-        gsap.to(cards, {
-            xPercent: -100 * (cards.length - 1),
+        // Horizontal Scroll
+        let items = gsap.utils.toArray(".item");
+        gsap.to(items, {
+            xPercent: -100 * (items.length - 1),
             ease: "none",
             scrollTrigger: {
-                trigger: ".horizontal-section",
+                trigger: ".h-wrap",
                 pin: true,
                 scrub: 1,
-                end: () => "+=" + document.querySelector(".horizontal-container").offsetWidth
+                end: "+=3000"
             }
         });
 
-        // Animation de parallaxe sur le texte en arrière-plan (Horizontal)
-        cards.forEach(card => {
-            gsap.from(card.querySelector('.product-bg-text'), {
-                x: -200,
+        // Parallaxe objets
+        items.forEach(item => {
+            gsap.from(item.querySelector('img'), {
+                y: 50, rotation: 5,
                 scrollTrigger: {
-                    trigger: card,
-                    containerAnimation: gsap.to(cards, { xPercent: -100 * (cards.length - 1) }),
+                    trigger: item,
+                    containerAnimation: gsap.to(items, { xPercent: -100 * (items.length - 1), ease: "none" }),
                     start: "left right",
                     scrub: true
                 }
             });
         });
-
     </script>
 </body>
 </html>
