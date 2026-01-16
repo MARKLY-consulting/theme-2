@@ -98,6 +98,17 @@
             100% { background-position: 0% 100%; }
         }
 
+        @keyframes headBob {
+            0%, 100% { transform: rotateZ(0deg); }
+            25% { transform: rotateZ(2deg); }
+            75% { transform: rotateZ(-2deg); }
+        }
+
+        @keyframes beat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
         /* ===== HEADER & NAVIGATION ===== */
         header {
             position: fixed;
@@ -320,6 +331,7 @@
             background: var(--bg-darker);
             padding: 5rem 0;
             position: relative;
+            overflow: hidden;
         }
 
         .product-3d:before {
@@ -330,6 +342,12 @@
             width: 100%;
             height: 1px;
             background: linear-gradient(90deg, transparent, var(--primary), transparent);
+            z-index: 1;
+        }
+
+        .product-3d .container {
+            position: relative;
+            z-index: 3;
         }
 
         .section-title {
@@ -359,29 +377,51 @@
             gap: 4rem;
             align-items: center;
             margin-top: 3rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .viewer-wrapper {
+            position: relative;
+            width: 100%;
+            height: 500px;
         }
 
         #headphone-canvas {
             width: 100%;
-            height: 500px;
+            height: 100%;
             border-radius: 20px;
             background: rgba(10, 10, 20, 0.8);
             border: 1px solid var(--neon-border);
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
             position: relative;
             overflow: hidden;
+            z-index: 2;
         }
 
-        #headphone-canvas:before {
-            content: '';
+        .robot-bg {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(45deg, transparent, rgba(0, 243, 255, 0.05), transparent);
             z-index: 1;
+            opacity: 0.3;
             pointer-events: none;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        #robot-canvas {
+            width: 100%;
+            height: 100%;
+        }
+
+        .viewer-hint {
+            text-align: center;
+            margin-top: 1rem;
+            color: var(--text-dim);
+            font-size: 0.9rem;
         }
 
         .viewer-controls {
@@ -396,6 +436,8 @@
             border-radius: 15px;
             padding: 2rem;
             backdrop-filter: blur(10px);
+            position: relative;
+            z-index: 2;
         }
 
         .model-info h3 {
@@ -766,6 +808,10 @@
             .hero-title {
                 font-size: 3rem;
             }
+            
+            .viewer-wrapper {
+                height: 400px;
+            }
         }
 
         @media (max-width: 768px) {
@@ -807,6 +853,10 @@
             section {
                 padding: 5rem 1rem;
             }
+            
+            .viewer-wrapper {
+                height: 350px;
+            }
         }
 
         @media (max-width: 480px) {
@@ -820,6 +870,10 @@
             
             .product-grid {
                 grid-template-columns: 1fr;
+            }
+            
+            .viewer-wrapper {
+                height: 300px;
             }
         }
 
@@ -879,6 +933,46 @@
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
+        }
+
+        /* ===== MUSIC VISUALIZER ===== */
+        .music-controls {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .beat-indicator {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--secondary);
+            animation: beat 0.5s infinite alternate;
+        }
+
+        .music-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(0, 243, 255, 0.2);
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 1.2rem;
+        }
+
+        .music-btn:hover {
+            background: rgba(0, 243, 255, 0.4);
+            transform: scale(1.1);
         }
     </style>
 </head>
@@ -961,9 +1055,27 @@
             
             <div class="viewer-container">
                 <div class="viewer-display">
-                    <canvas id="headphone-canvas"></canvas>
+                    <div class="viewer-wrapper">
+                        <!-- Robot Background -->
+                        <div class="robot-bg">
+                            <canvas id="robot-canvas"></canvas>
+                        </div>
+                        <!-- Headphone 3D Viewer -->
+                        <canvas id="headphone-canvas"></canvas>
+                        
+                        <!-- Music Controls -->
+                        <div class="music-controls">
+                            <div class="beat-indicator"></div>
+                            <button class="music-btn" id="play-music">
+                                <i class="fas fa-play"></i>
+                            </button>
+                            <button class="music-btn" id="stop-music" style="display: none;">
+                                <i class="fas fa-stop"></i>
+                            </button>
+                        </div>
+                    </div>
                     <div class="viewer-hint">
-                        <p class="code-font" style="text-align: center; margin-top: 1rem; color: var(--text-dim);">
+                        <p class="code-font">
                             <i class="fas fa-mouse-pointer"></i> Cliquer + glisser pour tourner | Molette pour zoomer
                         </p>
                     </div>
@@ -971,7 +1083,7 @@
                 
                 <div class="viewer-controls">
                     <div class="model-info">
-                        <h3>SYNCORE X1</h3>
+                        <h3 id="model-title">SYNCORE X1 | Synth Pink</h3>
                         <p>Le casque qui lit vos pensées. Technologie EEG intégrée avec 32 capteurs neuronaux.</p>
                         
                         <ul class="model-specs">
@@ -1008,7 +1120,7 @@
                             </div>
                         </div>
                         
-                        <button class="btn btn-primary" style="width: 100%; margin-top: 2rem;">
+                        <button class="btn btn-primary" style="width: 100%; margin-top: 2rem;" id="activate-demo">
                             <i class="fas fa-bolt"></i> ACTIVER LA DÉMO NEURALE
                         </button>
                     </div>
@@ -1249,11 +1361,13 @@
             
             // Initialize all components
             initNavigation();
-            init3DViewer();
+            initHeadphone3D();
+            initRobot3D();
             initNeuralCanvas();
             initCart();
             initAnimations();
             initInteractiveElements();
+            initMusicControls();
         });
 
         // ===== NAVIGATION =====
@@ -1311,8 +1425,8 @@
             });
         }
 
-        // ===== 3D VIEWER =====
-        function init3DViewer() {
+        // ===== HEADPHONE 3D VIEWER =====
+        function initHeadphone3D() {
             const canvas = document.getElementById('headphone-canvas');
             
             // Check if Three.js is loaded
@@ -1354,14 +1468,14 @@
             pointLight.position.set(-5, 5, 5);
             scene.add(pointLight);
             
-            // Create headphone model (simplified geometry since we don't have a 3D model)
+            // Create headphone model
             const createHeadphoneModel = () => {
                 const group = new THREE.Group();
                 
                 // Headband
                 const headbandGeometry = new THREE.TorusGeometry(1.5, 0.1, 16, 100, Math.PI);
                 const headbandMaterial = new THREE.MeshStandardMaterial({ 
-                    color: 0x0a0a14,
+                    color: 0xff00ff, // Synth Pink by default
                     metalness: 0.9,
                     roughness: 0.1
                 });
@@ -1372,7 +1486,7 @@
                 // Ear cups
                 const earCupGeometry = new THREE.SphereGeometry(0.8, 32, 32, 0, Math.PI * 2, 0, Math.PI / 2);
                 const earCupMaterial = new THREE.MeshStandardMaterial({ 
-                    color: 0x0a0a14,
+                    color: 0xff00ff,
                     metalness: 0.8,
                     roughness: 0.2
                 });
@@ -1429,10 +1543,10 @@
                     group.add(sensor2);
                 }
                 
-                return group;
+                return { group, headbandMaterial, earCupMaterial };
             };
             
-            const headphone = createHeadphoneModel();
+            const { group: headphone, headbandMaterial, earCupMaterial } = createHeadphoneModel();
             scene.add(headphone);
             
             // Controls
@@ -1445,6 +1559,8 @@
             
             // Color customization
             const colorOptions = document.querySelectorAll('.color-option');
+            const modelTitle = document.getElementById('model-title');
+            
             colorOptions.forEach(option => {
                 option.addEventListener('click', function() {
                     // Update active state
@@ -1458,38 +1574,39 @@
                     // Update headphone color
                     if (color === 'gradient') {
                         // Create gradient effect
-                        headphone.children.forEach((child, index) => {
-                            if (child.material) {
-                                if (index % 2 === 0) {
-                                    child.material.color.set(0x00f3ff);
-                                    child.material.emissive?.set(0x00f3ff);
-                                } else {
-                                    child.material.color.set(0x9d00ff);
-                                    child.material.emissive?.set(0x9d00ff);
-                                }
-                            }
-                        });
+                        headbandMaterial.color.set(0x00f3ff);
+                        earCupMaterial.color.set(0x9d00ff);
                     } else {
-                        headphone.children.forEach(child => {
-                            if (child.material && !child.material.emissive) {
-                                child.material.color.set(color);
-                            }
-                        });
+                        headbandMaterial.color.set(color);
+                        earCupMaterial.color.set(color);
                     }
                     
-                    // Update model info
-                    document.querySelector('.model-info h3').textContent = `SYNCORE X1 | ${colorName}`;
+                    // Update model title
+                    modelTitle.textContent = `SYNCORE X1 | ${colorName}`;
                 });
             });
             
             // Animation loop
             let time = 0;
+            let isMusicPlaying = false;
+            let headBobIntensity = 0;
+            
             const animate = () => {
                 requestAnimationFrame(animate);
                 time += 0.01;
                 
                 // Rotate headphone slowly
                 headphone.rotation.y += 0.002;
+                
+                // Add head bobbing effect when music is playing
+                if (isMusicPlaying) {
+                    headBobIntensity = Math.sin(time * 8) * 0.1;
+                    headphone.rotation.x = headBobIntensity;
+                    headphone.rotation.z = headBobIntensity * 0.5;
+                } else {
+                    headphone.rotation.x = 0;
+                    headphone.rotation.z = 0;
+                }
                 
                 // Pulsing glow for sensors
                 headphone.children.forEach((child, index) => {
@@ -1514,6 +1631,318 @@
                 camera.aspect = canvas.clientWidth / canvas.clientHeight;
                 camera.updateProjectionMatrix();
                 renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+            });
+            
+            // Expose music control
+            window.headphone3D = {
+                setMusicPlaying: (playing) => {
+                    isMusicPlaying = playing;
+                }
+            };
+        }
+
+        // ===== ROBOT 3D BACKGROUND =====
+        function initRobot3D() {
+            const canvas = document.getElementById('robot-canvas');
+            
+            if (typeof THREE === 'undefined') {
+                return;
+            }
+            
+            // Scene setup
+            const scene = new THREE.Scene();
+            
+            // Camera - positioned differently for background
+            const camera = new THREE.PerspectiveCamera(45, canvas.clientWidth / canvas.clientHeight, 0.1, 1000);
+            camera.position.set(0, 0, 15);
+            camera.lookAt(0, 0, 0);
+            
+            // Renderer with transparency
+            const renderer = new THREE.WebGLRenderer({ 
+                canvas: canvas,
+                alpha: true,
+                antialias: true
+            });
+            renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            renderer.setClearColor(0x000000, 0);
+            
+            // Create a simple robot character
+            const createRobot = () => {
+                const robot = new THREE.Group();
+                
+                // Head
+                const headGeometry = new THREE.SphereGeometry(1, 32, 32);
+                const headMaterial = new THREE.MeshStandardMaterial({ 
+                    color: 0x333344,
+                    metalness: 0.7,
+                    roughness: 0.3
+                });
+                const head = new THREE.Mesh(headGeometry, headMaterial);
+                robot.add(head);
+                
+                // Eyes
+                const eyeGeometry = new THREE.SphereGeometry(0.15, 16, 16);
+                const eyeMaterial = new THREE.MeshBasicMaterial({ 
+                    color: 0x00f3ff,
+                    emissive: 0x00f3ff,
+                    emissiveIntensity: 2
+                });
+                
+                const leftEye = new THREE.Mesh(eyeGeometry, eyeMaterial);
+                leftEye.position.set(-0.3, 0.2, 0.9);
+                head.add(leftEye);
+                
+                const rightEye = new THREE.Mesh(eyeGeometry, eyeMaterial);
+                rightEye.position.set(0.3, 0.2, 0.9);
+                head.add(rightEye);
+                
+                // Neck
+                const neckGeometry = new THREE.CylinderGeometry(0.3, 0.4, 0.8, 16);
+                const neckMaterial = new THREE.MeshStandardMaterial({ 
+                    color: 0x555566,
+                    metalness: 0.6,
+                    roughness: 0.4
+                });
+                const neck = new THREE.Mesh(neckGeometry, neckMaterial);
+                neck.position.set(0, -1.2, 0);
+                robot.add(neck);
+                
+                // Shoulders
+                const shoulderGeometry = new THREE.BoxGeometry(3, 0.8, 1);
+                const shoulderMaterial = new THREE.MeshStandardMaterial({ 
+                    color: 0x444455,
+                    metalness: 0.5,
+                    roughness: 0.5
+                });
+                const shoulders = new THREE.Mesh(shoulderGeometry, shoulderMaterial);
+                shoulders.position.set(0, -2, 0);
+                robot.add(shoulders);
+                
+                // Headphone on robot
+                const createRobotHeadphone = () => {
+                    const headphoneGroup = new THREE.Group();
+                    
+                    // Headband
+                    const headbandGeometry = new THREE.TorusGeometry(1.2, 0.08, 8, 100, Math.PI);
+                    const headbandMaterial = new THREE.MeshStandardMaterial({ 
+                        color: 0xff00ff,
+                        metalness: 0.9,
+                        roughness: 0.1,
+                        emissive: 0xff00ff,
+                        emissiveIntensity: 0.3
+                    });
+                    const headband = new THREE.Mesh(headbandGeometry, headbandMaterial);
+                    headband.rotation.z = Math.PI / 2;
+                    headband.position.y = 0.1;
+                    headphoneGroup.add(headband);
+                    
+                    // Ear cups
+                    const earCupGeometry = new THREE.SphereGeometry(0.6, 16, 16, 0, Math.PI * 2, 0, Math.PI / 2);
+                    const earCupMaterial = new THREE.MeshStandardMaterial({ 
+                        color: 0xff00ff,
+                        metalness: 0.8,
+                        roughness: 0.2
+                    });
+                    
+                    const leftEarCup = new THREE.Mesh(earCupGeometry, earCupMaterial);
+                    leftEarCup.position.set(-1.2, 0, 0);
+                    leftEarCup.rotation.z = Math.PI;
+                    headphoneGroup.add(leftEarCup);
+                    
+                    const rightEarCup = new THREE.Mesh(earCupGeometry, earCupMaterial);
+                    rightEarCup.position.set(1.2, 0, 0);
+                    headphoneGroup.add(rightEarCup);
+                    
+                    // Cables (glowing)
+                    const cableGeometry = new THREE.CylinderGeometry(0.02, 0.02, 2, 8);
+                    const cableMaterial = new THREE.MeshBasicMaterial({ 
+                        color: 0x00f3ff,
+                        emissive: 0x00f3ff,
+                        emissiveIntensity: 1
+                    });
+                    
+                    const leftCable = new THREE.Mesh(cableGeometry, cableMaterial);
+                    leftCable.position.set(-1.2, -1, 0);
+                    leftCable.rotation.z = Math.PI / 4;
+                    headphoneGroup.add(leftCable);
+                    
+                    const rightCable = new THREE.Mesh(cableGeometry, cableMaterial);
+                    rightCable.position.set(1.2, -1, 0);
+                    rightCable.rotation.z = -Math.PI / 4;
+                    headphoneGroup.add(rightCable);
+                    
+                    return headphoneGroup;
+                };
+                
+                const headphone = createRobotHeadphone();
+                headphone.position.y = 0.3;
+                head.add(headphone);
+                
+                return { robot, head, headphone };
+            };
+            
+            const { robot, head, headphone } = createRobot();
+            scene.add(robot);
+            
+            // Position robot to the side
+            robot.position.set(3, 0, 0);
+            robot.scale.set(1.2, 1.2, 1.2);
+            
+            // Add ambient light
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
+            scene.add(ambientLight);
+            
+            // Add colored lights
+            const pinkLight = new THREE.PointLight(0xff00ff, 0.5, 20);
+            pinkLight.position.set(5, 5, 5);
+            scene.add(pinkLight);
+            
+            const blueLight = new THREE.PointLight(0x00f3ff, 0.5, 20);
+            blueLight.position.set(-5, -5, 5);
+            scene.add(blueLight);
+            
+            // Animation variables
+            let time = 0;
+            let isMusicPlaying = false;
+            let headBobAmount = 0;
+            
+            // Animation loop
+            const animateRobot = () => {
+                requestAnimationFrame(animateRobot);
+                time += 0.01;
+                
+                // Gentle floating motion
+                robot.position.y = Math.sin(time * 0.5) * 0.2;
+                
+                // Head bobbing with music
+                if (isMusicPlaying) {
+                    headBobAmount = Math.sin(time * 8) * 0.2;
+                    head.rotation.z = headBobAmount;
+                    head.rotation.x = Math.sin(time * 4) * 0.1;
+                    
+                    // Headphone moves with head
+                    headphone.rotation.y = Math.sin(time * 6) * 0.1;
+                } else {
+                    head.rotation.z = Math.sin(time * 0.3) * 0.05;
+                    head.rotation.x = Math.sin(time * 0.2) * 0.05;
+                    headphone.rotation.y = Math.sin(time * 0.5) * 0.05;
+                }
+                
+                // Robot slowly rotates
+                robot.rotation.y += 0.001;
+                
+                // Move lights
+                pinkLight.position.x = Math.sin(time) * 8;
+                pinkLight.position.y = Math.cos(time * 0.7) * 8;
+                
+                blueLight.position.x = Math.cos(time) * 8;
+                blueLight.position.y = Math.sin(time * 0.9) * 8;
+                
+                renderer.render(scene, camera);
+            };
+            
+            animateRobot();
+            
+            // Handle window resize
+            window.addEventListener('resize', () => {
+                camera.aspect = canvas.clientWidth / canvas.clientHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+            });
+            
+            // Expose music control
+            window.robot3D = {
+                setMusicPlaying: (playing) => {
+                    isMusicPlaying = playing;
+                }
+            };
+        }
+
+        // ===== MUSIC CONTROLS =====
+        function initMusicControls() {
+            const playBtn = document.getElementById('play-music');
+            const stopBtn = document.getElementById('stop-music');
+            const activateDemoBtn = document.getElementById('activate-demo');
+            
+            let isMusicPlaying = false;
+            let audioContext;
+            let oscillator;
+            let gainNode;
+            
+            // Simulate music with Web Audio API
+            const playMusic = () => {
+                if (!audioContext) {
+                    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                }
+                
+                oscillator = audioContext.createOscillator();
+                gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                // Create a synth pattern
+                oscillator.type = 'sine';
+                oscillator.frequency.setValueAtTime(440, audioContext.currentTime);
+                
+                // Add some effects
+                oscillator.frequency.exponentialRampToValueAtTime(880, audioContext.currentTime + 0.5);
+                oscillator.frequency.exponentialRampToValueAtTime(440, audioContext.currentTime + 1);
+                
+                gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+                
+                oscillator.start();
+                
+                // Update UI
+                playBtn.style.display = 'none';
+                stopBtn.style.display = 'flex';
+                isMusicPlaying = true;
+                
+                // Sync animations
+                if (window.headphone3D) window.headphone3D.setMusicPlaying(true);
+                if (window.robot3D) window.robot3D.setMusicPlaying(true);
+                
+                // Add beat animation to whole section
+                document.querySelector('.product-3d').style.animation = 'beat 0.5s infinite alternate';
+            };
+            
+            const stopMusic = () => {
+                if (oscillator) {
+                    oscillator.stop();
+                    oscillator = null;
+                }
+                
+                // Update UI
+                playBtn.style.display = 'flex';
+                stopBtn.style.display = 'none';
+                isMusicPlaying = false;
+                
+                // Stop animations
+                if (window.headphone3D) window.headphone3D.setMusicPlaying(false);
+                if (window.robot3D) window.robot3D.setMusicPlaying(false);
+                
+                // Remove beat animation
+                document.querySelector('.product-3d').style.animation = '';
+            };
+            
+            // Button events
+            playBtn.addEventListener('click', playMusic);
+            stopBtn.addEventListener('click', stopMusic);
+            
+            // Demo activation button
+            activateDemoBtn.addEventListener('click', () => {
+                if (!isMusicPlaying) {
+                    playMusic();
+                }
+                
+                // Visual feedback
+                activateDemoBtn.innerHTML = '<i class="fas fa-sync fa-spin"></i> DÉMO ACTIVE';
+                activateDemoBtn.style.background = 'linear-gradient(45deg, #ff00ff, #9d00ff)';
+                
+                setTimeout(() => {
+                    activateDemoBtn.innerHTML = '<i class="fas fa-bolt"></i> DÉMO ACTIVE';
+                }, 2000);
             });
         }
 
