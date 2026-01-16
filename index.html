@@ -1,171 +1,53 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AURORA | Expérience Sonore 3D</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.160.0/three.min.js"></script>
-    <script src="https://unpkg.com/@studio-freight/lenis@1.0.33/dist/lenis.min.js"></script>
-
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;900&display=swap');
-        body { font-family: 'Inter', sans-serif; background-color: #0a0a0a; color: white; margin: 0; overflow-x: hidden; }
-        #canvas-container { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; z-index: 1; pointer-events: none; }
-        section { position: relative; height: 100vh; display: flex; align-items: center; z-index: 2; pointer-events: none; }
-        .content-box { pointer-events: all; }
-        .text-huge { font-size: clamp(3rem, 10vw, 8rem); line-height: 0.9; font-weight: 900; letter-spacing: -0.05em; }
-        .accent { color: #ff4500; }
-    </style>
-</head>
-<body>
-
-    <div id="canvas-container"></div>
-
-    <nav class="fixed top-0 w-full p-8 flex justify-between items-center z-50 mix-blend-difference">
-        <div class="font-black text-2xl uppercase tracking-tighter">Aurora</div>
-        <div class="space-x-8 hidden md:flex text-xs uppercase tracking-widest font-bold">
-            <a href="#">Technologie</a>
-            <a href="#">Design</a>
-            <a href="#">Store</a>
+<section class="h-auto py-20 px-8 md:px-20 bg-white text-black">
+    <div class="max-w-7xl mx-auto w-full">
+        <div class="mb-16">
+            <h2 class="text-5xl font-black uppercase tracking-tighter">Essential <span class="text-orange-600">Add-ons.</span></h2>
+            <p class="text-gray-500 mt-2">Optimisez votre expérience acoustique avec nos accessoires signature.</p>
         </div>
-    </nav>
 
-    <section class="px-8 md:px-20">
-        <div class="content-box max-w-4xl">
-            <h1 class="text-huge opacity-0" id="title1">SOUND<br><span class="accent">REDEFINED.</span></h1>
-            <p class="mt-6 text-gray-400 max-w-sm opacity-0" id="para1">L'immersion totale. Sans fil. Sans compromis. Découvrez la nouvelle architecture acoustique Aurora.</p>
-        </div>
-    </section>
-
-    <section class="px-8 md:px-20 justify-end">
-        <div class="content-box max-w-xl text-right">
-            <h2 class="text-huge opacity-0" id="title2">360°<br>AUDIO.</h2>
-            <p class="mt-6 text-gray-400 opacity-0" id="para2">Un gyroscope intégré suit les mouvements de votre tête pour recalibrer le son en temps réel.</p>
-        </div>
-    </section>
-
-    <section class="px-8 md:px-20">
-        <div class="content-box max-w-xl">
-            <h2 class="text-huge opacity-0" id="title3">CARBON<br><span class="accent">FIBER.</span></h2>
-            <p class="mt-6 text-gray-400 opacity-0" id="para3">Une structure en fibre de carbone ultra-légère pour un confort qui dure toute la journée.</p>
-            <button class="mt-10 bg-white text-black px-8 py-4 rounded-full font-bold uppercase text-xs tracking-widest hover:bg-orange-600 hover:text-white transition-colors opacity-0" id="btn3">Commander maintenant</button>
-        </div>
-    </section>
-
-    <script>
-        // --- CONFIGURATION THREE.JS ---
-        const container = document.getElementById('canvas-container');
-        const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.setPixelRatio(window.devicePixelRatio);
-        container.appendChild(renderer.domElement);
-
-        // Lumières
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
-        scene.add(ambientLight);
-        const spotLight = new THREE.SpotLight(0xff4500, 50);
-        spotLight.position.set(5, 5, 5);
-        scene.add(spotLight);
-        const blueLight = new THREE.PointLight(0x0066ff, 30);
-        blueLight.position.set(-5, -2, 2);
-        scene.add(blueLight);
-
-        // CRÉATION DU CASQUE (GÉOMÉTRIE)
-        const headphoneGroup = new THREE.Group();
-        
-        // Arceau
-        const torusGeom = new THREE.TorusGeometry(1.5, 0.15, 16, 100, Math.PI);
-        const material = new THREE.MeshStandardMaterial({ color: 0x111111, roughness: 0.1, metalness: 0.8 });
-        const arch = new THREE.Mesh(torusGeom, material);
-        arch.rotation.z = Math.PI / 2;
-        headphoneGroup.add(arch);
-
-        // Écouteurs (Côtés)
-        const speakerGeom = new THREE.CylinderGeometry(0.8, 0.8, 0.4, 32);
-        const speakerL = new THREE.Mesh(speakerGeom, material);
-        speakerL.position.set(-1.5, -0.2, 0);
-        speakerL.rotation.z = Math.PI / 2;
-        headphoneGroup.add(speakerL);
-
-        const speakerR = speakerL.clone();
-        speakerR.position.set(1.5, -0.2, 0);
-        headphoneGroup.add(speakerR);
-
-        // Coussinets (Orange Accent)
-        const padGeom = new THREE.CylinderGeometry(0.85, 0.85, 0.2, 32);
-        const padMat = new THREE.MeshStandardMaterial({ color: 0xff4500 });
-        const padL = new THREE.Mesh(padGeom, padMat);
-        padL.position.set(-1.3, -0.2, 0);
-        padL.rotation.z = Math.PI / 2;
-        headphoneGroup.add(padL);
-
-        const padR = padL.clone();
-        padR.position.set(1.3, -0.2, 0);
-        headphoneGroup.add(padR);
-
-        scene.add(headphoneGroup);
-        camera.position.z = 5;
-
-        // --- ANIMATIONS GSAP & SCROLL ---
-        gsap.registerPlugin(ScrollTrigger);
-
-        // Animation initiale
-        gsap.to("#title1", { opacity: 1, y: -20, duration: 1, delay: 0.5 });
-        gsap.to("#para1", { opacity: 1, y: -20, duration: 1, delay: 0.7 });
-
-        // Timeline pour le casque
-        const mainTl = gsap.timeline({
-            scrollTrigger: {
-                trigger: "body",
-                start: "top top",
-                end: "bottom bottom",
-                scrub: 1
-            }
-        });
-
-        mainTl
-            // Vers Section 2
-            .to(headphoneGroup.rotation, { y: Math.PI, x: 0.2 })
-            .to(headphoneGroup.position, { x: -2 }, 0)
-            .to("#title2", { opacity: 1, y: -20 }, 0.2)
-            .to("#para2", { opacity: 1, y: -20 }, 0.3)
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[300px]">
             
-            // Vers Section 3
-            .to(headphoneGroup.rotation, { y: Math.PI * 2, x: 0.5 })
-            .to(headphoneGroup.position, { x: 2 }, 0.5)
-            .to("#title3", { opacity: 1, y: -20 }, 0.6)
-            .to("#para3", { opacity: 1, y: -20 }, 0.7)
-            .to("#btn3", { opacity: 1, scale: 1.1 }, 0.8);
+            <div class="md:col-span-2 md:row-span-2 bg-[#f4f4f4] rounded-[40px] p-10 flex flex-col justify-between overflow-hidden group bento-item">
+                <div>
+                    <span class="bg-black text-white text-[10px] px-3 py-1 rounded-full uppercase font-bold tracking-widest">Innovation</span>
+                    <h3 class="text-3xl font-bold mt-4">Aurora Dock Pro</h3>
+                    <p class="text-gray-500 max-w-xs mt-2">Support magnétique avec charge rapide Qi2 intégrée et finition aluminium brossé.</p>
+                </div>
+                <div class="relative h-64 flex justify-center">
+                    <img src="https://images.unsplash.com/photo-1528148313279-cc7080860961?auto=format&fit=crop&q=80&w=600" 
+                         class="h-full object-contain group-hover:scale-110 transition-transform duration-700" alt="Dock">
+                </div>
+            </div>
 
-        // --- RENDER LOOP ---
-        function animate() {
-            requestAnimationFrame(animate);
-            // Petit flottement permanent
-            headphoneGroup.position.y = Math.sin(Date.now() * 0.002) * 0.1;
-            renderer.render(scene, camera);
-        }
-        animate();
+            <div class="bg-orange-600 rounded-[40px] p-8 text-white flex flex-col justify-between bento-item">
+                <h3 class="text-2xl font-bold leading-tight">Travel Case<br>Edition Noir</h3>
+                <div class="flex justify-center">
+                    <i class="fas fa-briefcase text-6xl opacity-20"></i>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="font-bold">129€</span>
+                    <button class="bg-white text-orange-600 w-10 h-10 rounded-full flex items-center justify-center hover:scale-110 transition">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
+            </div>
 
-        // Responsive
-        window.addEventListener('resize', () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        });
+            <div class="bg-black rounded-[40px] p-8 text-white flex flex-col justify-between bento-item">
+                <div>
+                    <h3 class="text-xl font-bold">Ultra-DAC</h3>
+                    <p class="text-xs text-gray-400 mt-2">Convertisseur 32-bit pour une pureté studio sur votre smartphone.</p>
+                </div>
+                <img src="https://images.unsplash.com/photo-1592436259366-18ab6da5f195?auto=format&fit=crop&q=80&w=400" 
+                     class="rounded-2xl opacity-80 group-hover:opacity-100 transition" alt="DAC">
+            </div>
 
-        // Smooth Scroll
-        const lenis = new Lenis();
-        lenis.on('scroll', ScrollTrigger.update);
-        function raf(time) {
-            lenis.raf(time);
-            requestAnimationFrame(raf);
-        }
-        requestAnimationFrame(raf);
-    </script>
-</body>
-</html>
+            <div class="md:col-span-3 bg-[#111] rounded-[40px] p-8 flex items-center justify-between text-white bento-item overflow-hidden">
+                <div class="max-w-md">
+                    <h3 class="text-2xl font-bold">Câble Cuivre OCC</h3>
+                    <p class="text-gray-400 mt-2">Zéro interférence, connecteurs plaqués or 24K pour les puristes.</p>
+                </div>
+                <span class="text-5xl font-black text-white/10 select-none">PREMIUM</span>
+            </div>
+        </div>
+    </div>
+</section>
