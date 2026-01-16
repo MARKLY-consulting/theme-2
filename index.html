@@ -3,237 +3,231 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PHANTOM | Beyond Velocity</title>
+    <title>LUMINA | Design d'Intérieur Émotionnel</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@700&family=Space+Grotesk:wght@300;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,600;1,300&family=Montserrat:wght@200;400&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     
     <style>
         :root {
-            --bg: #030303;
-            --accent: #00f2ff;
-            --danger: #ff003c;
-            --text: #ffffff;
+            --bg: #f4f1ee;
+            --text: #1a1a1a;
+            --accent: #bc9c82; /* Couleur sable/osier */
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { 
             background-color: var(--bg); 
             color: var(--text); 
-            font-family: 'Space Grotesk', sans-serif; 
+            font-family: 'Montserrat', sans-serif; 
             overflow-x: hidden;
-            cursor: none;
         }
 
-        /* Custom Cursor "Target" */
-        .cursor-custom {
-            position: fixed; width: 10px; height: 10px; background: var(--accent);
+        /* --- CURSEUR LUXE --- */
+        .cursor {
+            position: fixed; width: 30px; height: 30px; border: 1px solid var(--accent);
             border-radius: 50%; pointer-events: none; z-index: 10000;
-        }
-        .cursor-ring {
-            position: fixed; width: 40px; height: 40px; border: 1px solid var(--accent);
-            border-radius: 50%; pointer-events: none; z-index: 9999;
-            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: transform 0.1s ease;
         }
 
-        /* --- NAVIGATION --- */
+        /* --- NAV --- */
         nav {
-            position: fixed; width: 100%; padding: 30px 50px;
+            position: fixed; width: 100%; padding: 40px;
             display: flex; justify-content: space-between; z-index: 100;
-            mix-blend-mode: difference;
+            font-size: 0.7rem; letter-spacing: 4px; text-transform: uppercase;
         }
 
-        /* --- HERO SECTION --- */
+        /* --- HERO: L'EFFET DE ZOOM --- */
         .hero {
-            height: 100vh; display: flex; align-items: center; justify-content: center;
-            perspective: 1000px; overflow: hidden;
-        }
-        .hero-title {
-            font-family: 'Syncopate'; font-size: 15vw; letter-spacing: -10px;
-            opacity: 0.1; position: absolute; white-space: nowrap;
-        }
-        .main-car {
-            width: 70%; z-index: 10; filter: drop-shadow(0 0 50px rgba(0, 242, 255, 0.2));
-            transform: translateZ(100px);
+            height: 300vh; /* Espace pour le scroll */
+            position: relative;
         }
 
-        /* --- SECTION PERFORMANCE (STAGGER) --- */
-        .stats-section {
-            min-height: 100vh; padding: 100px 10%; display: grid;
-            grid-template-columns: 1fr 1fr; align-items: center;
-        }
-        .stat-card {
-            background: rgba(255,255,255,0.02); padding: 40px;
-            border-left: 4px solid var(--danger); margin: 20px 0;
-            transform: translateX(-100px); opacity: 0;
-        }
-        .stat-number { font-family: 'Syncopate'; font-size: 4rem; color: var(--accent); }
-
-        /* --- INTERIOR PARALLAX --- */
-        .parallax-window {
-            height: 80vh; margin: 100px 0; position: relative;
-            overflow: hidden; display: flex; align-items: center; justify-content: center;
-        }
-        .parallax-bg {
-            position: absolute; width: 120%; height: 120%;
-            background: url('https://images.unsplash.com/photo-1617469767053-d3b503a0b982?auto=format&fit=crop&w=1920&q=80');
-            background-size: cover; z-index: -1;
-        }
-        .parallax-text { font-family: 'Syncopate'; font-size: 5vw; background: #000; padding: 20px 50px; }
-
-        /* --- HORIZONTAL MODÈLES --- */
-        .scroll-container { display: flex; width: 400vw; background: #000; }
-        .slide {
-            width: 100vw; height: 100vh; display: flex; align-items: center;
-            justify-content: center; position: relative;
-        }
-        .slide img { width: 60%; transform: scale(0.8); transition: 1s; }
-        .slide.active img { transform: scale(1.1) rotate(-5deg); }
-        .slide-name {
-            position: absolute; bottom: 100px; left: 100px;
-            font-family: 'Syncopate'; font-size: 8vw; color: rgba(255,255,255,0.05);
+        .viewport {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
+            display: flex; align-items: center; justify-content: center;
+            overflow: hidden;
         }
 
-        /* --- FOOTER FUTURE --- */
+        .main-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 10vw; font-weight: 300; font-style: italic;
+            z-index: 10; pointer-events: none; text-align: center;
+        }
+
+        .room-container {
+            position: absolute; width: 100%; height: 100%;
+            display: flex; align-items: center; justify-content: center;
+        }
+
+        .room-image {
+            width: 40%; height: 60%; object-fit: cover;
+            box-shadow: 0 50px 100px rgba(0,0,0,0.1);
+        }
+
+        /* --- SECTIONS DE CONTENU --- */
+        .content-section {
+            min-height: 100vh; padding: 100px 10%; position: relative;
+            background: white; z-index: 20; display: flex; align-items: center;
+        }
+
+        .grid-decor {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 50px;
+        }
+
+        .reveal-box {
+            overflow: hidden; position: relative;
+        }
+
+        .reveal-box img { width: 100%; transform: scale(1.5); transition: 1.5s; }
+
+        .elegant-title {
+            font-family: 'Cormorant Garamond', serif; font-size: 4rem;
+            margin-bottom: 20px; line-height: 1;
+        }
+
+        /* --- SECTION HORIZONTALE: OBJETS 3D (IMAGES) --- */
+        .horizontal-wrap { overflow: hidden; background: #fff; }
+        .horizontal-content { display: flex; width: 300vw; }
+        .product-card {
+            width: 100vw; height: 100vh; display: flex; align-items: center; justify-content: center;
+            flex-direction: column;
+        }
+        .product-card img { width: 30%; margin-bottom: 40px; filter: drop-shadow(0 20px 40px rgba(0,0,0,0.1)); }
+
         footer {
-            height: 100vh; display: flex; flex-direction: column;
-            align-items: center; justify-content: center; text-align: center;
+            height: 60vh; background: #1a1a1a; color: white;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
         }
-        .footer-cta {
-            font-family: 'Syncopate'; font-size: 6vw; cursor: pointer;
-            transition: 0.5s; -webkit-text-stroke: 1px white; color: transparent;
-        }
-        .footer-cta:hover { color: var(--accent); -webkit-text-stroke: 0px; }
     </style>
 </head>
 <body>
 
-    <div class="cursor-custom"></div>
-    <div class="cursor-ring"></div>
+    <div class="cursor"></div>
 
     <nav>
-        <div style="font-family: 'Syncopate';">PHANTOM_LABS</div>
-        <div style="font-size: 0.8rem; letter-spacing: 5px;">MENU</div>
+        <div style="font-weight: 600;">LUMINA<span>.</span>STUDIO</div>
+        <div>PROJETS / PHILOSOPHIE / CONTACT</div>
     </nav>
 
-    <section class="hero">
-        <h1 class="hero-title">AERODYNAMIC</h1>
-        <img src="https://www.pngplay.com/wp-content/uploads/13/Lamborghini-Aventador-Transparent-Images.png" class="main-car" id="hero-car">
-    </section>
-
-    <section class="stats-section">
-        <div>
-            <div class="stat-card" id="stat-1">
-                <div class="stat-number">1.9S</div>
-                <div>0 - 100 KM/H</div>
-            </div>
-            <div class="stat-card" id="stat-2">
-                <div class="stat-number">420</div>
-                <div>VITESSE MAX (KM/H)</div>
-            </div>
-            <div class="stat-card" id="stat-3">
-                <div class="stat-number">1200</div>
-                <div>COUPLE NM</div>
+    <div class="hero">
+        <div class="viewport">
+            <h1 class="main-title">Pureté &<br>Harmonie</h1>
+            <div class="room-container">
+                <img src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1600&q=80" class="room-image" id="zoom-img">
             </div>
         </div>
-        <div style="padding-left: 50px;">
-            <h2 style="font-family: 'Syncopate'; font-size: 3rem;">PUISSANCE <br><span style="color:var(--danger)">BRUTALE</span></h2>
-            <p style="margin-top: 20px; color: #888;">L'ingénierie redéfinie pour ceux qui refusent les limites. Le moteur Phantom V16 fusionne l'électrique et le thermique dans une symphonie de destruction.</p>
-        </div>
-    </section>
-
-    <div class="parallax-window">
-        <div class="parallax-bg"></div>
-        <h2 class="parallax-text">COCKPIT IMMERSIF</h2>
     </div>
 
-    <div style="overflow: hidden;">
-        <div class="scroll-container">
-            <div class="slide">
-                <div class="slide-name">NERO</div>
-                <img src="https://www.pngplay.com/wp-content/uploads/13/Lamborghini-Aventador-PNG-Clipart-Background.png">
+    <section class="content-section">
+        <div class="grid-decor">
+            <div class="reveal-box">
+                <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=1000&q=80" id="reveal-img">
             </div>
-            <div class="slide">
-                <div class="slide-name">CYAN</div>
-                <img src="https://www.pngplay.com/wp-content/uploads/13/Lamborghini-Aventador-Background-PNG-Image.png">
+            <div>
+                <h2 class="elegant-title">L'art de vivre <br><span style="color:var(--accent)">autrement</span></h2>
+                <p style="color: #666; line-height: 1.8; margin-bottom: 30px;">
+                    Chaque objet raconte une histoire. Nous créons des espaces qui ne sont pas seulement beaux, mais qui respirent avec vous. Une sélection minutieuse de matières naturelles : lin, chêne massif et pierre volcanique.
+                </p>
+                <button style="background:none; border:none; border-bottom: 1px solid black; padding: 10px 0; cursor: pointer; letter-spacing: 2px;">DÉCOUVRIR LA COLLECTION</button>
             </div>
-            <div class="slide">
-                <div class="slide-name">ROUGE</div>
-                <img src="https://www.pngplay.com/wp-content/uploads/13/Lamborghini-Aventador-Transparent-Background.png">
+        </div>
+    </section>
+
+    <div class="horizontal-wrap">
+        <div class="horizontal-content">
+            <div class="product-card">
+                <img src="https://purepng.com/public/uploads/large/purepng.com-chairchairfurniture-itemseat-1701527932684st7e7.png">
+                <h3 class="elegant-title">La Chaise "Silo"</h3>
+                <p>Chêne tourné à la main</p>
+            </div>
+            <div class="product-card">
+                <img src="https://purepng.com/public/uploads/large/purepng.com-vasesvaseflowervasestands-1701528246736iv4e4.png">
+                <h3 class="elegant-title">Vase Terrazzo</h3>
+                <p>Céramique mate</p>
+            </div>
+            <div class="product-card">
+                <img src="https://purepng.com/public/uploads/large/purepng.com-pendant-lamplampfixturelights-1701528221886shlbe.png">
+                <h3 class="elegant-title">Suspension Aura</h3>
+                <p>Laiton brossé</p>
             </div>
         </div>
     </div>
 
     <footer>
-        <p style="letter-spacing: 10px; margin-bottom: 20px;">ÊTES-VOUS PRÊT ?</p>
-        <h2 class="footer-cta">REJOINDRE LE MYTHE</h2>
-        <div style="margin-top: 100px; display: flex; gap: 50px; color: #444;">
-            <span>INSTAGRAM</span> / <span>TWITTER</span> / <span>YOUTUBE</span>
-        </div>
+        <h2 class="elegant-title" style="font-size: 5vw;">Sublimez votre espace.</h2>
+        <p style="opacity: 0.5;">© 2026 LUMINA STUDIO ARCHITECTURE</p>
     </footer>
 
     <script>
         gsap.registerPlugin(ScrollTrigger);
 
-        // Custom Cursor Movement
-        const cursor = document.querySelector('.cursor-custom');
-        const ring = document.querySelector('.cursor-ring');
+        // Curseur fluide
         document.addEventListener('mousemove', (e) => {
-            gsap.to(cursor, { x: e.clientX, y: e.clientY, duration: 0 });
-            gsap.to(ring, { x: e.clientX - 15, y: e.clientY - 15, duration: 0.3 });
+            gsap.to('.cursor', { x: e.clientX - 15, y: e.clientY - 15, duration: 0.2 });
         });
 
-        // Hero Car Parallax
-        gsap.to("#hero-car", {
-            y: -50,
-            rotationZ: 5,
+        // ANIMATION 1: Le zoom immersif dans l'image
+        gsap.to("#zoom-img", {
+            width: "100%",
+            height: "100%",
             scrollTrigger: {
                 trigger: ".hero",
                 start: "top top",
-                scrub: 1
-            }
-        });
-
-        // Stats Appear (Stagger)
-        gsap.to(".stat-card", {
-            x: 0, opacity: 1, stagger: 0.2,
-            scrollTrigger: {
-                trigger: ".stats-section",
-                start: "top 60%"
-            }
-        });
-
-        // Interior Parallax
-        gsap.to(".parallax-bg", {
-            yPercent: 20,
-            scrollTrigger: {
-                trigger: ".parallax-window",
+                end: "bottom bottom",
                 scrub: true
             }
         });
 
-        // Horizontal Scroll
-        let slides = gsap.utils.toArray(".slide");
-        gsap.to(slides, {
-            xPercent: -100 * (slides.length - 1),
+        // Animation du titre qui s'efface au zoom
+        gsap.to(".main-title", {
+            opacity: 0,
+            scale: 0.8,
             scrollTrigger: {
-                trigger: ".scroll-container",
-                pin: true,
-                scrub: 1,
-                end: "+=3000",
-                onUpdate: (self) => {
-                    // Activer la slide centrale
-                    const index = Math.round(self.progress * (slides.length - 1));
-                    slides.forEach((s, i) => s.classList.toggle('active', i === index));
-                }
+                trigger: ".hero",
+                start: "top top",
+                end: "center center",
+                scrub: true
             }
         });
 
-        // Effect de distortion au scroll (simulé par scale)
-        window.addEventListener('scroll', () => {
-            const speed = Math.min(window.scrollY / 1000, 1.1);
-            gsap.to(".main-car", { scale: 1 + speed * 0.1, duration: 0.5 });
+        // ANIMATION 2: Reveal image au scroll
+        gsap.to("#reveal-img", {
+            scale: 1,
+            scrollTrigger: {
+                trigger: ".content-section",
+                start: "top 80%",
+                end: "top 20%",
+                scrub: true
+            }
+        });
+
+        // ANIMATION 3: Scroll Horizontal
+        let products = gsap.utils.toArray(".product-card");
+        gsap.to(products, {
+            xPercent: -100 * (products.length - 1),
+            ease: "none",
+            scrollTrigger: {
+                trigger: ".horizontal-wrap",
+                pin: true,
+                scrub: 1,
+                end: () => "+=" + document.querySelector(".horizontal-content").offsetWidth
+            }
+        });
+
+        // Effet de parallaxe sur les produits lors du scroll horizontal
+        products.forEach(card => {
+            gsap.from(card.querySelector('img'), {
+                y: 100,
+                rotation: 10,
+                scrollTrigger: {
+                    trigger: card,
+                    containerAnimation: gsap.to(products, { xPercent: -100 * (products.length - 1) }),
+                    start: "left right",
+                    scrub: true
+                }
+            });
         });
     </script>
 </body>
