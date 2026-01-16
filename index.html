@@ -3,250 +3,229 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LUMINA | Design d'Intérieur Émotionnel</title>
+    <title>LUMINA | Architecture d'Intérieur 3D</title>
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,600;1,300&family=Montserrat:wght@200;400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,600;1,300&family=Space+Grotesk:wght@300;500&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-    
+
     <style>
         :root {
-            --bg: #f4f1ee;
+            --bg: #fdfbf8;
             --text: #1a1a1a;
-            --accent: #bc9c82; /* Couleur sable/osier */
+            --accent: #bc9c82;
+            --soft-gray: #f2f2f2;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { 
             background-color: var(--bg); 
             color: var(--text); 
-            font-family: 'Montserrat', sans-serif; 
+            font-family: 'Space Grotesk', sans-serif; 
             overflow-x: hidden;
+            cursor: none;
         }
 
-        /* --- CURSEUR LUXE --- */
-        .cursor {
-            position: fixed; width: 30px; height: 30px; border: 1px solid var(--accent);
+        /* --- CURSEUR CRÉATIF --- */
+        .cursor-outer {
+            position: fixed; width: 40px; height: 40px; border: 1px solid var(--accent);
             border-radius: 50%; pointer-events: none; z-index: 10000;
-            transition: transform 0.1s ease;
+            transition: transform 0.15s ease-out;
+        }
+        .cursor-inner {
+            position: fixed; width: 6px; height: 6px; background: var(--accent);
+            border-radius: 50%; pointer-events: none; z-index: 10001;
         }
 
-        /* --- NAV --- */
+        /* --- NAVIGATION --- */
         nav {
             position: fixed; width: 100%; padding: 40px;
             display: flex; justify-content: space-between; z-index: 100;
-            font-size: 0.7rem; letter-spacing: 4px; text-transform: uppercase;
+            mix-blend-mode: difference; color: white;
+            font-size: 0.8rem; letter-spacing: 3px;
         }
 
-        /* --- HERO: L'EFFET DE ZOOM --- */
-        .hero {
-            height: 300vh; /* Espace pour le scroll */
-            position: relative;
-        }
-
+        /* --- HERO: ZOOM 3D EFFECT --- */
+        .hero { height: 300vh; position: relative; }
         .viewport {
             position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
             display: flex; align-items: center; justify-content: center;
             overflow: hidden;
         }
-
         .main-title {
             font-family: 'Cormorant Garamond', serif;
-            font-size: 10vw; font-weight: 300; font-style: italic;
+            font-size: 8vw; font-weight: 300; font-style: italic;
             z-index: 10; pointer-events: none; text-align: center;
+            line-height: 0.9;
         }
-
-        .room-container {
-            position: absolute; width: 100%; height: 100%;
-            display: flex; align-items: center; justify-content: center;
+        .room-frame {
+            position: absolute; width: 45%; height: 65%;
+            overflow: hidden; box-shadow: 0 40px 100px rgba(0,0,0,0.15);
         }
+        .room-img { width: 100%; height: 100%; object-fit: cover; transform: scale(1.2); }
 
-        .room-image {
-            width: 40%; height: 60%; object-fit: cover;
-            box-shadow: 0 50px 100px rgba(0,0,0,0.1);
+        /* --- SECTION STORY --- */
+        .story {
+            padding: 150px 10%; display: grid; grid-template-columns: 1fr 1fr;
+            gap: 100px; background: white; position: relative; z-index: 20;
         }
+        .story-img-wrap { overflow: hidden; border-radius: 5px; }
+        .story-img { width: 100%; transition: 1.5s; }
+        .elegant-h2 { font-family: 'Cormorant Garamond', serif; font-size: 4.5rem; line-height: 1; margin-bottom: 30px; }
 
-        /* --- SECTIONS DE CONTENU --- */
-        .content-section {
-            min-height: 100vh; padding: 100px 10%; position: relative;
-            background: white; z-index: 20; display: flex; align-items: center;
-        }
-
-        .grid-decor {
-            display: grid; grid-template-columns: 1fr 1fr; gap: 50px;
-        }
-
-        .reveal-box {
-            overflow: hidden; position: relative;
-        }
-
-        .reveal-box img { width: 100%; transform: scale(1.5); transition: 1.5s; }
-
-        .elegant-title {
-            font-family: 'Cormorant Garamond', serif; font-size: 4rem;
-            margin-bottom: 20px; line-height: 1;
-        }
-
-        /* --- SECTION HORIZONTALE: OBJETS 3D (IMAGES) --- */
-        .horizontal-wrap { overflow: hidden; background: #fff; }
-        .horizontal-content { display: flex; width: 300vw; }
+        /* --- HORIZONTAL 3D SHOWCASE --- */
+        .horizontal-section { overflow: hidden; background: var(--soft-gray); }
+        .horizontal-container { display: flex; width: 300vw; }
         .product-card {
-            width: 100vw; height: 100vh; display: flex; align-items: center; justify-content: center;
-            flex-direction: column;
+            width: 100vw; height: 100vh; display: flex; align-items: center;
+            justify-content: center; position: relative;
         }
-        .product-card img { width: 30%; margin-bottom: 40px; filter: drop-shadow(0 20px 40px rgba(0,0,0,0.1)); }
-
-        /* --- SECTION CONTACT --- */
-        .contact-section {
-            min-height: 80vh; background: var(--bg); display: flex; align-items: center; justify-content: center;
-            padding: 100px 10%;
+        .product-card img { width: 35%; z-index: 2; filter: drop-shadow(0 30px 50px rgba(0,0,0,0.1)); }
+        .product-bg-text {
+            position: absolute; font-size: 20vw; font-family: 'Cormorant Garamond';
+            color: rgba(0,0,0,0.03); font-weight: 700; white-space: nowrap;
         }
 
-        .contact-card {
-            background: #fff; padding: 60px; border-radius: 10px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.05); text-align: center;
-            max-width: 800px; width: 100%;
+        /* --- SECTION CONTACT LUXE --- */
+        .contact {
+            padding: 150px 10%; background: #1a1a1a; color: white;
+            display: grid; grid-template-columns: 1fr 1.2fr; gap: 80px;
         }
-
-        .contact-form {
-            display: grid; gap: 25px; margin-top: 40px;
+        .contact-info h2 { font-family: 'Cormorant Garamond', serif; font-size: 4rem; color: var(--accent); }
+        .form-group { margin-bottom: 30px; position: relative; }
+        .form-group input, .form-group textarea {
+            width: 100%; background: transparent; border: none;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+            padding: 15px 0; color: white; font-family: 'Space Grotesk'; outline: none;
+            transition: 0.3s;
         }
-
-        .contact-form input, .contact-form textarea {
-            width: 100%; padding: 18px; border: 1px solid #e0e0e0;
-            border-radius: 5px; font-family: 'Montserrat', sans-serif;
-            font-size: 1rem; color: var(--text);
-            transition: border-color 0.3s ease;
-        }
-
-        .contact-form input:focus, .contact-form textarea:focus {
-            outline: none; border-color: var(--accent);
-        }
-
+        .form-group input:focus { border-bottom-color: var(--accent); }
         .submit-btn {
-            background: var(--accent); color: white; border: none;
-            padding: 18px 30px; border-radius: 5px; cursor: pointer;
-            font-family: 'Montserrat', sans-serif; font-weight: 600;
-            font-size: 1.1rem; letter-spacing: 1px;
-            transition: background-color 0.3s ease, transform 0.2s ease;
+            background: var(--accent); color: white; padding: 20px 50px;
+            border: none; cursor: pointer; font-family: 'Space Grotesk';
+            font-weight: 600; letter-spacing: 2px; text-transform: uppercase;
+            transition: 0.4s;
         }
-
-        .submit-btn:hover {
-            background-color: #a88a75;
-            transform: translateY(-2px);
-        }
-
-        .social-icons {
-            margin-top: 40px; display: flex; justify-content: center; gap: 30px;
-        }
-
-        .social-icons a {
-            color: var(--text); font-size: 1.8rem;
-            transition: color 0.3s ease;
-        }
-
-        .social-icons a:hover {
-            color: var(--accent);
-        }
+        .submit-btn:hover { background: #fff; color: #000; transform: translateY(-5px); }
 
         footer {
-            height: 40vh; background: #1a1a1a; color: white;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            padding: 50px 10%; background: #111; color: rgba(255,255,255,0.3);
+            display: flex; justify-content: space-between; font-size: 0.8rem;
         }
     </style>
 </head>
 <body>
 
-    <div class="cursor"></div>
+    <div class="cursor-outer"></div>
+    <div class="cursor-inner"></div>
 
     <nav>
-        <div style="font-weight: 600;">LUMINA<span>.</span>STUDIO</div>
-        <div>PROJETS / PHILOSOPHIE / CONTACT</div>
+        <div style="font-weight: 600;">LUMINA<span>.</span></div>
+        <div style="display: flex; gap: 40px;">
+            <span>PROJETS</span>
+            <span>STUDIO</span>
+            <span>CONTACT</span>
+        </div>
     </nav>
 
     <div class="hero">
         <div class="viewport">
-            <h1 class="main-title">Pureté &<br>Harmonie</h1>
-            <div class="room-container">
-                <img src="
-" class="room-image" id="zoom-img">
+            <h1 class="main-title">L'Émotion<br>de l'Espace</h1>
+            <div class="room-frame">
+                <img src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1600&q=80" class="room-img" id="hero-img">
             </div>
         </div>
     </div>
 
-    <section class="content-section">
-        <div class="grid-decor">
-            <div class="reveal-box">
-                <img src="
-" id="reveal-img">
-            </div>
-            <div>
-                <h2 class="elegant-title">L'art de vivre <br><span style="color:var(--accent)">autrement</span></h2>
-                <p style="color: #666; line-height: 1.8; margin-bottom: 30px;">
-                    Chaque objet raconte une histoire. Nous créons des espaces qui ne sont pas seulement beaux, mais qui respirent avec vous. Une sélection minutieuse de matières naturelles : lin, chêne massif et pierre volcanique.
-                </p>
-                <button style="background:none; border:none; border-bottom: 1px solid black; padding: 10px 0; cursor: pointer; letter-spacing: 2px;">DÉCOUVRIR LA COLLECTION</button>
-            </div>
+    <section class="story">
+        <div class="story-img-wrap">
+            <img src="https://images.unsplash.com/photo-1616486341353-c5833ad88010?auto=format&fit=crop&w=1000&q=80" class="story-img" id="scroll-img">
+        </div>
+        <div style="display: flex; flex-direction: column; justify-content: center;">
+            <h2 class="elegant-h2">Simplicité <br><span style="color:var(--accent)">Intemporelle.</span></h2>
+            <p style="color: #666; line-height: 1.8; font-size: 1.1rem;">
+                Nous croyons que chaque maison doit être un sanctuaire. Nos designs fusionnent le minimalisme moderne avec la chaleur des textures organiques pour créer une harmonie visuelle unique.
+            </p>
+            <div style="margin-top: 40px; font-weight: 500; border-bottom: 2px solid var(--accent); width: fit-content; padding-bottom: 5px;">NOTRE PHILOSOPHIE</div>
         </div>
     </section>
 
-    <div class="horizontal-wrap">
-        <div class="horizontal-content">
+    <div class="horizontal-section">
+        <div class="horizontal-container">
             <div class="product-card">
-                <img src="
-">
-                <h3 class="elegant-title">La Chaise "Silo"</h3>
-                <p>Chêne tourné à la main</p>
+                <div class="product-bg-text">MINIMAL</div>
+                <img src="https://www.pngmart.com/files/7/Modern-Chair-PNG-Transparent-Image.png">
+                <div style="position: absolute; bottom: 100px; text-align: center;">
+                    <h3 style="font-family: 'Cormorant Garamond'; font-size: 2.5rem;">Chaise OSLO</h3>
+                    <p style="letter-spacing: 3px; color: var(--accent);">CHÊNE BLANC</p>
+                </div>
             </div>
             <div class="product-card">
-                <img src="
-">
-                <h3 class="elegant-title">Vase Terrazzo</h3>
-                <p>Céramique mate</p>
+                <div class="product-bg-text">PURETÉ</div>
+                <img src="https://www.pngmart.com/files/1/Sofa-PNG-Transparent-Image.png">
+                <div style="position: absolute; bottom: 100px; text-align: center;">
+                    <h3 style="font-family: 'Cormorant Garamond'; font-size: 2.5rem;">Divan CLOUD</h3>
+                    <p style="letter-spacing: 3px; color: var(--accent);">COTON ORGANIQUE</p>
+                </div>
             </div>
             <div class="product-card">
-                <img src="
-">
-                <h3 class="elegant-title">Suspension Aura</h3>
-                <p>Laiton brossé</p>
+                <div class="product-bg-text">LUMIÈRE</div>
+                <img src="https://www.pngmart.com/files/7/Lamp-PNG-File.png">
+                <div style="position: absolute; bottom: 100px; text-align: center;">
+                    <h3 style="font-family: 'Cormorant Garamond'; font-size: 2.5rem;">Lampe AURA</h3>
+                    <p style="letter-spacing: 3px; color: var(--accent);">LAITON BROSSÉ</p>
+                </div>
             </div>
         </div>
     </div>
 
-    <section class="contact-section">
-        <div class="contact-card">
-            <h2 class="elegant-title" style="font-size: 3rem;">Prenons contact.</h2>
-            <p style="color: #666;">Une question, un projet ou juste envie de dire bonjour ?</p>
-            <form class="contact-form">
-                <input type="text" placeholder="Nom Complet" required>
-                <input type="email" placeholder="Adresse Email" required>
-                <textarea placeholder="Votre Message" rows="6" required></textarea>
-                <button type="submit" class="submit-btn">Envoyer le Message</button>
-            </form>
-            <div class="social-icons">
-                <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-                <a href="#" aria-label="Pinterest"><i class="fab fa-pinterest"></i></a>
-                <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-                <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+    <section class="contact">
+        <div class="contact-info">
+            <h2>Créons votre <br>sanctuaire.</h2>
+            <p style="margin-top: 30px; opacity: 0.6;">Basé à Paris, disponible pour des projets dans le monde entier.</p>
+            <div style="margin-top: 60px;">
+                <p style="color: var(--accent); margin-bottom: 10px;">EMAIL</p>
+                <p style="font-size: 1.5rem;">hello@lumina.studio</p>
             </div>
         </div>
+        <form class="contact-form">
+            <div class="form-group">
+                <input type="text" placeholder="VOTRE NOM" required>
+            </div>
+            <div class="form-group">
+                <input type="email" placeholder="VOTRE EMAIL" required>
+            </div>
+            <div class="form-group">
+                <textarea placeholder="PARLEZ-NOUS DE VOTRE PROJET" rows="5"></textarea>
+            </div>
+            <button type="submit" class="submit-btn">Envoyer la demande</button>
+        </form>
     </section>
 
     <footer>
-        <h2 class="elegant-title" style="font-size: 5vw;">Sublimez votre espace.</h2>
-        <p style="opacity: 0.5;">© 2026 LUMINA STUDIO ARCHITECTURE</p>
+        <div>LUMINA © 2026</div>
+        <div style="display: flex; gap: 30px;">
+            <span>INSTAGRAM</span>
+            <span>PINTEREST</span>
+            <span>BEHANCE</span>
+        </div>
     </footer>
 
     <script>
         gsap.registerPlugin(ScrollTrigger);
 
-        // Curseur fluide
+        // --- CURSEUR ---
+        const cOuter = document.querySelector('.cursor-outer');
+        const cInner = document.querySelector('.cursor-inner');
+        
         document.addEventListener('mousemove', (e) => {
-            gsap.to('.cursor', { x: e.clientX - 15, y: e.clientY - 15, duration: 0.2 });
+            gsap.to(cInner, { x: e.clientX, y: e.clientY, duration: 0 });
+            gsap.to(cOuter, { x: e.clientX - 20, y: e.clientY - 20, duration: 0.2 });
         });
 
-        // ANIMATION 1: Le zoom immersif dans l'image
-        gsap.to("#zoom-img", {
+        // --- ANIMATION HERO ZOOM ---
+        gsap.to(".room-frame", {
             width: "100%",
             height: "100%",
             scrollTrigger: {
@@ -257,10 +236,18 @@
             }
         });
 
-        // Animation du titre qui s'efface au zoom
+        gsap.to("#hero-img", {
+            scale: 1,
+            scrollTrigger: {
+                trigger: ".hero",
+                start: "top top",
+                end: "bottom bottom",
+                scrub: true
+            }
+        });
+
         gsap.to(".main-title", {
-            opacity: 0,
-            scale: 0.8,
+            y: -200, opacity: 0,
             scrollTrigger: {
                 trigger: ".hero",
                 start: "top top",
@@ -269,43 +256,43 @@
             }
         });
 
-        // ANIMATION 2: Reveal image au scroll
-        gsap.to("#reveal-img", {
-            scale: 1,
+        // --- STORY REVEAL ---
+        gsap.from("#scroll-img", {
+            scale: 1.5,
             scrollTrigger: {
-                trigger: ".content-section",
-                start: "top 80%",
-                end: "top 20%",
+                trigger: ".story",
+                start: "top bottom",
+                end: "bottom top",
                 scrub: true
             }
         });
 
-        // ANIMATION 3: Scroll Horizontal
-        let products = gsap.utils.toArray(".product-card");
-        gsap.to(products, {
-            xPercent: -100 * (products.length - 1),
+        // --- HORIZONTAL SCROLL ---
+        let cards = gsap.utils.toArray(".product-card");
+        gsap.to(cards, {
+            xPercent: -100 * (cards.length - 1),
             ease: "none",
             scrollTrigger: {
-                trigger: ".horizontal-wrap",
+                trigger: ".horizontal-section",
                 pin: true,
                 scrub: 1,
-                end: () => "+=" + document.querySelector(".horizontal-content").offsetWidth
+                end: () => "+=" + document.querySelector(".horizontal-container").offsetWidth
             }
         });
 
-        // Effet de parallaxe sur les produits lors du scroll horizontal
-        products.forEach(card => {
-            gsap.from(card.querySelector('img'), {
-                y: 100,
-                rotation: 10,
+        // Animation de parallaxe sur le texte en arrière-plan (Horizontal)
+        cards.forEach(card => {
+            gsap.from(card.querySelector('.product-bg-text'), {
+                x: -200,
                 scrollTrigger: {
                     trigger: card,
-                    containerAnimation: gsap.to(products, { xPercent: -100 * (products.length - 1) }),
+                    containerAnimation: gsap.to(cards, { xPercent: -100 * (cards.length - 1) }),
                     start: "left right",
                     scrub: true
                 }
             });
         });
+
     </script>
 </body>
 </html>
