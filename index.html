@@ -3,228 +3,1362 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nexus3D | L'Immobilier Multidimensionnel</title>
+    <title>Aura Audio - L'excellence acoustique réinventée</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --primary: #0a0a12;
-            --accent: #00f2fe;
-            --accent-2: #ff00ff;
-            --glass: rgba(255, 255, 255, 0.03);
-            --glass-border: rgba(255, 255, 255, 0.08);
-            --text-main: #e0e0e0;
-            --font-body: 'Plus Jakarta Sans', sans-serif;
-            --font-head: 'Space Grotesk', sans-serif;
+        /* ===== RESET & BASE STYLES ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
-        /* Scroll Progress Bar */
-        #progress {
-            position: fixed; top: 0; left: 0; height: 4px;
-            background: linear-gradient(90deg, var(--accent), var(--accent-2));
-            z-index: 2000; width: 0%; transition: width 0.1s;
+        :root {
+            --primary: #0a0a0a;
+            --secondary: #1a1a1a;
+            --accent: #6a11cb;
+            --accent-light: #8a2be2;
+            --light: #f8f9fa;
+            --gray: #6c757d;
+            --transition: all 0.3s ease;
         }
 
         body {
+            font-family: 'Roboto', sans-serif;
+            line-height: 1.6;
+            color: var(--light);
             background-color: var(--primary);
-            color: var(--text-main);
-            font-family: var(--font-body);
             overflow-x: hidden;
-            selection-background: var(--accent);
         }
 
-        /* Fond Animé "Deep Space" */
-        .bg-mesh {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at 50% 50%, #1a1a2e 0%, #0a0a12 100%);
-            z-index: -1;
-        }
-        .bg-mesh::after {
-            content: ""; position: absolute; width: 200%; height: 200%;
-            background-image: url('https://www.transparenttextures.com/patterns/stardust.png');
-            opacity: 0.1; animation: rotateBg 100s linear infinite;
+        h1, h2, h3, h4 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 1rem;
         }
 
-        @keyframes rotateBg { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-
-        /* Custom Cursor */
-        .cursor {
-            width: 20px; height: 20px; border: 2px solid var(--accent);
-            border-radius: 50%; position: fixed; pointer-events: none;
-            z-index: 9999; transition: transform 0.1s, background 0.3s;
-            mix-blend-mode: difference;
+        a {
+            text-decoration: none;
+            color: inherit;
+            transition: var(--transition);
         }
 
-        /* Header Premium */
-        header {
-            padding: 20px 0; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            border-bottom: 1px solid transparent;
-        }
-        header.scrolled {
-            background: rgba(10, 10, 18, 0.8);
-            backdrop-filter: blur(15px);
-            padding: 12px 0;
-            border-bottom: 1px solid var(--glass-border);
+        ul {
+            list-style: none;
         }
 
-        /* Hero Section Refined */
-        .hero {
-            height: 100vh; display: flex; align-items: center;
-            perspective: 1000px;
-        }
-        
-        .hero-title {
-            font-family: var(--font-head);
-            font-size: clamp(2.5rem, 8vw, 5rem);
-            line-height: 1; font-weight: 700;
-            background: linear-gradient(to right, #fff, var(--accent), var(--accent-2));
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            margin-bottom: 30px;
+        img {
+            max-width: 100%;
+            height: auto;
         }
 
-        /* Card 3D Effect */
-        .property-card {
-            background: var(--glass);
-            border: 1px solid var(--glass-border);
+        section {
+            padding: 5rem 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+            font-size: 2.5rem;
+            position: relative;
+        }
+
+        .section-title:after {
+            content: '';
+            position: absolute;
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(to right, var(--accent), var(--accent-light));
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 2px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.9rem 2rem;
+            background: linear-gradient(to right, var(--accent), var(--accent-light));
+            color: white;
             border-radius: 30px;
-            overflow: hidden;
-            transition: 0.5s all cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            backdrop-filter: blur(10px);
-        }
-        .property-card:hover {
-            transform: translateY(-15px) scale(1.02);
-            border-color: var(--accent);
-            box-shadow: 0 20px 40px rgba(0, 242, 254, 0.15);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
         }
 
-        /* Boutons Futuristes */
-        .btn-magic {
-            position: relative; padding: 16px 35px; border-radius: 50px;
-            background: transparent; color: white; border: 1px solid var(--accent);
-            overflow: hidden; cursor: pointer; font-weight: 600;
-            text-transform: uppercase; letter-spacing: 1px;
-            transition: 0.3s;
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(106, 17, 203, 0.3);
         }
-        .btn-magic::before {
-            content: ''; position: absolute; top: 50%; left: 50%;
-            width: 300%; height: 300%; background: var(--accent);
-            transition: 0.5s; z-index: -1; transform: translate(-50%, -50%) scale(0);
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--accent-light);
+        }
+
+        .btn-outline:hover {
+            background: linear-gradient(to right, var(--accent), var(--accent-light));
+        }
+
+        /* ===== HEADER ===== */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            background-color: rgba(10, 10, 10, 0.95);
+            padding: 1.2rem 0;
+            transition: var(--transition);
+        }
+
+        header.scrolled {
+            padding: 0.8rem 0;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: white;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo i {
+            color: var(--accent);
+            margin-right: 0.5rem;
+            font-size: 2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            font-weight: 500;
+            position: relative;
+        }
+
+        .nav-links a:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            bottom: -5px;
+            left: 0;
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover:after,
+        .nav-links a.active:after {
+            width: 100%;
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .nav-actions i {
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .nav-actions i:hover {
+            color: var(--accent);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* ===== HERO SECTION ===== */
+        .hero {
+            height: 100vh;
+            background: linear-gradient(rgba(10, 10, 10, 0.85), rgba(10, 10, 10, 0.9)), url('https://images.unsplash.com/photo-1505740420928-5e560c06d30e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            text-align: center;
+            padding-top: 80px;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(to right, #fff, var(--accent-light));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2.5rem;
+            color: #ddd;
+        }
+
+        .hero-btns {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        /* ===== PRODUCTS SECTION ===== */
+        .products {
+            background-color: var(--secondary);
+        }
+
+        .product-filters {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 3rem;
+        }
+
+        .filter-btn {
+            padding: 0.7rem 1.5rem;
+            background: transparent;
+            border: 1px solid var(--gray);
+            color: var(--light);
+            border-radius: 30px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .filter-btn.active,
+        .filter-btn:hover {
+            background: linear-gradient(to right, var(--accent), var(--accent-light));
+            border-color: transparent;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .product-card {
+            background-color: var(--primary);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: var(--transition);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(106, 17, 203, 0.2);
+        }
+
+        .product-img {
+            height: 250px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .product-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+
+        .product-card:hover .product-img img {
+            transform: scale(1.05);
+        }
+
+        .product-tag {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: var(--accent);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .product-info {
+            padding: 1.5rem;
+        }
+
+        .product-name {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .product-price {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 1rem;
+        }
+
+        .product-price del {
+            font-size: 1rem;
+            color: var(--gray);
+            margin-left: 0.5rem;
+        }
+
+        .product-features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.7rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-tag {
+            background-color: rgba(106, 17, 203, 0.1);
+            color: var(--accent-light);
+            padding: 0.3rem 0.7rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+        }
+
+        /* ===== TECHNOLOGY SECTION ===== */
+        .technology {
+            background: linear-gradient(to bottom, var(--primary), var(--secondary));
+        }
+
+        .tech-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .tech-item {
+            text-align: center;
+            padding: 2rem;
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            transition: var(--transition);
+        }
+
+        .tech-item:hover {
+            background-color: rgba(106, 17, 203, 0.1);
+            transform: translateY(-5px);
+        }
+
+        .tech-icon {
+            font-size: 3rem;
+            color: var(--accent);
+            margin-bottom: 1.5rem;
+        }
+
+        .tech-item h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        /* ===== TESTIMONIALS ===== */
+        .testimonials {
+            background-color: var(--secondary);
+        }
+
+        .testimonials-slider {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .testimonial-slide {
+            padding: 2rem;
+            text-align: center;
+            display: none;
+            animation: fadeIn 0.8s ease;
+        }
+
+        .testimonial-slide.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .testimonial-text {
+            font-size: 1.2rem;
+            font-style: italic;
+            margin-bottom: 2rem;
+            color: #ddd;
+            position: relative;
+            padding: 0 2rem;
+        }
+
+        .testimonial-text:before,
+        .testimonial-text:after {
+            content: '"';
+            font-size: 4rem;
+            color: var(--accent);
+            opacity: 0.3;
+            position: absolute;
+            line-height: 1;
+        }
+
+        .testimonial-text:before {
+            top: -20px;
+            left: 0;
+        }
+
+        .testimonial-text:after {
+            bottom: -40px;
+            right: 0;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .author-avatar {
+            width: 60px;
+            height: 60px;
             border-radius: 50%;
+            overflow: hidden;
+            border: 3px solid var(--accent);
         }
-        .btn-magic:hover { color: #000; }
-        .btn-magic:hover::before { transform: translate(-50%, -50%) scale(1); }
 
-        /* Visite 3D - Viewer */
-        .tour-window {
-            aspect-ratio: 16/9; border-radius: 40px;
-            background: #000; position: relative;
-            box-shadow: 0 0 100px rgba(0, 242, 254, 0.1);
-            border: 1px solid var(--glass-border);
+        .author-info h4 {
+            margin-bottom: 0.3rem;
+        }
+
+        .author-info p {
+            color: var(--gray);
+        }
+
+        .slider-controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .slider-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: var(--gray);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .slider-dot.active {
+            background-color: var(--accent);
+            transform: scale(1.2);
+        }
+
+        /* ===== FOOTER ===== */
+        footer {
+            background-color: #050505;
+            padding: 4rem 2rem 2rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-column h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-bottom: 0.7rem;
+        }
+
+        .footer-column h3:after {
+            content: '';
+            position: absolute;
+            width: 40px;
+            height: 3px;
+            background: var(--accent);
+            bottom: 0;
+            left: 0;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent);
+            padding-left: 5px;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--secondary);
+            transition: var(--transition);
+        }
+
+        .social-links a:hover {
+            background-color: var(--accent);
+            transform: translateY(-5px);
+        }
+
+        .newsletter p {
+            margin-bottom: 1rem;
+            color: #aaa;
+        }
+
+        .newsletter-form {
+            display: flex;
+            margin-top: 1rem;
+        }
+
+        .newsletter-form input {
+            flex: 1;
+            padding: 0.8rem 1rem;
+            background-color: var(--secondary);
+            border: none;
+            border-radius: 30px 0 0 30px;
+            color: white;
+        }
+
+        .newsletter-form button {
+            padding: 0.8rem 1.5rem;
+            background: linear-gradient(to right, var(--accent), var(--accent-light));
+            color: white;
+            border: none;
+            border-radius: 0 30px 30px 0;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .newsletter-form button:hover {
+            background: linear-gradient(to right, var(--accent-light), var(--accent));
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid var(--secondary);
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        /* ===== RESPONSIVE DESIGN ===== */
+        @media (max-width: 992px) {
+            .hero h1 {
+                font-size: 2.8rem;
+            }
+            
+            .section-title {
+                font-size: 2.2rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            .nav-links {
+                position: fixed;
+                top: 70px;
+                left: -100%;
+                width: 100%;
+                flex-direction: column;
+                background-color: var(--primary);
+                padding: 2rem;
+                transition: var(--transition);
+                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+                z-index: 999;
+            }
+            
+            .nav-links.active {
+                left: 0;
+            }
+            
+            .hero h1 {
+                font-size: 2.3rem;
+            }
+            
+            .hero-btns {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn {
+                width: 100%;
+                max-width: 250px;
+            }
+            
+            section {
+                padding: 3rem 1.5rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .section-title {
+                font-size: 1.8rem;
+            }
+            
+            .product-filters {
+                gap: 0.5rem;
+            }
+            
+            .filter-btn {
+                padding: 0.5rem 1rem;
+                font-size: 0.9rem;
+            }
+        }
+
+        /* ===== CART MODAL ===== */
+        .cart-modal {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 100%;
+            max-width: 400px;
+            height: 100%;
+            background-color: var(--primary);
+            box-shadow: -5px 0 30px rgba(0, 0, 0, 0.3);
+            z-index: 2000;
+            transition: var(--transition);
+            padding: 2rem;
+            overflow-y: auto;
+        }
+
+        .cart-modal.active {
+            right: 0;
+        }
+
+        .cart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--secondary);
+        }
+
+        .close-cart {
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .close-cart:hover {
+            color: var(--accent);
+        }
+
+        .cart-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .cart-item-img {
+            width: 80px;
+            height: 80px;
+            border-radius: 8px;
             overflow: hidden;
         }
 
-        /* Responsive */
-        @media (max-width: 768px) {
-            .hero { text-align: center; }
-            .hero-actions { justify-content: center; }
+        .cart-item-info h4 {
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .cart-item-price {
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .cart-item-remove {
+            color: #ff6b6b;
+            cursor: pointer;
+            margin-left: auto;
+            font-size: 0.9rem;
+        }
+
+        .cart-total {
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 2px solid var(--accent);
+            display: flex;
+            justify-content: space-between;
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        .cart-actions {
+            margin-top: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        /* ===== OVERLAY ===== */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1500;
+            display: none;
+        }
+
+        .overlay.active {
+            display: block;
         }
     </style>
 </head>
 <body>
-    <div id="progress"></div>
-    <div class="cursor"></div>
-    <div class="bg-mesh"></div>
-
-    <header id="header" class="fixed-top w-100">
-        <div class="container d-flex justify-content-between align-items-center">
-            <a href="#" class="logo d-flex align-items-center gap-2 text-decoration-none">
-                <i class="fas fa-atom fa-2x" style="color: var(--accent)"></i>
-                <span style="font-family: var(--font-head); font-weight: 700; font-size: 24px; color: #fff;">NEXUS<span style="color: var(--accent)">3D</span></span>
+    <!-- Header -->
+    <header id="header">
+        <div class="container nav-container">
+            <a href="#" class="logo">
+                <i class="fas fa-headphones"></i>
+                AURA AUDIO
             </a>
             
-            <nav class="d-none d-lg-block">
-                <ul class="d-flex gap-5 list-unstyled m-0">
-                    <li><a href="#home" class="text-decoration-none text-white opacity-75">Univers</a></li>
-                    <li><a href="#properties" class="text-decoration-none text-white opacity-75">Galerie</a></li>
-                    <li><a href="#tour" class="text-decoration-none text-white opacity-75">Immersion</a></li>
+            <div class="mobile-menu-btn" id="mobile-menu-btn">
+                <i class="fas fa-bars"></i>
+            </div>
+            
+            <nav>
+                <ul class="nav-links" id="nav-links">
+                    <li><a href="#home" class="active">Accueil</a></li>
+                    <li><a href="#products">Produits</a></li>
+                    <li><a href="#technology">Technologie</a></li>
+                    <li><a href="#testimonials">Avis</a></li>
+                    <li><a href="#about">À propos</a></li>
+                    <li><a href="#contact">Contact</a></li>
                 </ul>
             </nav>
-
-            <button class="btn-magic">Accès VR</button>
+            
+            <div class="nav-actions">
+                <i class="fas fa-search" id="search-btn"></i>
+                <i class="fas fa-user" id="user-btn"></i>
+                <i class="fas fa-shopping-cart" id="cart-btn"></i>
+                <span class="cart-count">0</span>
+            </div>
         </div>
     </header>
 
-    <section class="hero container" id="home">
-        <div class="row align-items-center">
-            <div class="col-lg-7">
-                <h1 class="hero-title">L'immobilier n'a plus de limites.</h1>
-                <p class="lead opacity-50 mb-5 fs-4">Vivez une expérience sensorielle unique où chaque pixel dessine votre futur chez-vous. La réalité n'est que le début.</p>
-                <div class="d-flex gap-4 hero-actions">
-                    <button class="btn-magic">Explorer</button>
-                    <button class="btn-magic" style="border-color: var(--accent-2);">Vendre en 3D</button>
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="container hero-content">
+            <h1>L'excellence acoustique réinventée</h1>
+            <p>Découvrez une expérience audio immersive avec nos casques haute-fidélité. Conçus pour les audiophiles exigeants, nos produits allient technologie de pointe et design élégant.</p>
+            <div class="hero-btns">
+                <a href="#products" class="btn">Découvrir la collection</a>
+                <a href="#technology" class="btn btn-outline">Explorer la technologie</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section class="products" id="products">
+        <div class="container">
+            <h2 class="section-title">Nos Produits</h2>
+            <div class="product-filters">
+                <button class="filter-btn active" data-filter="all">Tous</button>
+                <button class="filter-btn" data-filter="wireless">Sans-fil</button>
+                <button class="filter-btn" data-filter="noise-cancelling">Anti-bruit</button>
+                <button class="filter-btn" data-filter="professional">Professionnel</button>
+                <button class="filter-btn" data-filter="sport">Sport</button>
+            </div>
+            
+            <div class="products-grid" id="products-grid">
+                <!-- Product 1 -->
+                <div class="product-card" data-category="wireless noise-cancelling">
+                    <div class="product-img">
+                        <div class="product-tag">Bestseller</div>
+                        <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Aura Pro Wireless">
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">Aura Pro Wireless</h3>
+                        <div class="product-price">€299 <del>€349</del></div>
+                        <div class="product-features">
+                            <span class="feature-tag">Sans-fil</span>
+                            <span class="feature-tag">ANC Actif</span>
+                            <span class="feature-tag">30h autonomie</span>
+                        </div>
+                        <p>Casque over-ear avec annulation de bruit active et son haute-fidélité. Parfait pour les longs trajets et le travail.</p>
+                        <button class="btn add-to-cart" data-id="1" data-name="Aura Pro Wireless" data-price="299" data-image="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80">Ajouter au panier</button>
+                    </div>
+                </div>
+                
+                <!-- Product 2 -->
+                <div class="product-card" data-category="professional">
+                    <div class="product-img">
+                        <div class="product-tag">Nouveau</div>
+                        <img src="https://images.unsplash.com/photo-1583394838336-acd977736f90?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Aura Studio Pro">
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">Aura Studio Pro</h3>
+                        <div class="product-price">€449</div>
+                        <div class="product-features">
+                            <span class="feature-tag">Studio</span>
+                            <span class="feature-tag">Haute-fidélité</span>
+                            <span class="feature-tag">Câble détachable</span>
+                        </div>
+                        <p>Casque de studio professionnel pour la production musicale. Réponse en fréquence parfaite et confort optimal.</p>
+                        <button class="btn add-to-cart" data-id="2" data-name="Aura Studio Pro" data-price="449" data-image="https://images.unsplash.com/photo-1583394838336-acd977736f90?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80">Ajouter au panier</button>
+                    </div>
+                </div>
+                
+                <!-- Product 3 -->
+                <div class="product-card" data-category="wireless sport">
+                    <div class="product-img">
+                        <img src="https://images.unsplash.com/photo-1484704849700-f032a568e944?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Aura Fit Wireless">
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">Aura Fit Wireless</h3>
+                        <div class="product-price">€179</div>
+                        <div class="product-features">
+                            <span class="feature-tag">Sport</span>
+                            <span class="feature-tag">Résistant à l'eau</span>
+                            <span class="feature-tag">12h autonomie</span>
+                        </div>
+                        <p>Écouteurs intra-auriculaires conçus pour le sport. Léger, résistant à la sueur et avec une fixation sécurisée.</p>
+                        <button class="btn add-to-cart" data-id="3" data-name="Aura Fit Wireless" data-price="179" data-image="https://images.unsplash.com/photo-1484704849700-f032a568e944?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80">Ajouter au panier</button>
+                    </div>
                 </div>
             </div>
-            <div class="col-lg-5 d-none d-lg-block">
-                <div class="cube-container">
+        </div>
+    </section>
+
+    <!-- Technology Section -->
+    <section class="technology" id="technology">
+        <div class="container">
+            <h2 class="section-title">Notre Technologie</h2>
+            <div class="tech-content">
+                <div class="tech-item">
+                    <div class="tech-icon">
+                        <i class="fas fa-volume-up"></i>
                     </div>
+                    <h3>Audio Haute-Fidélité</h3>
+                    <p>Drivers de 40mm avec diaphragme en néodyme pour des basses profondes et des aigus cristallins.</p>
+                </div>
+                
+                <div class="tech-item">
+                    <div class="tech-icon">
+                        <i class="fas fa-volume-mute"></i>
+                    </div>
+                    <h3>Annulation de Bruit Active</h3>
+                    <p>Technologie ANC de pointe qui élimine 95% des bruits ambiants pour une immersion totale.</p>
+                </div>
+                
+                <div class="tech-item">
+                    <div class="tech-icon">
+                        <i class="fas fa-bluetooth"></i>
+                    </div>
+                    <h3>Bluetooth 5.3</h3>
+                    <p>Connectivité stable jusqu'à 15m avec codec audio haute qualité pour une écoute sans compromis.</p>
+                </div>
+                
+                <div class="tech-item">
+                    <div class="tech-icon">
+                        <i class="fas fa-battery-full"></i>
+                    </div>
+                    <h3>Autonomie Prolongée</h3>
+                    <p>Jusqu'à 30 heures d'autonomie avec une charge rapide de 15 minutes pour 3 heures d'écoute.</p>
+                </div>
             </div>
         </div>
     </section>
 
-    <section class="container py-10" id="properties">
-        <div class="text-center mb-5">
-            <h2 style="font-family: var(--font-head); font-size: 3rem;">Collections Rares</h2>
-            <div style="width: 80px; height: 4px; background: var(--accent); margin: 20px auto;"></div>
+    <!-- Testimonials Section -->
+    <section class="testimonials" id="testimonials">
+        <div class="container">
+            <h2 class="section-title">Ce que disent nos clients</h2>
+            <div class="testimonials-slider">
+                <!-- Testimonial 1 -->
+                <div class="testimonial-slide active">
+                    <div class="testimonial-text">
+                        La qualité sonore des Aura Pro Wireless est tout simplement exceptionnelle. L'annulation de bruit est si efficace que je peux me concentrer même dans les endroits les plus bruyants. Le confort est également remarquable pour de longues sessions d'écoute.
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">
+                            <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Marc Dupont">
+                        </div>
+                        <div class="author-info">
+                            <h4>Marc Dupont</h4>
+                            <p>Musicien professionnel</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Testimonial 2 -->
+                <div class="testimonial-slide">
+                    <div class="testimonial-text">
+                        J'utilise les Aura Fit Wireless pour mes séances de sport et ils tiennent parfaitement en place. La qualité audio est excellente et ils résistent à la transpiration. L'autonomie est plus que suffisante pour mes entraînements hebdomadaires.
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">
+                            <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Sophie Martin">
+                        </div>
+                        <div class="author-info">
+                            <h4>Sophie Martin</h4>
+                            <p>Athlète professionnelle</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Testimonial 3 -->
+                <div class="testimonial-slide">
+                    <div class="testimonial-text">
+                        En tant qu'ingénieur du son, je suis très exigeant sur la qualité audio. Les Aura Studio Pro offrent une réponse en fréquence parfaite et une restitution fidèle du son. Ils sont devenus mon outil de travail principal en studio.
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">
+                            <img src="https://randomuser.me/api/portraits/men/67.jpg" alt="Thomas Leroy">
+                        </div>
+                        <div class="author-info">
+                            <h4>Thomas Leroy</h4>
+                            <p>Ingénieur du son</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="slider-controls">
+                <div class="slider-dot active" data-slide="0"></div>
+                <div class="slider-dot" data-slide="1"></div>
+                <div class="slider-dot" data-slide="2"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>AURA AUDIO</h3>
+                    <p>Depuis 2010, nous repoussons les limites de l'expérience audio. Nos produits sont conçus pour les passionnés de musique qui recherchent la perfection sonore.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Liens Rapides</h3>
+                    <ul class="footer-links">
+                        <li><a href="#home">Accueil</a></li>
+                        <li><a href="#products">Produits</a></li>
+                        <li><a href="#technology">Technologie</a></li>
+                        <li><a href="#testimonials">Avis clients</a></li>
+                        <li><a href="#">Support technique</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Support</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Centre d'aide</a></li>
+                        <li><a href="#">Guides d'utilisation</a></li>
+                        <li><a href="#">Garantie</a></li>
+                        <li><a href="#">Contactez-nous</a></li>
+                        <li><a href="#">Retours & Échanges</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Newsletter</h3>
+                    <p>Abonnez-vous pour recevoir nos offres exclusives et les dernières nouveautés.</p>
+                    <div class="newsletter-form">
+                        <input type="email" placeholder="Votre email">
+                        <button type="submit"><i class="fas fa-paper-plane"></i></button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2023 Aura Audio. Tous droits réservés.</p>
+                <p>Site créé pour démonstration</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Cart Modal -->
+    <div class="cart-modal" id="cart-modal">
+        <div class="cart-header">
+            <h3>Votre Panier</h3>
+            <div class="close-cart" id="close-cart">
+                <i class="fas fa-times"></i>
+            </div>
         </div>
         
-        <div class="row g-4" id="propertiesGrid">
+        <div class="cart-items" id="cart-items">
+            <!-- Les articles du panier seront ajoutés ici dynamiquement -->
+            <div class="empty-cart-message" id="empty-cart-message">
+                <p>Votre panier est vide</p>
             </div>
-    </section>
+        </div>
+        
+        <div class="cart-total" id="cart-total" style="display: none;">
+            <span>Total:</span>
+            <span id="cart-total-price">€0</span>
+        </div>
+        
+        <div class="cart-actions" id="cart-actions" style="display: none;">
+            <button class="btn" id="checkout-btn">Procéder au paiement</button>
+            <button class="btn btn-outline" id="continue-shopping">Continuer mes achats</button>
+        </div>
+    </div>
 
+    <!-- Overlay -->
+    <div class="overlay" id="overlay"></div>
+
+    <!-- JavaScript -->
     <script>
-        // 1. Barre de progression
-        window.onscroll = function() {
-            let winScroll = document.body.scrollTop || document.documentElement.scrollTop;
-            let height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-            let scrolled = (winScroll / height) * 100;
-            document.getElementById("progress").style.width = scrolled + "%";
-            
-            // Header scroll
-            if(winScroll > 50) document.getElementById("header").classList.add('scrolled');
-            else document.getElementById("header").classList.remove('scrolled');
-        };
-
-        // 2. Custom Cursor
-        const cursor = document.querySelector('.cursor');
-        document.addEventListener('mousemove', e => {
-            cursor.style.left = e.clientX + 'px';
-            cursor.style.top = e.clientY + 'px';
+        // Variables globales
+        let cart = [];
+        
+        // DOM Elements
+        const header = document.getElementById('header');
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const navLinks = document.getElementById('nav-links');
+        const cartBtn = document.getElementById('cart-btn');
+        const cartModal = document.getElementById('cart-modal');
+        const closeCart = document.getElementById('close-cart');
+        const overlay = document.getElementById('overlay');
+        const cartItemsContainer = document.getElementById('cart-items');
+        const emptyCartMessage = document.getElementById('empty-cart-message');
+        const cartTotal = document.getElementById('cart-total');
+        const cartTotalPrice = document.getElementById('cart-total-price');
+        const cartActions = document.getElementById('cart-actions');
+        const cartCount = document.querySelector('.cart-count');
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        const productCards = document.querySelectorAll('.product-card');
+        const testimonialSlides = document.querySelectorAll('.testimonial-slide');
+        const sliderDots = document.querySelectorAll('.slider-dot');
+        
+        // Header scroll effect
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
         });
-
-        // 3. Animation d'entrée des cartes (Intersection Observer)
+        
+        // Mobile menu toggle
+        mobileMenuBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            mobileMenuBtn.querySelector('i').classList.toggle('fa-bars');
+            mobileMenuBtn.querySelector('i').classList.toggle('fa-times');
+        });
+        
+        // Close mobile menu when clicking on a link
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+                mobileMenuBtn.querySelector('i').classList.remove('fa-times');
+                mobileMenuBtn.querySelector('i').classList.add('fa-bars');
+            });
+        });
+        
+        // Cart functionality
+        cartBtn.addEventListener('click', () => {
+            cartModal.classList.add('active');
+            overlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+        
+        closeCart.addEventListener('click', closeCartModal);
+        overlay.addEventListener('click', closeCartModal);
+        
+        function closeCartModal() {
+            cartModal.classList.remove('active');
+            overlay.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+        
+        // Add to cart functionality
+        document.querySelectorAll('.add-to-cart').forEach(button => {
+            button.addEventListener('click', function() {
+                const productId = this.getAttribute('data-id');
+                const productName = this.getAttribute('data-name');
+                const productPrice = parseFloat(this.getAttribute('data-price'));
+                const productImage = this.getAttribute('data-image');
+                
+                addToCart(productId, productName, productPrice, productImage);
+                
+                // Animation feedback
+                this.innerHTML = '<i class="fas fa-check"></i> Ajouté';
+                this.style.background = '#28a745';
+                
+                setTimeout(() => {
+                    this.innerHTML = 'Ajouter au panier';
+                    this.style.background = '';
+                }, 1500);
+            });
+        });
+        
+        function addToCart(id, name, price, image) {
+            // Check if product already in cart
+            const existingItem = cart.find(item => item.id === id);
+            
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({
+                    id: id,
+                    name: name,
+                    price: price,
+                    image: image,
+                    quantity: 1
+                });
+            }
+            
+            updateCartUI();
+        }
+        
+        function updateCartUI() {
+            // Update cart count
+            const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
+            cartCount.textContent = totalItems;
+            
+            // Update cart items display
+            cartItemsContainer.innerHTML = '';
+            
+            if (cart.length === 0) {
+                emptyCartMessage.style.display = 'block';
+                cartTotal.style.display = 'none';
+                cartActions.style.display = 'none';
+            } else {
+                emptyCartMessage.style.display = 'none';
+                
+                let totalPrice = 0;
+                
+                cart.forEach(item => {
+                    totalPrice += item.price * item.quantity;
+                    
+                    const cartItemElement = document.createElement('div');
+                    cartItemElement.className = 'cart-item';
+                    cartItemElement.innerHTML = `
+                        <div class="cart-item-img">
+                            <img src="${item.image}" alt="${item.name}">
+                        </div>
+                        <div class="cart-item-info">
+                            <h4>${item.name}</h4>
+                            <div class="cart-item-price">€${item.price} x ${item.quantity}</div>
+                        </div>
+                        <div class="cart-item-remove" data-id="${item.id}">
+                            <i class="fas fa-trash"></i>
+                        </div>
+                    `;
+                    
+                    cartItemsContainer.appendChild(cartItemElement);
+                });
+                
+                // Add event listeners to remove buttons
+                document.querySelectorAll('.cart-item-remove').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const itemId = this.getAttribute('data-id');
+                        removeFromCart(itemId);
+                    });
+                });
+                
+                // Update total
+                cartTotalPrice.textContent = `€${totalPrice.toFixed(2)}`;
+                cartTotal.style.display = 'flex';
+                cartActions.style.display = 'flex';
+            }
+        }
+        
+        function removeFromCart(id) {
+            cart = cart.filter(item => item.id !== id);
+            updateCartUI();
+        }
+        
+        // Checkout button
+        document.getElementById('checkout-btn').addEventListener('click', () => {
+            if (cart.length > 0) {
+                alert('Merci pour votre achat ! Cette fonctionnalité est en cours de développement.');
+                cart = [];
+                updateCartUI();
+                closeCartModal();
+            }
+        });
+        
+        // Continue shopping button
+        document.getElementById('continue-shopping').addEventListener('click', closeCartModal);
+        
+        // Product filtering
+        filterButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                // Remove active class from all buttons
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                
+                // Add active class to clicked button
+                this.classList.add('active');
+                
+                const filterValue = this.getAttribute('data-filter');
+                
+                // Show/hide products based on filter
+                productCards.forEach(card => {
+                    if (filterValue === 'all' || card.getAttribute('data-category').includes(filterValue)) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+        
+        // Testimonial slider
+        let currentSlide = 0;
+        
+        function showSlide(index) {
+            // Hide all slides
+            testimonialSlides.forEach(slide => {
+                slide.classList.remove('active');
+            });
+            
+            // Remove active class from all dots
+            sliderDots.forEach(dot => {
+                dot.classList.remove('active');
+            });
+            
+            // Show current slide and activate corresponding dot
+            testimonialSlides[index].classList.add('active');
+            sliderDots[index].classList.add('active');
+            currentSlide = index;
+        }
+        
+        // Add click events to dots
+        sliderDots.forEach(dot => {
+            dot.addEventListener('click', function() {
+                const slideIndex = parseInt(this.getAttribute('data-slide'));
+                showSlide(slideIndex);
+            });
+        });
+        
+        // Auto-advance slides every 5 seconds
+        setInterval(() => {
+            let nextSlide = currentSlide + 1;
+            if (nextSlide >= testimonialSlides.length) {
+                nextSlide = 0;
+            }
+            showSlide(nextSlide);
+        }, 5000);
+        
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+        
+        // Newsletter form submission
+        const newsletterForm = document.querySelector('.newsletter-form');
+        newsletterForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const emailInput = this.querySelector('input[type="email"]');
+            
+            if (emailInput.value && emailInput.value.includes('@')) {
+                alert('Merci de vous être abonné à notre newsletter !');
+                emailInput.value = '';
+            } else {
+                alert('Veuillez entrer une adresse email valide.');
+            }
+        });
+        
+        // Initialize cart UI
+        updateCartUI();
+        
+        // Animation on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    entry.target.style.opacity = 1;
-                    entry.target.style.transform = "translateY(0)";
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
                 }
             });
-        }, { threshold: 0.1 });
-
-        // On peut réutiliser tes données properties ici...
-        // Ajout d'un effet "magnetic" sur les boutons
-        document.querySelectorAll('.btn-magic').forEach(btn => {
-            btn.addEventListener('mousemove', e => {
-                let rect = btn.getBoundingClientRect();
-                let x = e.clientX - rect.left - rect.width/2;
-                let y = e.clientY - rect.top - rect.height/2;
-                btn.style.transform = `translate(${x * 0.3}px, ${y * 0.3}px)`;
-            });
-            btn.addEventListener('mouseleave', () => {
-                btn.style.transform = `translate(0px, 0px)`;
-            });
+        }, observerOptions);
+        
+        // Observe elements for animation
+        document.querySelectorAll('.product-card, .tech-item').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+            observer.observe(el);
         });
-
     </script>
 </body>
 </html>
