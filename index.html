@@ -3,61 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AURORA | Expérience 3D & Écosystème</title>
+    <title>AURORA | Expérience 3D & Audio Premium</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.160.0/three.min.js"></script>
     <script src="https://unpkg.com/@studio-freight/lenis@1.0.33/dist/lenis.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;900&display=swap');
-        
-        body { 
-            font-family: 'Inter', sans-serif; 
-            background-color: #0a0a0a; 
-            color: white; 
-            margin: 0; 
-            overflow-x: hidden; 
-        }
-
-        #canvas-container { 
-            position: fixed; 
-            top: 0; 
-            left: 0; 
-            width: 100%; 
-            height: 100vh; 
-            z-index: 1; 
-            pointer-events: none; 
-        }
-
-        section { 
-            position: relative; 
-            min-height: 100vh; 
-            display: flex; 
-            align-items: center; 
-            z-index: 2; 
-        }
-
-        .text-huge { 
-            font-size: clamp(3.5rem, 12vw, 9rem); 
-            line-height: 0.85; 
-            font-weight: 900; 
-            letter-spacing: -0.06em; 
-        }
-
-        .bento-card {
-            background: #f8f8f8;
-            border-radius: 40px;
-            transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
-        }
-
-        .bento-card:hover {
-            transform: scale(1.02);
-            box-shadow: 0 40px 80px rgba(0,0,0,0.1);
-        }
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #050505; color: white; margin: 0; }
+        #canvas-container { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; z-index: 1; pointer-events: none; }
+        section { position: relative; min-height: 100vh; display: flex; align-items: center; z-index: 2; }
+        .text-huge { font-size: clamp(3rem, 10vw, 8rem); font-weight: 800; line-height: 0.9; letter-spacing: -0.04em; }
+        .bento-card { background: #111; border-radius: 32px; overflow: hidden; transition: transform 0.4s ease; border: 1px solid rgba(255,255,255,0.05); }
+        .bento-card:hover { transform: translateY(-10px); border-color: #ff4500; }
     </style>
 </head>
 <body>
@@ -65,183 +26,144 @@
     <div id="canvas-container"></div>
 
     <nav class="fixed top-0 w-full p-8 flex justify-between items-center z-50 mix-blend-difference">
-        <div class="font-black text-2xl uppercase tracking-tighter">Aurora</div>
-        <div class="space-x-8 hidden md:flex text-[10px] uppercase tracking-[0.3em] font-bold">
-            <a href="#tech" class="hover:text-orange-500 transition">Technologie</a>
-            <a href="#ecosystem" class="hover:text-orange-500 transition">Écosystème</a>
-        </div>
-        <div class="bg-white text-black px-5 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest cursor-pointer hover:bg-orange-600 hover:text-white transition">Shop</div>
+        <div class="font-black text-2xl uppercase italic">Aurora</div>
+        <div class="bg-orange-600 text-white px-6 py-2 rounded-full text-xs font-bold uppercase tracking-widest cursor-pointer">Shop Now</div>
     </nav>
 
-    <section class="px-8 md:px-20 pointer-events-none">
-        <div class="max-w-5xl">
-            <h1 class="text-huge opacity-0 translate-y-20" id="hero-title">
-                AURORA <br> <span class="text-orange-600">SONIC II.</span>
-            </h1>
-            <p class="mt-8 text-gray-400 max-w-sm opacity-0 translate-y-10" id="hero-para">
-                L'ingénierie acoustique de demain, sculptée dans un alliage de magnésium et de fibre de carbone.
-            </p>
+    <section class="px-10 pointer-events-none">
+        <div class="max-w-4xl">
+            <h1 class="text-huge opacity-0" id="h-title">ULTIMATE<br><span class="text-orange-600">HEARING.</span></h1>
+            <p class="mt-6 text-gray-400 max-w-sm opacity-0" id="h-para">L'ingénierie Aurora Sonic II : un son spatialisé en temps réel dans un design ultra-minimaliste.</p>
         </div>
     </section>
 
-    <section class="px-8 md:px-20 justify-end pointer-events-none" id="tech">
+    <section class="px-10 justify-end pointer-events-none">
         <div class="max-w-xl text-right">
-            <h2 class="text-huge opacity-0 translate-y-20 sec-title">ACOUSTIC <br> <span class="text-blue-500">PRECISION.</span></h2>
-            <p class="mt-6 text-gray-400 opacity-0 translate-y-10 sec-para">Traitement du signal 64-bit pour une restitution sans aucune distorsion harmonique.</p>
+            <h2 class="text-huge opacity-0 sec-reveal">PURE<br>CARBON.</h2>
+            <p class="mt-6 text-gray-400 opacity-0 sec-reveal">Structure en carbone composite pesant seulement 240g pour un confort infini.</p>
         </div>
     </section>
 
-    <section class="h-auto py-32 bg-white text-black" id="ecosystem">
-        <div class="max-w-7xl mx-auto px-8 w-full">
-            <div class="mb-20">
-                <h2 class="text-6xl font-black uppercase tracking-tighter leading-none">Écosystème <br> <span class="text-orange-600">Intelligent.</span></h2>
-                <p class="text-gray-500 mt-4 text-lg">Des accessoires pensés pour la performance pure.</p>
+    <section class="h-auto py-20 bg-white text-black" id="shop">
+        <div class="max-w-7xl mx-auto px-6 w-full">
+            <div class="mb-12">
+                <h2 class="text-5xl font-extrabold tracking-tighter">LA COLLECTION <span class="text-orange-600">AURORA.</span></h2>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 auto-rows-[300px]">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
                 
-                <div class="md:col-span-2 md:row-span-2 bento-card p-10 flex flex-col justify-between overflow-hidden group">
+                <div class="md:col-span-2 md:row-span-2 bento-card bg-gray-100 p-8 flex flex-col justify-between group">
                     <div>
-                        <span class="text-[10px] font-bold uppercase tracking-widest border border-black/10 px-3 py-1 rounded-full">Wireless Charge</span>
-                        <h3 class="text-4xl font-black mt-4">Aurora Dock</h3>
-                        <p class="text-gray-500 mt-2">Suspension magnétique et charge induction ultra-rapide.</p>
+                        <span class="text-[10px] font-bold bg-black text-white px-3 py-1 rounded-full uppercase">Le Fleuron</span>
+                        <h3 class="text-4xl font-black mt-4">Aurora Sonic II</h3>
+                        <p class="text-gray-500 mt-2">Réduction de bruit adaptative ultra-puissante.</p>
                     </div>
-                    <img src="https://images.unsplash.com/photo-1528148313279-cc7080860961?auto=format&fit=crop&q=80&w=600" 
-                         class="h-64 object-contain group-hover:scale-110 transition duration-700" alt="Dock">
-                </div>
-
-                <div class="md:col-span-2 bg-orange-600 rounded-[40px] p-10 text-white flex items-center justify-between group overflow-hidden">
-                    <div class="z-10">
-                        <h3 class="text-3xl font-black">Travel Case</h3>
-                        <p class="opacity-80">Cuir de Toscane et intérieur velours.</p>
-                        <button class="mt-4 bg-white text-orange-600 font-bold px-6 py-2 rounded-full text-xs uppercase">Détails</button>
+                    <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&q=80&w=800" 
+                         class="rounded-2xl mt-6 group-hover:scale-105 transition-transform duration-500" alt="Casque Aurora">
+                    <div class="flex justify-between items-center mt-6">
+                        <span class="text-2xl font-bold">399€</span>
+                        <button class="bg-black text-white px-6 py-2 rounded-full text-xs font-bold">Ajouter</button>
                     </div>
-                    <i class="fas fa-suitcase-rolling text-9xl opacity-10 absolute right-[-20px] group-hover:rotate-12 transition"></i>
                 </div>
 
-                <div class="bg-black rounded-[40px] p-8 text-white flex flex-col justify-between group">
-                    <h3 class="font-bold text-xl leading-tight">Mini DAC <br> Hi-Res</h3>
-                    <img src="https://images.unsplash.com/photo-1592436259366-18ab6da5f195?auto=format&fit=crop&q=80&w=400" 
-                         class="rounded-2xl opacity-50 group-hover:opacity-100 transition" alt="DAC">
+                <div class="bento-card bg-gray-900 text-white p-6 flex flex-col justify-between group">
+                    <h3 class="text-xl font-bold">Aurora Buds</h3>
+                    <img src="https://images.unsplash.com/photo-1590658268037-6bf12165a8df?auto=format&fit=crop&q=80&w=400" 
+                         class="rounded-xl my-4 opacity-80 group-hover:opacity-100 transition" alt="Buds">
+                    <span class="text-orange-500 font-bold">149€</span>
                 </div>
 
-                <div class="bg-[#222] rounded-[40px] p-8 text-white flex flex-col justify-between">
-                    <h3 class="font-bold text-xl uppercase tracking-tighter">OFC Cable</h3>
-                    <p class="text-[10px] text-gray-500">Pureté cuivre 99.9%</p>
-                    <div class="text-orange-500 font-black text-3xl">49€</div>
+                <div class="bento-card bg-[#f4f4f4] p-6 flex flex-col justify-between">
+                    <h3 class="text-xl font-bold text-black">Power Stand</h3>
+                    <img src="https://images.unsplash.com/photo-1528148313279-cc7080860961?auto=format&fit=crop&q=80&w=400" 
+                         class="rounded-xl my-4" alt="Stand">
+                    <span class="text-black font-bold">89€</span>
+                </div>
+
+                <div class="md:col-span-2 bento-card bg-orange-600 p-8 text-white flex items-center justify-between group">
+                    <div class="max-w-[50%]">
+                        <h3 class="text-3xl font-black italic">Studio Pro</h3>
+                        <p class="text-sm mt-2 opacity-80">Conçu pour les producteurs et ingénieurs du son.</p>
+                        <button class="mt-4 border border-white px-6 py-2 rounded-full text-[10px] font-bold uppercase">Découvrir</button>
+                    </div>
+                    <img src="https://images.unsplash.com/photo-1583394838336-acd977736f90?auto=format&fit=crop&q=80&w=400" 
+                         class="w-32 h-32 object-cover rounded-full group-hover:rotate-12 transition-transform duration-500" alt="Studio Pro">
                 </div>
             </div>
         </div>
     </section>
-
-    <footer class="py-20 bg-black text-center border-t border-white/5">
-        <p class="text-[10px] uppercase tracking-[0.5em] text-gray-600">© 2026 Aurora Sound Technologies</p>
-    </footer>
 
     <script>
-        // 1. CONFIGURATION THREE.JS (CASQUE)
+        // 1. SCÈNE 3D (CENTRE)
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
         const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
         document.getElementById('canvas-container').appendChild(renderer.domElement);
 
-        // Lumières
-        const ambient = new THREE.AmbientLight(0xffffff, 1);
-        scene.add(ambient);
-        const point = new THREE.PointLight(0xff4500, 100);
-        point.position.set(5, 5, 5);
-        scene.add(point);
-
-        // Géométrie du Casque (Simplifiée pour mono-file)
         const group = new THREE.Group();
-        const mat = new THREE.MeshStandardMaterial({ color: 0x111111, roughness: 0.2, metalness: 0.9 });
+        const mat = new THREE.MeshStandardMaterial({ color: 0x111111, metalness: 1, roughness: 0.1 });
         
-        // Arceau
-        const arch = new THREE.Mesh(new THREE.TorusGeometry(1.5, 0.1, 16, 100, Math.PI), mat);
+        // Arceau 3D
+        const arch = new THREE.Mesh(new THREE.TorusGeometry(1.6, 0.12, 16, 100, Math.PI), mat);
         arch.rotation.z = Math.PI / 2;
         group.add(arch);
 
-        // Écouteurs
-        const speakerGeom = new THREE.CylinderGeometry(0.8, 0.8, 0.5, 32);
-        const padGeom = new THREE.CylinderGeometry(0.85, 0.85, 0.2, 32);
-        const padMat = new THREE.MeshStandardMaterial({ color: 0xff4500 });
-
-        const left = new THREE.Mesh(speakerGeom, mat);
-        left.position.set(-1.5, -0.2, 0);
-        left.rotation.z = Math.PI / 2;
+        // Écouteurs 3D
+        const speaker = new THREE.CylinderGeometry(0.8, 0.8, 0.4, 32);
+        const pad = new THREE.MeshStandardMaterial({ color: 0xff4500 });
+        
+        const left = new THREE.Mesh(speaker, mat);
+        left.position.set(-1.6, -0.2, 0); left.rotation.z = Math.PI / 2;
         group.add(left);
 
-        const leftPad = new THREE.Mesh(padGeom, padMat);
-        leftPad.position.set(-1.3, -0.2, 0);
-        leftPad.rotation.z = Math.PI / 2;
-        group.add(leftPad);
+        const lPad = new THREE.Mesh(new THREE.CylinderGeometry(0.85, 0.85, 0.2, 32), pad);
+        lPad.position.set(-1.4, -0.2, 0); lPad.rotation.z = Math.PI / 2;
+        group.add(lPad);
 
-        const right = left.clone();
-        right.position.x = 1.5;
-        group.add(right);
-
-        const rightPad = leftPad.clone();
-        rightPad.position.x = 1.3;
-        group.add(rightPad);
+        const right = left.clone(); right.position.x = 1.6; group.add(right);
+        const rPad = lPad.clone(); rPad.position.x = 1.4; group.add(rPad);
 
         scene.add(group);
+        scene.add(new THREE.AmbientLight(0xffffff, 1));
+        const light = new THREE.PointLight(0xff4500, 50); light.position.set(5, 5, 5);
+        scene.add(light);
         camera.position.z = 5;
 
-        // 2. ANIMATIONS GSAP
+        // 2. ANIMATIONS
         gsap.registerPlugin(ScrollTrigger);
+        const lenis = new Lenis();
+        function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
+        requestAnimationFrame(raf);
 
         // Intro
-        gsap.to("#hero-title", { opacity: 1, y: 0, duration: 1.5, ease: "expo.out" });
-        gsap.to("#hero-para", { opacity: 1, y: 0, duration: 1.5, delay: 0.2, ease: "expo.out" });
+        gsap.to("#h-title", { opacity: 1, y: -20, duration: 1, delay: 0.5 });
+        gsap.to("#h-para", { opacity: 1, y: -20, duration: 1, delay: 0.7 });
 
         // Scroll Timeline
-        const tl = gsap.timeline({
-            scrollTrigger: {
-                trigger: "body",
-                start: "top top",
-                end: "bottom bottom",
-                scrub: 1
-            }
+        const mainTl = gsap.timeline({
+            scrollTrigger: { trigger: "body", start: "top top", end: "bottom bottom", scrub: 1 }
         });
 
-        tl.to(group.rotation, { y: Math.PI * 2, x: 0.5 })
-          .to(group.position, { x: -3, z: -2 }, 0)
-          .to(".sec-title", { opacity: 1, y: 0 }, 0.2)
-          .to(".sec-para", { opacity: 1, y: 0 }, 0.3)
-          .to(group.position, { x: 3, y: 1 }, 0.6)
-          .to(group.scale, { x: 0.5, y: 0.5, z: 0.5 }, 0.8);
+        mainTl.to(group.rotation, { y: Math.PI * 2, x: 0.3 })
+              .to(group.position, { x: -3 }, 0)
+              .to(".sec-reveal", { opacity: 1, y: -20, stagger: 0.2 }, 0.3)
+              .to(group.position, { x: 3, y: 1, z: -2 }, 0.6)
+              .to(group.scale, { x: 0.4, y: 0.4, z: 0.4 }, 0.8);
 
-        // Bento Animation
-        gsap.from(".bento-card, .md\\:col-span-2, .bg-black, .bg-\\[\\#222\\]", {
-            scrollTrigger: {
-                trigger: "#ecosystem",
-                start: "top 70%",
-            },
-            y: 100,
-            opacity: 0,
-            stagger: 0.1,
-            duration: 1,
-            ease: "power4.out"
+        // Animation de la grille
+        gsap.from(".bento-card", {
+            scrollTrigger: { trigger: "#shop", start: "top 70%" },
+            y: 50, opacity: 0, stagger: 0.1, duration: 1, ease: "power4.out"
         });
 
-        // 3. RENDER LOOP
         function animate() {
             requestAnimationFrame(animate);
-            group.position.y += Math.sin(Date.now() * 0.002) * 0.002;
+            group.position.y += Math.sin(Date.now() * 0.002) * 0.003;
             renderer.render(scene, camera);
         }
         animate();
 
-        // 4. SMOOTH SCROLL (LENIS)
-        const lenis = new Lenis();
-        function raf(time) {
-            lenis.raf(time);
-            requestAnimationFrame(raf);
-        }
-        requestAnimationFrame(raf);
-
-        // Resize
         window.addEventListener('resize', () => {
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
