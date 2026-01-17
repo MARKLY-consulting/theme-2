@@ -3,28 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NEXUS IMMO | Design Immobilier 3D</title>
+    <title>NEXUS IMMO | Design Immobilier 3D Intelligence</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/ScrollTrigger.min.js"></script>
     <style>
         /* ===== VARIABLES & RESET ===== */
         :root {
-            --primary: #2A5CAA;
-            --primary-light: #4A7CC8;
-            --secondary: #E8B923;
-            --tertiary: #27AE60;
-            --dark: #1A1D28;
-            --dark-light: #2A2D38;
-            --light: #F8F9FA;
-            --light-gray: #E9ECEF;
-            --gray: #6C757D;
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            --transition-slow: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            --shadow-lg: 0 20px 60px rgba(0, 0, 0, 0.2);
+            --primary: #0066FF;
+            --primary-dark: #0052CC;
+            --primary-light: #3399FF;
+            --secondary: #00D4AA;
+            --tertiary: #FF6B6B;
+            --accent: #9D4EDD;
+            --dark: #0A0A14;
+            --dark-light: #1A1A24;
+            --light: #F8FAFF;
+            --light-gray: #E8ECF4;
+            --gray: #8C94A3;
+            --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-slow: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            --shadow: 0 10px 40px rgba(0, 102, 255, 0.1);
+            --shadow-lg: 0 20px 60px rgba(0, 102, 255, 0.2);
+            --shadow-neon: 0 0 20px rgba(0, 212, 170, 0.5);
+            --gradient-primary: linear-gradient(135deg, var(--primary), var(--secondary));
+            --gradient-dark: linear-gradient(135deg, var(--dark), var(--dark-light));
         }
 
         * {
@@ -39,19 +46,22 @@
 
         body {
             font-family: 'Poppins', sans-serif;
-            background-color: var(--light);
-            color: var(--dark);
+            background-color: var(--dark);
+            color: var(--light);
             line-height: 1.6;
             overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(0, 102, 255, 0.1) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(0, 212, 170, 0.1) 0%, transparent 20%);
         }
 
         h1, h2, h3, h4, h5, .logo {
             font-family: 'Montserrat', sans-serif;
-            font-weight: 700;
+            font-weight: 900;
         }
 
         section {
-            padding: 6rem 2rem;
+            padding: 8rem 2rem;
             position: relative;
         }
 
@@ -61,30 +71,108 @@
             padding: 0 2rem;
         }
 
-        /* ===== ANIMATIONS ===== */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        /* ===== PARTICLES BACKGROUND ===== */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            background: var(--primary);
+            border-radius: 50%;
+            animation: float 20s infinite linear;
         }
 
         @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+            0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
         }
 
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
+        /* ===== GLITCH EFFECT ===== */
+        .glitch {
+            position: relative;
+            display: inline-block;
         }
 
-        @keyframes slideInRight {
-            from { transform: translateX(100px); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
+        .glitch::before,
+        .glitch::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--dark);
         }
 
-        @keyframes slideInLeft {
-            from { transform: translateX(-100px); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
+        .glitch::before {
+            left: 2px;
+            text-shadow: -2px 0 var(--tertiary);
+            clip: rect(24px, 550px, 90px, 0);
+            animation: glitch-anim 5s infinite linear alternate-reverse;
+        }
+
+        .glitch::after {
+            left: -2px;
+            text-shadow: -2px 0 var(--secondary);
+            clip: rect(85px, 550px, 140px, 0);
+            animation: glitch-anim2 5s infinite linear alternate-reverse;
+        }
+
+        @keyframes glitch-anim {
+            0% { clip: rect(42px, 9999px, 44px, 0); }
+            5% { clip: rect(12px, 9999px, 59px, 0); }
+            10% { clip: rect(48px, 9999px, 29px, 0); }
+            15% { clip: rect(42px, 9999px, 73px, 0); }
+            20% { clip: rect(63px, 9999px, 27px, 0); }
+            25% { clip: rect(34px, 9999px, 55px, 0); }
+            30% { clip: rect(86px, 9999px, 73px, 0); }
+            35% { clip: rect(20px, 9999px, 20px, 0); }
+            40% { clip: rect(26px, 9999px, 60px, 0); }
+            45% { clip: rect(25px, 9999px, 66px, 0); }
+            50% { clip: rect(57px, 9999px, 98px, 0); }
+            55% { clip: rect(5px, 9999px, 46px, 0); }
+            60% { clip: rect(82px, 9999px, 31px, 0); }
+            65% { clip: rect(54px, 9999px, 27px, 0); }
+            70% { clip: rect(28px, 9999px, 99px, 0); }
+            75% { clip: rect(45px, 9999px, 69px, 0); }
+            80% { clip: rect(23px, 9999px, 85px, 0); }
+            85% { clip: rect(54px, 9999px, 84px, 0); }
+            90% { clip: rect(45px, 9999px, 47px, 0); }
+            95% { clip: rect(37px, 9999px, 20px, 0); }
+            100% { clip: rect(4px, 9999px, 91px, 0); }
+        }
+
+        @keyframes glitch-anim2 {
+            0% { clip: rect(65px, 9999px, 100px, 0); }
+            5% { clip: rect(52px, 9999px, 74px, 0); }
+            10% { clip: rect(79px, 9999px, 85px, 0); }
+            15% { clip: rect(75px, 9999px, 5px, 0); }
+            20% { clip: rect(67px, 9999px, 61px, 0); }
+            25% { clip: rect(14px, 9999px, 79px, 0); }
+            30% { clip: rect(1px, 9999px, 66px, 0); }
+            35% { clip: rect(86px, 9999px, 30px, 0); }
+            40% { clip: rect(23px, 9999px, 98px, 0); }
+            45% { clip: rect(85px, 9999px, 72px, 0); }
+            50% { clip: rect(71px, 9999px, 75px, 0); }
+            55% { clip: rect(2px, 9999px, 48px, 0); }
+            60% { clip: rect(30px, 9999px, 16px, 0); }
+            65% { clip: rect(59px, 9999px, 50px, 0); }
+            70% { clip: rect(41px, 9999px, 62px, 0); }
+            75% { clip: rect(2px, 9999px, 82px, 0); }
+            80% { clip: rect(47px, 9999px, 73px, 0); }
+            85% { clip: rect(3px, 9999px, 27px, 0); }
+            90% { clip: rect(40px, 9999px, 86px, 0); }
+            95% { clip: rect(45px, 9999px, 72px, 0); }
+            100% { clip: rect(23px, 9999px, 49px, 0); }
         }
 
         /* ===== HEADER & NAVIGATION ===== */
@@ -94,16 +182,17 @@
             left: 0;
             width: 100%;
             z-index: 1000;
-            padding: 1.2rem 0;
-            background-color: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+            padding: 1.5rem 0;
+            background: rgba(10, 10, 20, 0.9);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             transition: var(--transition);
         }
 
         header.scrolled {
-            padding: 0.8rem 0;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 1rem 0;
+            background: rgba(10, 10, 20, 0.95);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
         }
 
         .nav-container {
@@ -113,16 +202,20 @@
         }
 
         .logo {
-            font-size: 1.8rem;
-            color: var(--primary);
+            font-size: 2rem;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
             display: flex;
             align-items: center;
             gap: 0.5rem;
         }
 
         .logo i {
-            color: var(--secondary);
-            animation: float 3s ease-in-out infinite;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: pulse 2s ease-in-out infinite;
         }
 
         .nav-links {
@@ -131,31 +224,34 @@
         }
 
         .nav-link {
-            font-weight: 500;
-            color: var(--dark);
+            font-weight: 600;
+            color: var(--light);
             position: relative;
             padding: 0.5rem 0;
             transition: var(--transition);
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
         }
 
-        .nav-link:after {
+        .nav-link:before {
             content: '';
             position: absolute;
             width: 0;
             height: 2px;
-            background: var(--primary);
+            background: var(--gradient-primary);
             bottom: 0;
             left: 0;
             transition: var(--transition);
         }
 
-        .nav-link:hover:after,
-        .nav-link.active:after {
+        .nav-link:hover:before,
+        .nav-link.active:before {
             width: 100%;
         }
 
         .nav-link:hover {
-            color: var(--primary);
+            color: var(--primary-light);
         }
 
         .nav-actions {
@@ -165,26 +261,46 @@
         }
 
         .btn {
-            padding: 0.8rem 2rem;
-            border-radius: 8px;
-            font-weight: 600;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            font-weight: 700;
             cursor: pointer;
             transition: var(--transition);
             border: none;
             font-family: 'Poppins', sans-serif;
             display: inline-flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.9rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+
+        .btn:hover:before {
+            left: 100%;
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            background: var(--gradient-primary);
             color: white;
             box-shadow: var(--shadow);
         }
 
         .btn-primary:hover {
-            transform: translateY(-3px);
+            transform: translateY(-5px) scale(1.05);
             box-shadow: var(--shadow-lg);
         }
 
@@ -197,182 +313,276 @@
         .btn-secondary:hover {
             background: var(--primary);
             color: white;
+            transform: translateY(-3px);
         }
 
         .mobile-menu-btn {
             display: none;
             font-size: 1.5rem;
             cursor: pointer;
-            color: var(--dark);
+            color: var(--light);
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.5rem;
+            border-radius: 8px;
         }
 
         /* ===== HERO SECTION ===== */
         .hero {
-            padding-top: 8rem;
-            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+            padding-top: 12rem;
             min-height: 100vh;
             display: flex;
             align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 30% 30%, rgba(0, 102, 255, 0.1) 0%, transparent 50%),
+                      radial-gradient(circle at 70% 70%, rgba(0, 212, 170, 0.1) 0%, transparent 50%);
         }
 
         .hero-container {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 4rem;
+            gap: 6rem;
             align-items: center;
+            position: relative;
+            z-index: 2;
         }
 
         .hero-content {
-            animation: slideInLeft 1s ease-out;
+            animation: slideInLeft 1.2s ease-out;
         }
 
         .hero-title {
-            font-size: 3.5rem;
-            line-height: 1.2;
-            margin-bottom: 1.5rem;
-            color: var(--dark);
-        }
-
-        .hero-title span {
-            color: var(--primary);
-            position: relative;
-        }
-
-        .hero-title span:after {
-            content: '';
-            position: absolute;
-            width: 100%;
-            height: 8px;
-            background: rgba(42, 92, 170, 0.2);
-            bottom: 5px;
-            left: 0;
-            z-index: -1;
+            font-size: 4rem;
+            line-height: 1.1;
+            margin-bottom: 2rem;
+            background: linear-gradient(135deg, var(--light) 30%, var(--primary-light) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .hero-subtitle {
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             color: var(--gray);
-            margin-bottom: 2.5rem;
+            margin-bottom: 3rem;
             max-width: 500px;
         }
 
-        .hero-stats {
+        .hero-btns {
             display: flex;
-            gap: 3rem;
-            margin-top: 3rem;
+            gap: 1.5rem;
+            margin-bottom: 4rem;
+        }
+
+        .hero-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
         }
 
         .stat-item {
             text-align: center;
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: var(--transition);
+        }
+
+        .stat-item:hover {
+            transform: translateY(-10px);
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: var(--shadow);
         }
 
         .stat-number {
-            font-size: 2.5rem;
-            font-weight: 800;
-            color: var(--primary);
+            font-size: 2.8rem;
+            font-weight: 900;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
             display: block;
             line-height: 1;
+            margin-bottom: 0.5rem;
         }
 
         .stat-label {
             color: var(--gray);
             font-size: 0.9rem;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 2px;
         }
 
         .hero-visual {
             position: relative;
-            height: 500px;
-            animation: slideInRight 1s ease-out;
+            height: 600px;
+            animation: slideInRight 1.2s ease-out;
         }
 
         #hero-canvas {
             width: 100%;
             height: 100%;
-            border-radius: 20px;
+            border-radius: 30px;
             box-shadow: var(--shadow-lg);
-            background: white;
+            background: var(--dark-light);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         /* ===== 3D DESIGNER SECTION ===== */
         .designer {
-            background: var(--light);
+            background: var(--dark-light);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .designer:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent 30%, rgba(0, 102, 255, 0.05) 100%);
         }
 
         .section-title {
             text-align: center;
-            font-size: 2.8rem;
-            margin-bottom: 1rem;
-            color: var(--dark);
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--light) 30%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
+            display: inline-block;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .section-title:after {
+            content: '';
+            position: absolute;
+            width: 100px;
+            height: 4px;
+            background: var(--gradient-primary);
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 2px;
         }
 
         .section-subtitle {
             text-align: center;
             color: var(--gray);
-            margin-bottom: 4rem;
+            margin-bottom: 5rem;
             max-width: 700px;
             margin-left: auto;
             margin-right: auto;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
         }
 
         .designer-container {
             display: grid;
-            grid-template-columns: 300px 1fr 300px;
-            gap: 2rem;
-            margin-top: 2rem;
-            height: 700px;
+            grid-template-columns: 350px 1fr 350px;
+            gap: 2.5rem;
+            margin-top: 3rem;
+            height: 800px;
         }
 
-        /* Controls Panel */
-        .controls-panel {
-            background: white;
-            border-radius: 15px;
-            padding: 2rem;
+        /* AI Suggestions Panel */
+        .ai-panel {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 2.5rem;
             box-shadow: var(--shadow);
             overflow-y: auto;
             height: 100%;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
         }
 
         .panel-title {
-            font-size: 1.3rem;
-            margin-bottom: 1.5rem;
-            color: var(--primary);
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            color: var(--light);
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: 1rem;
         }
 
         .panel-title i {
             color: var(--secondary);
+            font-size: 1.3rem;
+            animation: pulse 2s infinite;
         }
 
-        .control-group {
-            margin-bottom: 2rem;
+        .ai-suggestion {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            cursor: pointer;
+            transition: var(--transition);
         }
 
-        .control-group h4 {
-            font-size: 1rem;
-            margin-bottom: 1rem;
-            color: var(--dark);
+        .ai-suggestion:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateX(5px);
+            border-color: var(--primary);
+        }
+
+        .ai-suggestion.active {
+            background: rgba(0, 102, 255, 0.15);
+            border-color: var(--primary);
+        }
+
+        .suggestion-header {
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: 1rem;
+            margin-bottom: 1rem;
         }
 
-        .control-group h4 i {
-            color: var(--primary);
+        .suggestion-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-primary);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .suggestion-title {
+            font-weight: 600;
+            color: var(--light);
+        }
+
+        .suggestion-desc {
+            color: var(--gray);
+            font-size: 0.9rem;
+            line-height: 1.5;
         }
 
         /* 3D Viewer */
         .viewer-container {
             position: relative;
-            border-radius: 15px;
+            border-radius: 25px;
             overflow: hidden;
             box-shadow: var(--shadow-lg);
-            background: white;
+            background: var(--dark);
             height: 100%;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         #designer-canvas {
@@ -382,181 +592,208 @@
 
         .viewer-controls {
             position: absolute;
-            bottom: 20px;
+            bottom: 30px;
             left: 50%;
             transform: translateX(-50%);
             display: flex;
-            gap: 0.5rem;
-            background: rgba(255, 255, 255, 0.9);
-            padding: 0.8rem 1.2rem;
+            gap: 1rem;
+            background: rgba(10, 10, 20, 0.9);
+            padding: 1rem 2rem;
             border-radius: 50px;
             box-shadow: var(--shadow);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .viewer-btn {
-            width: 40px;
-            height: 40px;
+            width: 50px;
+            height: 50px;
             border-radius: 50%;
-            background: white;
-            border: 1px solid var(--light-gray);
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
             transition: var(--transition);
-            color: var(--dark);
+            color: var(--light);
+            font-size: 1.2rem;
         }
 
         .viewer-btn:hover {
             background: var(--primary);
             color: white;
             border-color: var(--primary);
+            transform: translateY(-5px) scale(1.1);
         }
 
         /* Decoration Panel */
         .decoration-panel {
-            background: white;
-            border-radius: 15px;
-            padding: 2rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 2.5rem;
             box-shadow: var(--shadow);
             overflow-y: auto;
             height: 100%;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .category-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            overflow-x: auto;
+            padding-bottom: 1rem;
+        }
+
+        .category-tab {
+            padding: 0.8rem 1.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 50px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--gray);
+            cursor: pointer;
+            transition: var(--transition);
+            white-space: nowrap;
+        }
+
+        .category-tab:hover,
+        .category-tab.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
         }
 
         .decoration-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 1rem;
+            gap: 1.2rem;
             margin-bottom: 2rem;
         }
 
         .decoration-item {
-            background: var(--light-gray);
-            border-radius: 10px;
-            padding: 1rem;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+            padding: 1.5rem 1rem;
             text-align: center;
             cursor: pointer;
             transition: var(--transition);
-            border: 2px solid transparent;
+            border: 1px solid transparent;
         }
 
         .decoration-item:hover {
-            transform: translateY(-5px);
+            transform: translateY(-10px) scale(1.05);
             box-shadow: var(--shadow);
             border-color: var(--primary);
+            background: rgba(255, 255, 255, 0.08);
         }
 
         .decoration-item.active {
             border-color: var(--primary);
-            background: rgba(42, 92, 170, 0.1);
+            background: rgba(0, 102, 255, 0.15);
+            transform: translateY(-5px);
         }
 
         .decoration-icon {
-            font-size: 2rem;
-            color: var(--primary);
-            margin-bottom: 0.5rem;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .decoration-name {
             font-size: 0.9rem;
-            font-weight: 500;
+            font-weight: 600;
+            color: var(--light);
         }
 
-        /* Controls */
+        .decoration-price {
+            font-size: 0.8rem;
+            color: var(--secondary);
+            margin-top: 0.5rem;
+            font-weight: 700;
+        }
+
+        /* Advanced Controls */
+        .advanced-controls {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
         .slider-container {
-            margin-bottom: 1.5rem;
+            margin-bottom: 2rem;
         }
 
         .slider-label {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 0.5rem;
+            margin-bottom: 1rem;
         }
 
         .slider-label span {
             font-size: 0.9rem;
-            color: var(--dark);
+            color: var(--light);
+            font-weight: 600;
         }
 
         .slider-value {
-            color: var(--primary);
-            font-weight: 600;
+            color: var(--secondary);
+            font-weight: 700;
         }
 
         .slider {
             width: 100%;
-            height: 6px;
+            height: 8px;
             -webkit-appearance: none;
-            background: var(--light-gray);
-            border-radius: 3px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
             outline: none;
         }
 
         .slider::-webkit-slider-thumb {
             -webkit-appearance: none;
-            width: 20px;
-            height: 20px;
+            width: 24px;
+            height: 24px;
             border-radius: 50%;
-            background: var(--primary);
+            background: var(--gradient-primary);
             cursor: pointer;
-            border: 3px solid white;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-        }
-
-        /* Color Picker */
-        .color-options {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.8rem;
-            margin-top: 1rem;
-        }
-
-        .color-option {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            cursor: pointer;
-            transition: var(--transition);
-            border: 2px solid transparent;
-        }
-
-        .color-option:hover {
-            transform: scale(1.2);
-        }
-
-        .color-option.active {
-            border: 2px solid var(--dark);
-            transform: scale(1.2);
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            border: 3px solid var(--dark);
+            box-shadow: 0 4px 15px rgba(0, 102, 255, 0.5);
         }
 
         /* ===== PROPERTIES SECTION ===== */
         .properties {
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            background: var(--dark);
+            position: relative;
         }
 
         .properties-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 2.5rem;
-            margin-top: 3rem;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 3rem;
+            margin-top: 4rem;
         }
 
         .property-card {
-            background: white;
-            border-radius: 15px;
+            background: var(--dark-light);
+            border-radius: 25px;
             overflow: hidden;
             box-shadow: var(--shadow);
             transition: var(--transition);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .property-card:hover {
-            transform: translateY(-10px);
+            transform: translateY(-20px) scale(1.02);
             box-shadow: var(--shadow-lg);
+            border-color: var(--primary);
         }
 
         .property-image {
-            height: 250px;
+            height: 280px;
             position: relative;
             overflow: hidden;
         }
@@ -574,227 +811,330 @@
 
         .property-badge {
             position: absolute;
-            top: 15px;
-            right: 15px;
-            background: var(--secondary);
-            color: var(--dark);
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            font-weight: 600;
-            font-size: 0.8rem;
+            top: 20px;
+            right: 20px;
+            background: var(--gradient-primary);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            box-shadow: var(--shadow);
         }
 
         .property-info {
-            padding: 1.5rem;
+            padding: 2rem;
         }
 
         .property-title {
-            font-size: 1.3rem;
-            margin-bottom: 0.5rem;
-            color: var(--dark);
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--light);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .property-title i {
+            color: var(--secondary);
         }
 
         .property-price {
-            font-size: 1.8rem;
-            font-weight: 800;
-            color: var(--primary);
-            margin-bottom: 1rem;
+            font-size: 2.2rem;
+            font-weight: 900;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1.5rem;
         }
 
         .property-features {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 1.5rem;
-            padding-bottom: 1.5rem;
-            border-bottom: 1px solid var(--light-gray);
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .feature {
             text-align: center;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
         }
 
         .feature i {
             color: var(--primary);
-            font-size: 1.2rem;
-            margin-bottom: 0.5rem;
+            font-size: 1.5rem;
+            margin-bottom: 0.8rem;
             display: block;
         }
 
         .feature span {
             font-size: 0.9rem;
             color: var(--gray);
+            display: block;
+        }
+
+        .feature-value {
+            font-weight: 700;
+            color: var(--light);
+            margin-top: 0.3rem;
         }
 
         /* ===== FEATURES SECTION ===== */
         .features {
-            background: white;
+            background: var(--dark-light);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .features:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><path fill="%230066FF" opacity="0.05" d="M0,500C150,400,300,300,500,300C700,300,850,400,1000,500L1000,1000L0,1000Z"/></svg>') no-repeat bottom;
+            background-size: cover;
         }
 
         .features-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2.5rem;
-            margin-top: 3rem;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 3rem;
+            margin-top: 4rem;
+            position: relative;
+            z-index: 2;
         }
 
         .feature-card {
-            background: var(--light);
-            padding: 2.5rem 2rem;
-            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.03);
+            padding: 3rem 2.5rem;
+            border-radius: 25px;
             text-align: center;
             transition: var(--transition);
-            border: 2px solid transparent;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
         }
 
         .feature-card:hover {
             border-color: var(--primary);
-            transform: translateY(-5px);
-            box-shadow: var(--shadow);
+            transform: translateY(-20px) scale(1.05);
+            box-shadow: var(--shadow-lg);
+            background: rgba(255, 255, 255, 0.08);
         }
 
         .feature-icon {
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(135deg, var(--primary), var(--primary-light));
-            border-radius: 50%;
+            width: 100px;
+            height: 100px;
+            background: var(--gradient-primary);
+            border-radius: 25px;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 1.5rem;
+            margin: 0 auto 2rem;
             color: white;
-            font-size: 2rem;
+            font-size: 2.5rem;
+            transform: rotate(45deg);
+            transition: var(--transition);
+        }
+
+        .feature-card:hover .feature-icon {
+            transform: rotate(0deg) scale(1.2);
         }
 
         .feature-card h3 {
-            font-size: 1.3rem;
-            margin-bottom: 1rem;
-            color: var(--dark);
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--light);
+        }
+
+        .feature-card p {
+            color: var(--gray);
+            line-height: 1.8;
         }
 
         /* ===== CTA SECTION ===== */
         .cta {
-            background: linear-gradient(135deg, var(--primary), var(--primary-light));
-            color: white;
+            background: var(--gradient-dark);
+            position: relative;
+            overflow: hidden;
+            padding: 10rem 2rem;
+        }
+
+        .cta:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><path fill="%2300D4AA" opacity="0.1" d="M0,0C150,100,300,200,500,200C700,200,850,100,1000,0L1000,1000L0,1000Z"/></svg>') no-repeat top;
+            background-size: cover;
+        }
+
+        .cta-content {
             text-align: center;
-            padding: 8rem 2rem;
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+            margin: 0 auto;
         }
 
         .cta-title {
-            font-size: 3rem;
-            margin-bottom: 1.5rem;
+            font-size: 3.5rem;
+            margin-bottom: 2rem;
+            background: linear-gradient(135deg, var(--light) 30%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .cta-subtitle {
-            font-size: 1.2rem;
-            margin-bottom: 3rem;
-            max-width: 700px;
-            margin-left: auto;
-            margin-right: auto;
-            opacity: 0.9;
+            font-size: 1.3rem;
+            margin-bottom: 4rem;
+            color: var(--gray);
         }
 
         .cta-btns {
             display: flex;
-            gap: 1.5rem;
+            gap: 2rem;
             justify-content: center;
             flex-wrap: wrap;
         }
 
-        .btn-white {
-            background: white;
-            color: var(--primary);
+        .btn-large {
+            padding: 1.2rem 3rem;
+            font-size: 1.1rem;
         }
 
-        .btn-white:hover {
-            background: rgba(255, 255, 255, 0.9);
-            transform: translateY(-3px);
+        .btn-glow {
+            animation: glow 2s ease-in-out infinite alternate;
         }
 
-        .btn-outline-white {
-            background: transparent;
-            color: white;
-            border: 2px solid white;
-        }
-
-        .btn-outline-white:hover {
-            background: white;
-            color: var(--primary);
+        @keyframes glow {
+            from {
+                box-shadow: 0 0 20px rgba(0, 102, 255, 0.5);
+            }
+            to {
+                box-shadow: 0 0 30px rgba(0, 102, 255, 0.8), 0 0 40px rgba(0, 212, 170, 0.6);
+            }
         }
 
         /* ===== FOOTER ===== */
         footer {
-            background: var(--dark);
-            color: white;
-            padding: 5rem 0 2rem;
+            background: #080810;
+            padding: 6rem 0 3rem;
+            position: relative;
         }
 
         .footer-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 3rem;
-            margin-bottom: 3rem;
+            gap: 4rem;
+            margin-bottom: 4rem;
         }
 
         .footer-col h3 {
-            font-size: 1.3rem;
-            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
             color: white;
+            position: relative;
+            padding-bottom: 1rem;
+        }
+
+        .footer-col h3:after {
+            content: '';
+            position: absolute;
+            width: 50px;
+            height: 3px;
+            background: var(--gradient-primary);
+            bottom: 0;
+            left: 0;
+            border-radius: 2px;
         }
 
         .footer-links li {
-            margin-bottom: 0.8rem;
+            margin-bottom: 1.2rem;
         }
 
         .footer-links a {
-            color: rgba(255, 255, 255, 0.7);
+            color: var(--gray);
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .footer-links a i {
+            color: var(--primary);
+            font-size: 0.8rem;
             transition: var(--transition);
         }
 
         .footer-links a:hover {
             color: white;
-            padding-left: 5px;
+            padding-left: 10px;
+        }
+
+        .footer-links a:hover i {
+            transform: translateX(5px);
         }
 
         .social-links {
             display: flex;
-            gap: 1rem;
-            margin-top: 1.5rem;
+            gap: 1.2rem;
+            margin-top: 2rem;
         }
 
         .social-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.1);
+            width: 50px;
+            height: 50px;
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.05);
             display: flex;
             align-items: center;
             justify-content: center;
             transition: var(--transition);
+            color: var(--light);
+            font-size: 1.2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .social-icon:hover {
             background: var(--primary);
-            transform: translateY(-3px);
+            color: white;
+            transform: translateY(-10px) rotate(5deg);
+            border-color: var(--primary);
+        }
+
+        .newsletter {
+            margin-top: 2rem;
         }
 
         .newsletter input {
             width: 100%;
-            padding: 1rem;
-            background: rgba(255, 255, 255, 0.1);
-            border: none;
-            border-radius: 8px;
+            padding: 1.2rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
             color: white;
-            margin-bottom: 1rem;
+            margin-bottom: 1.5rem;
             font-family: 'Poppins', sans-serif;
-        }
-
-        .newsletter input::placeholder {
-            color: rgba(255, 255, 255, 0.5);
+            transition: var(--transition);
         }
 
         .newsletter input:focus {
             outline: none;
-            background: rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--primary);
+            box-shadow: 0 0 20px rgba(0, 102, 255, 0.3);
+        }
+
+        .newsletter input::placeholder {
+            color: rgba(255, 255, 255, 0.3);
         }
 
         .footer-bottom {
@@ -806,15 +1146,26 @@
         }
 
         /* ===== RESPONSIVE DESIGN ===== */
-        @media (max-width: 1200px) {
+        @media (max-width: 1400px) {
             .designer-container {
-                grid-template-columns: 1fr;
-                grid-template-rows: auto 500px auto;
-                height: auto;
+                grid-template-columns: 320px 1fr 320px;
                 gap: 2rem;
             }
             
-            .controls-panel,
+            .hero-title {
+                font-size: 3.5rem;
+            }
+        }
+
+        @media (max-width: 1200px) {
+            .designer-container {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto 600px auto;
+                height: auto;
+                gap: 2.5rem;
+            }
+            
+            .ai-panel,
             .decoration-panel {
                 height: auto;
                 max-height: 400px;
@@ -823,16 +1174,20 @@
             .hero-title {
                 font-size: 3rem;
             }
+            
+            .section-title {
+                font-size: 3rem;
+            }
         }
 
         @media (max-width: 992px) {
             .hero-container {
                 grid-template-columns: 1fr;
-                gap: 3rem;
+                gap: 4rem;
             }
             
             .hero-visual {
-                height: 400px;
+                height: 500px;
                 order: -1;
             }
             
@@ -845,21 +1200,25 @@
             }
             
             .hero-title {
-                font-size: 2.5rem;
+                font-size: 2.8rem;
             }
             
             section {
-                padding: 4rem 1rem;
+                padding: 6rem 1.5rem;
+            }
+            
+            .cta-title {
+                font-size: 2.8rem;
             }
         }
 
         @media (max-width: 768px) {
             .hero-title {
-                font-size: 2.2rem;
+                font-size: 2.5rem;
             }
             
             .section-title {
-                font-size: 2.2rem;
+                font-size: 2.5rem;
             }
             
             .properties-grid {
@@ -871,12 +1230,11 @@
             }
             
             .hero-stats {
-                flex-direction: column;
-                gap: 1.5rem;
+                grid-template-columns: repeat(2, 1fr);
             }
             
             .cta-title {
-                font-size: 2.2rem;
+                font-size: 2.3rem;
             }
             
             .cta-btns {
@@ -886,37 +1244,59 @@
             
             .btn {
                 width: 100%;
-                max-width: 300px;
+                max-width: 350px;
                 justify-content: center;
+            }
+            
+            .hero-btns {
+                flex-direction: column;
+            }
+            
+            .viewer-controls {
+                flex-wrap: wrap;
+                justify-content: center;
+                width: 90%;
             }
         }
 
-        @media (max-width: 480px) {
+        @media (max-width: 576px) {
             .hero-title {
-                font-size: 1.8rem;
+                font-size: 2.2rem;
             }
             
             .section-title {
-                font-size: 1.8rem;
+                font-size: 2.2rem;
             }
             
             .hero-visual {
-                height: 300px;
+                height: 400px;
             }
             
             .designer-container {
-                grid-template-rows: auto 400px auto;
+                grid-template-rows: auto 500px auto;
+            }
+            
+            .stat-item {
+                padding: 1rem;
+            }
+            
+            .stat-number {
+                font-size: 2.2rem;
+            }
+            
+            .decoration-grid {
+                grid-template-columns: 1fr;
             }
         }
 
-        /* ===== MODAL ===== */
+        /* ===== MODALS & LOADING ===== */
         .modal {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(0, 0, 0, 0.9);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -924,7 +1304,7 @@
             opacity: 0;
             visibility: hidden;
             transition: var(--transition-slow);
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(20px);
         }
 
         .modal.active {
@@ -933,79 +1313,57 @@
         }
 
         .modal-content {
-            background: white;
-            border-radius: 20px;
-            padding: 3rem;
-            max-width: 500px;
+            background: var(--dark-light);
+            border-radius: 30px;
+            padding: 4rem;
+            max-width: 600px;
             width: 90%;
-            transform: translateY(50px);
+            transform: translateY(100px) scale(0.9);
             transition: var(--transition-slow);
             position: relative;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: var(--shadow-lg);
         }
 
         .modal.active .modal-content {
-            transform: translateY(0);
+            transform: translateY(0) scale(1);
         }
 
         .close-modal {
             position: absolute;
-            top: 20px;
-            right: 20px;
-            font-size: 1.5rem;
+            top: 25px;
+            right: 25px;
+            font-size: 1.8rem;
             cursor: pointer;
             color: var(--gray);
             transition: var(--transition);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.05);
         }
 
         .close-modal:hover {
-            color: var(--dark);
+            color: var(--light);
+            background: rgba(255, 255, 255, 0.1);
+            transform: rotate(90deg);
         }
 
         .modal-title {
-            font-size: 1.8rem;
-            margin-bottom: 1rem;
-            color: var(--primary);
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .modal-subtitle {
             color: var(--gray);
-            margin-bottom: 2rem;
-        }
-
-        .modal-form {
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
-
-        .form-group label {
-            font-weight: 500;
-            color: var(--dark);
-        }
-
-        .form-group input,
-        .form-group select,
-        .form-group textarea {
-            padding: 1rem;
-            border: 1px solid var(--light-gray);
-            border-radius: 8px;
-            font-family: 'Poppins', sans-serif;
-            font-size: 1rem;
-            transition: var(--transition);
-        }
-
-        .form-group input:focus,
-        .form-group select:focus,
-        .form-group textarea:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(42, 92, 170, 0.1);
+            margin-bottom: 3rem;
+            font-size: 1.1rem;
         }
 
         /* ===== LOADING ===== */
@@ -1015,23 +1373,39 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: var(--light);
+            background: var(--dark);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             z-index: 9999;
-            transition: opacity 0.5s ease;
+            transition: opacity 0.8s ease;
         }
 
         .loader {
-            width: 60px;
-            height: 60px;
-            border: 4px solid var(--light-gray);
+            width: 80px;
+            height: 80px;
+            border: 4px solid transparent;
             border-top: 4px solid var(--primary);
+            border-right: 4px solid var(--secondary);
+            border-bottom: 4px solid var(--tertiary);
             border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-bottom: 1.5rem;
+            animation: spin 1.5s linear infinite;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .loader:before {
+            content: '';
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            right: 5px;
+            bottom: 5px;
+            border: 4px solid transparent;
+            border-top: 4px solid var(--accent);
+            border-radius: 50%;
+            animation: spinReverse 1s linear infinite;
         }
 
         @keyframes spin {
@@ -1039,37 +1413,181 @@
             100% { transform: rotate(360deg); }
         }
 
-        /* ===== CUSTOM SCROLLBAR ===== */
+        @keyframes spinReverse {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(-360deg); }
+        }
+
+        .loading-text {
+            font-size: 1.2rem;
+            color: var(--gray);
+            margin-top: 2rem;
+            text-align: center;
+        }
+
+        .loading-bar {
+            width: 300px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+            margin-top: 2rem;
+            overflow: hidden;
+        }
+
+        .loading-progress {
+            width: 0%;
+            height: 100%;
+            background: var(--gradient-primary);
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* ===== SCROLLBAR ===== */
         ::-webkit-scrollbar {
-            width: 8px;
+            width: 10px;
         }
 
         ::-webkit-scrollbar-track {
-            background: var(--light-gray);
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 5px;
         }
 
         ::-webkit-scrollbar-thumb {
-            background: var(--primary);
-            border-radius: 4px;
+            background: var(--gradient-primary);
+            border-radius: 5px;
         }
 
         ::-webkit-scrollbar-thumb:hover {
             background: var(--primary-light);
         }
+
+        /* ===== ANIMATION CLASSES ===== */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .float {
+            animation: floating 6s ease-in-out infinite;
+        }
+
+        @keyframes floating {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .pulse {
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.05); }
+        }
+
+        .slide-in-left {
+            animation: slideInLeft 1s ease-out;
+        }
+
+        .slide-in-right {
+            animation: slideInRight 1s ease-out;
+        }
+
+        .typewriter {
+            overflow: hidden;
+            border-right: 2px solid var(--primary);
+            white-space: nowrap;
+            animation: typing 3.5s steps(40, end), blink-caret 0.75s step-end infinite;
+        }
+
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 100% }
+        }
+
+        @keyframes blink-caret {
+            from, to { border-color: transparent }
+            50% { border-color: var(--primary) }
+        }
+
+        /* ===== 3D DESIGNER ENHANCEMENTS ===== */
+        .room-info {
+            position: absolute;
+            top: 30px;
+            left: 30px;
+            background: rgba(10, 10, 20, 0.9);
+            padding: 1.5rem 2rem;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 10;
+        }
+
+        .room-info h4 {
+            color: var(--light);
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .room-info p {
+            color: var(--secondary);
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .ai-recommendation {
+            position: absolute;
+            top: 30px;
+            right: 30px;
+            background: rgba(10, 10, 20, 0.9);
+            padding: 1.5rem;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 212, 170, 0.3);
+            max-width: 300px;
+            z-index: 10;
+            animation: pulse 2s infinite;
+        }
+
+        .ai-recommendation h4 {
+            color: var(--secondary);
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .ai-recommendation p {
+            color: var(--light);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
     </style>
 </head>
 <body>
+    <!-- Particles Background -->
+    <div class="particles" id="particles"></div>
+
     <!-- Loading Screen -->
     <div class="loading" id="loading">
         <div class="loader"></div>
-        <p>Chargement de l'expérience 3D...</p>
+        <div class="loading-text">Initialisation de l'interface quantique...</div>
+        <div class="loading-bar">
+            <div class="loading-progress" id="loading-progress"></div>
+        </div>
     </div>
 
     <!-- Header -->
     <header id="header">
         <div class="container nav-container">
             <a href="#" class="logo">
-                <i class="fas fa-building"></i>
+                <i class="fas fa-atom"></i>
                 NEXUS IMMO
             </a>
             
@@ -1079,11 +1597,11 @@
             
             <nav>
                 <ul class="nav-links" id="nav-links">
-                    <li><a href="#home" class="nav-link active">Accueil</a></li>
-                    <li><a href="#designer" class="nav-link">Designer 3D</a></li>
-                    <li><a href="#properties" class="nav-link">Propriétés</a></li>
-                    <li><a href="#features" class="nav-link">Services</a></li>
-                    <li><a href="#contact" class="nav-link">Contact</a></li>
+                    <li><a href="#home" class="nav-link active"><i class="fas fa-home"></i> Accueil</a></li>
+                    <li><a href="#designer" class="nav-link"><i class="fas fa-cube"></i> Designer 3D</a></li>
+                    <li><a href="#properties" class="nav-link"><i class="fas fa-building"></i> Propriétés</a></li>
+                    <li><a href="#features" class="nav-link"><i class="fas fa-star"></i> Technologies</a></li>
+                    <li><a href="#contact" class="nav-link"><i class="fas fa-comment"></i> Contact</a></li>
                 </ul>
             </nav>
             
@@ -1091,8 +1609,8 @@
                 <button class="btn btn-secondary" id="login-btn">
                     <i class="fas fa-user"></i> Connexion
                 </button>
-                <button class="btn btn-primary" id="demo-btn">
-                    <i class="fas fa-play-circle"></i> Démo 3D
+                <button class="btn btn-primary btn-glow" id="demo-btn">
+                    <i class="fas fa-play"></i> Démo IA
                 </button>
             </div>
         </div>
@@ -1102,36 +1620,43 @@
     <section class="hero" id="home">
         <div class="container hero-container">
             <div class="hero-content">
-                <h1 class="hero-title">Design Immobilier <span>Réinventé</span> en 3D</h1>
-                <p class="hero-subtitle">Visualisez, personnalisez et explorez votre future propriété en réalité virtuelle. Notre technologie avancée vous permet de créer l'espace parfait avant même la construction.</p>
+                <h1 class="hero-title">
+                    <span class="glitch" data-text="RÉVOLUTION">RÉVOLUTION</span><br>
+                    IMMOBILIÈRE 5.0
+                </h1>
+                <p class="hero-subtitle typewriter">Notre intelligence artificielle crée vos espaces avant même que vous les imaginiez. Design quantique, réalité augmentée, et précision nanométrique.</p>
                 
                 <div class="hero-btns">
-                    <button class="btn btn-primary" id="start-design">
-                        <i class="fas fa-cube"></i> Commencer le Design
+                    <button class="btn btn-primary btn-large btn-glow" id="start-design">
+                        <i class="fas fa-brain"></i> Designer IA
                     </button>
-                    <button class="btn btn-secondary" id="view-properties">
-                        <i class="fas fa-search"></i> Explorer les Biens
+                    <button class="btn btn-secondary btn-large" id="view-properties">
+                        <i class="fas fa-vr-cardboard"></i> Explorer VR
                     </button>
                 </div>
                 
                 <div class="hero-stats">
                     <div class="stat-item">
-                        <span class="stat-number">500+</span>
-                        <span class="stat-label">Projets Réalisés</span>
+                        <span class="stat-number">∞</span>
+                        <span class="stat-label">Combinaisons IA</span>
                     </div>
                     <div class="stat-item">
-                        <span class="stat-number">98%</span>
-                        <span class="stat-label">Clients Satisfaits</span>
+                        <span class="stat-number">99.9%</span>
+                        <span class="stat-label">Précision Quantique</span>
                     </div>
                     <div class="stat-item">
-                        <span class="stat-number">24h</span>
-                        <span class="stat-label">Rendu 3D</span>
+                        <span class="stat-number">0ms</span>
+                        <span class="stat-label">Latence 3D</span>
                     </div>
                 </div>
             </div>
             
             <div class="hero-visual">
                 <canvas id="hero-canvas"></canvas>
+                <div class="ai-recommendation">
+                    <h4><i class="fas fa-robot"></i> RECOMMANDATION IA</h4>
+                    <p>"Votre espace idéal: minimaliste avec touches boisées et éclairage intelligent"</p>
+                </div>
             </div>
         </div>
     </section>
@@ -1139,87 +1664,87 @@
     <!-- 3D Designer Section -->
     <section class="designer" id="designer">
         <div class="container">
-            <h2 class="section-title">Designer 3D Immobilier</h2>
-            <p class="section-subtitle">Créez et personnalisez votre espace en temps réel. Modifiez les dimensions, choisissez les couleurs et ajoutez des éléments de décoration.</p>
+            <h2 class="section-title">DESIGNER IA 3D QUANTIQUE</h2>
+            <p class="section-subtitle">Notre IA analyse vos préférences et génère des designs uniques en temps réel. Modifiez chaque atome de votre espace.</p>
             
             <div class="designer-container">
-                <!-- Left Panel: Controls -->
-                <div class="controls-panel">
+                <!-- AI Panel -->
+                <div class="ai-panel">
                     <h3 class="panel-title">
-                        <i class="fas fa-sliders-h"></i> Configuration
+                        <i class="fas fa-brain"></i> Intelligence Artificielle
                     </h3>
                     
-                    <div class="control-group">
-                        <h4><i class="fas fa-arrows-alt-h"></i> Dimensions</h4>
-                        <div class="slider-container">
-                            <div class="slider-label">
-                                <span>Longueur</span>
-                                <span class="slider-value" id="length-value">10m</span>
+                    <div class="ai-suggestion active">
+                        <div class="suggestion-header">
+                            <div class="suggestion-icon">
+                                <i class="fas fa-magic"></i>
                             </div>
-                            <input type="range" class="slider" id="length-slider" min="5" max="30" value="10" step="0.5">
+                            <div class="suggestion-title">Design Minimaliste</div>
                         </div>
-                        
-                        <div class="slider-container">
-                            <div class="slider-label">
-                                <span>Largeur</span>
-                                <span class="slider-value" id="width-value">8m</span>
-                            </div>
-                            <input type="range" class="slider" id="width-slider" min="5" max="25" value="8" step="0.5">
-                        </div>
-                        
-                        <div class="slider-container">
-                            <div class="slider-label">
-                                <span>Hauteur</span>
-                                <span class="slider-value" id="height-value">3m</span>
-                            </div>
-                            <input type="range" class="slider" id="height-slider" min="2.5" max="5" value="3" step="0.1">
-                        </div>
+                        <p class="suggestion-desc">L'IA recommande un design épuré avec dominante blanche et bois clair pour agrandir visuellement l'espace.</p>
                     </div>
                     
-                    <div class="control-group">
-                        <h4><i class="fas fa-palette"></i> Couleurs des Murs</h4>
-                        <div class="color-options">
-                            <div class="color-option active" style="background: #F5F5F5;" data-color="#F5F5F5"></div>
-                            <div class="color-option" style="background: #E8F4F8;" data-color="#E8F4F8"></div>
-                            <div class="color-option" style="background: #FFF8E1;" data-color="#FFF8E1"></div>
-                            <div class="color-option" style="background: #F3E5F5;" data-color="#F3E5F5"></div>
-                            <div class="color-option" style="background: #2A5CAA;" data-color="#2A5CAA"></div>
-                            <div class="color-option" style="background: #27AE60;" data-color="#27AE60"></div>
-                            <div class="color-option" style="background: #E74C3C;" data-color="#E74C3C"></div>
-                            <div class="color-option" style="background: #34495E;" data-color="#34495E"></div>
+                    <div class="ai-suggestion">
+                        <div class="suggestion-header">
+                            <div class="suggestion-icon">
+                                <i class="fas fa-lightbulb"></i>
+                            </div>
+                            <div class="suggestion-title">Éclairage Intelligent</div>
                         </div>
+                        <p class="suggestion-desc">Système d'éclairage adaptatif qui s'ajuste automatiquement à l'heure et à vos activités.</p>
                     </div>
                     
-                    <div class="control-group">
-                        <h4><i class="fas fa-layer-group"></i> Type de Sol</h4>
-                        <div class="color-options">
-                            <div class="color-option active" style="background: #8B4513;" data-floor="wood"></div>
-                            <div class="color-option" style="background: #808080;" data-floor="tile"></div>
-                            <div class="color-option" style="background: #2C3E50;" data-floor="marble"></div>
-                            <div class="color-option" style="background: #D7CCC8;" data-floor="carpet"></div>
+                    <div class="ai-suggestion">
+                        <div class="suggestion-header">
+                            <div class="suggestion-icon">
+                                <i class="fas fa-leaf"></i>
+                            </div>
+                            <div class="suggestion-title">Éco-Design</div>
                         </div>
+                        <p class="suggestion-desc">Matériaux durables et orientation optimale pour maximiser l'efficacité énergétique.</p>
                     </div>
                     
-                    <button class="btn btn-primary" style="width: 100%; margin-top: 2rem;" id="save-design">
-                        <i class="fas fa-save"></i> Sauvegarder le Design
+                    <div class="ai-suggestion">
+                        <div class="suggestion-header">
+                            <div class="suggestion-icon">
+                                <i class="fas fa-wifi"></i>
+                            </div>
+                            <div class="suggestion-title">Connectivité 5G</div>
+                        </div>
+                        <p class="suggestion-desc">Intégration complète d'appareils intelligents et réseau optimisé pour réalité virtuelle.</p>
+                    </div>
+                    
+                    <button class="btn btn-primary" style="width: 100%; margin-top: 2rem;" id="generate-ai">
+                        <i class="fas fa-sync-alt"></i> Régénérer IA
                     </button>
                 </div>
                 
-                <!-- Center: 3D Viewer -->
+                <!-- 3D Viewer -->
                 <div class="viewer-container">
                     <canvas id="designer-canvas"></canvas>
+                    <div class="room-info">
+                        <h4><i class="fas fa-ruler-combined"></i> DIMENSIONS</h4>
+                        <p id="room-dimensions">12m × 8m × 3m</p>
+                    </div>
+                    <div class="ai-recommendation">
+                        <h4><i class="fas fa-robot"></i> IA ACTIVE</h4>
+                        <p>Optimisation en temps réel des flux énergétiques</p>
+                    </div>
                     <div class="viewer-controls">
-                        <button class="viewer-btn" id="rotate-btn" title="Rotation">
+                        <button class="viewer-btn" id="rotate-btn" title="Rotation Quantique">
                             <i class="fas fa-sync-alt"></i>
                         </button>
-                        <button class="viewer-btn" id="pan-btn" title="Déplacement">
+                        <button class="viewer-btn" id="pan-btn" title="Déplacement Holographique">
                             <i class="fas fa-arrows-alt"></i>
                         </button>
-                        <button class="viewer-btn" id="zoom-in-btn" title="Zoom +">
+                        <button class="viewer-btn" id="zoom-in-btn" title="Zoom Nanométrique">
                             <i class="fas fa-search-plus"></i>
                         </button>
-                        <button class="viewer-btn" id="zoom-out-btn" title="Zoom -">
+                        <button class="viewer-btn" id="zoom-out-btn" title="Zoom Macro">
                             <i class="fas fa-search-minus"></i>
+                        </button>
+                        <button class="viewer-btn" id="vr-btn" title="Mode VR">
+                            <i class="fas fa-vr-cardboard"></i>
                         </button>
                         <button class="viewer-btn" id="reset-btn" title="Réinitialiser">
                             <i class="fas fa-redo"></i>
@@ -1227,104 +1752,84 @@
                     </div>
                 </div>
                 
-                <!-- Right Panel: Decoration -->
+                <!-- Decoration Panel -->
                 <div class="decoration-panel">
-                    <h3 class="panel-title">
-                        <i class="fas fa-couch"></i> Décoration
-                    </h3>
+                    <div class="category-tabs">
+                        <div class="category-tab active" data-category="furniture">Meubles IA</div>
+                        <div class="category-tab" data-category="lighting">Éclairage Smart</div>
+                        <div class="category-tab" data-category="tech">Technologies</div>
+                        <div class="category-tab" data-category="materials">Matériaux</div>
+                        <div class="category-tab" data-category="decor">Décoration</div>
+                    </div>
                     
-                    <div class="control-group">
-                        <h4><i class="fas fa-chair"></i> Meubles</h4>
-                        <div class="decoration-grid">
-                            <div class="decoration-item" data-type="sofa">
-                                <div class="decoration-icon">
-                                    <i class="fas fa-couch"></i>
-                                </div>
-                                <div class="decoration-name">Canapé</div>
+                    <div class="decoration-grid" id="furniture-grid">
+                        <div class="decoration-item active" data-type="smart-bed">
+                            <div class="decoration-icon">
+                                <i class="fas fa-bed"></i>
                             </div>
-                            <div class="decoration-item" data-type="table">
-                                <div class="decoration-icon">
-                                    <i class="fas fa-table"></i>
-                                </div>
-                                <div class="decoration-name">Table</div>
+                            <div class="decoration-name">Lit Intelligent</div>
+                            <div class="decoration-price">AI RECOMMANDÉ</div>
+                        </div>
+                        <div class="decoration-item" data-type="holographic-table">
+                            <div class="decoration-icon">
+                                <i class="fas fa-table"></i>
                             </div>
-                            <div class="decoration-item" data-type="bed">
-                                <div class="decoration-icon">
-                                    <i class="fas fa-bed"></i>
-                                </div>
-                                <div class="decoration-name">Lit</div>
+                            <div class="decoration-name">Table Holographique</div>
+                        </div>
+                        <div class="decoration-item" data-type="ergonomic-chair">
+                            <div class="decoration-icon">
+                                <i class="fas fa-chair"></i>
                             </div>
-                            <div class="decoration-item" data-type="chair">
-                                <div class="decoration-icon">
-                                    <i class="fas fa-chair"></i>
-                                </div>
-                                <div class="decoration-name">Chaise</div>
+                            <div class="decoration-name">Siège Ergonomique</div>
+                        </div>
+                        <div class="decoration-item" data-type="floating-shelf">
+                            <div class="decoration-icon">
+                                <i class="fas fa-th"></i>
                             </div>
-                            <div class="decoration-item" data-type="desk">
-                                <div class="decoration-icon">
-                                    <i class="fas fa-desktop"></i>
-                                </div>
-                                <div class="decoration-name">Bureau</div>
+                            <div class="decoration-name">Étagères Flottantes</div>
+                        </div>
+                        <div class="decoration-item" data-type="smart-closet">
+                            <div class="decoration-icon">
+                                <i class="fas fa-archive"></i>
                             </div>
-                            <div class="decoration-item" data-type="cabinet">
-                                <div class="decoration-icon">
-                                    <i class="fas fa-archive"></i>
-                                </div>
-                                <div class="decoration-name">Armoire</div>
+                            <div class="decoration-name">Penderie IA</div>
+                        </div>
+                        <div class="decoration-item" data-type="media-wall">
+                            <div class="decoration-icon">
+                                <i class="fas fa-tv"></i>
                             </div>
+                            <div class="decoration-name">Mur Média 8K</div>
                         </div>
                     </div>
                     
-                    <div class="control-group">
-                        <h4><i class="fas fa-lightbulb"></i> Éclairage</h4>
-                        <div class="decoration-grid">
-                            <div class="decoration-item" data-type="ceiling-light">
-                                <div class="decoration-icon">
-                                    <i class="fas fa-lightbulb"></i>
-                                </div>
-                                <div class="decoration-name">Plafonnier</div>
+                    <div class="advanced-controls">
+                        <div class="slider-container">
+                            <div class="slider-label">
+                                <span><i class="fas fa-sun"></i> LUMINOSITÉ</span>
+                                <span class="slider-value" id="light-value">85%</span>
                             </div>
-                            <div class="decoration-item" data-type="floor-lamp">
-                                <div class="decoration-icon">
-                                    <i class="fas fa-lamp"></i>
-                                </div>
-                                <div class="decoration-name">Lampadaire</div>
+                            <input type="range" class="slider" id="light-slider" min="0" max="100" value="85">
+                        </div>
+                        
+                        <div class="slider-container">
+                            <div class="slider-label">
+                                <span><i class="fas fa-temperature-high"></i> TEMPÉRATURE</span>
+                                <span class="slider-value" id="temp-value">22°C</span>
                             </div>
-                            <div class="decoration-item" data-type="wall-light">
-                                <div class="decoration-icon">
-                                    <i class="fas fa-lightbulb"></i>
-                                </div>
-                                <div class="decoration-name">Murale</div>
+                            <input type="range" class="slider" id="temp-slider" min="16" max="28" value="22">
+                        </div>
+                        
+                        <div class="slider-container">
+                            <div class="slider-label">
+                                <span><i class="fas fa-volume-up"></i> AMBIANCE SONORE</span>
+                                <span class="slider-value" id="sound-value">Calme</span>
                             </div>
+                            <input type="range" class="slider" id="sound-slider" min="0" max="100" value="30">
                         </div>
                     </div>
                     
-                    <div class="control-group">
-                        <h4><i class="fas fa-door-open"></i> Ouvertures</h4>
-                        <div class="decoration-grid">
-                            <div class="decoration-item" data-type="window">
-                                <div class="decoration-icon">
-                                    <i class="fas fa-window-maximize"></i>
-                                </div>
-                                <div class="decoration-name">Fenêtre</div>
-                            </div>
-                            <div class="decoration-item" data-type="door">
-                                <div class="decoration-icon">
-                                    <i class="fas fa-door-closed"></i>
-                                </div>
-                                <div class="decoration-name">Porte</div>
-                            </div>
-                            <div class="decoration-item" data-type="french-door">
-                                <div class="decoration-icon">
-                                    <i class="fas fa-door-open"></i>
-                                </div>
-                                <div class="decoration-name">Porte-fenêtre</div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <button class="btn btn-secondary" style="width: 100%; margin-top: 1rem;" id="clear-decoration">
-                        <i class="fas fa-trash"></i> Effacer la Décoration
+                    <button class="btn btn-secondary" style="width: 100%; margin-top: 2rem;" id="export-design">
+                        <i class="fas fa-file-export"></i> Exporter en BIM
                     </button>
                 </div>
             </div>
@@ -1334,38 +1839,43 @@
     <!-- Properties Section -->
     <section class="properties" id="properties">
         <div class="container">
-            <h2 class="section-title">Nos Propriétés Phares</h2>
-            <p class="section-subtitle">Découvrez une sélection de nos réalisations les plus remarquables, toutes visualisables en 3D.</p>
+            <h2 class="section-title">PROPRIÉTÉS QUANTIQUES</h2>
+            <p class="section-subtitle">Découvrez nos réalisations où chaque atome est placé avec précision nanométrique.</p>
             
             <div class="properties-grid">
                 <!-- Property 1 -->
                 <div class="property-card">
                     <div class="property-image">
-                        <div class="property-badge">À VENDRE</div>
-                        <img src="https://images.unsplash.com/photo-1613490493576-7fde63acd811?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Villa Moderne">
+                        <div class="property-badge">QUANTUM READY</div>
+                        <img src="https://images.unsplash.com/photo-1613977257363-707ba9348227?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Smart Loft">
                     </div>
                     <div class="property-info">
-                        <h3 class="property-title">Villa Moderne</h3>
-                        <div class="property-price">€ 850,000</div>
-                        <p>Magnifique villa contemporaine avec piscine à débordement et vue panoramique. Design épuré et matériaux premium.</p>
+                        <h3 class="property-title">
+                            <i class="fas fa-microchip"></i> Smart Loft Q-12
+                        </h3>
+                        <div class="property-price">€ 1,250,000</div>
+                        <p>Loft entièrement contrôlé par IA avec murs interactifs et mobilier holographique. Système de réalité mixte intégré.</p>
                         
                         <div class="property-features">
                             <div class="feature">
-                                <i class="fas fa-bed"></i>
-                                <span>5 Chambres</span>
+                                <i class="fas fa-brain"></i>
+                                <span>IA Intégrée</span>
+                                <span class="feature-value">Nexus Core v5</span>
                             </div>
                             <div class="feature">
-                                <i class="fas fa-bath"></i>
-                                <span>4 Salles de bain</span>
+                                <i class="fas fa-bolt"></i>
+                                <span>Énergie</span>
+                                <span class="feature-value">Auto-suffisant</span>
                             </div>
                             <div class="feature">
-                                <i class="fas fa-ruler-combined"></i>
-                                <span>350 m²</span>
+                                <i class="fas fa-wifi"></i>
+                                <span>Connectivité</span>
+                                <span class="feature-value">6G+</span>
                             </div>
                         </div>
                         
                         <button class="btn btn-primary" style="width: 100%;">
-                            <i class="fas fa-eye"></i> Voir en 3D
+                            <i class="fas fa-vr-cardboard"></i> Visite Quantique
                         </button>
                     </div>
                 </div>
@@ -1373,31 +1883,36 @@
                 <!-- Property 2 -->
                 <div class="property-card">
                     <div class="property-image">
-                        <div class="property-badge">NOUVEAU</div>
-                        <img src="https://images.unsplash.com/photo-1518780664697-55e3ad937233?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Appartement Design">
+                        <div class="property-badge">BIOTECH</div>
+                        <img src="https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Bio Residence">
                     </div>
                     <div class="property-info">
-                        <h3 class="property-title">Appartement Design</h3>
-                        <div class="property-price">€ 420,000</div>
-                        <p>Appartement lumineux en cœur de ville avec terrasse privative. Finitions haut de gamme et espaces modulables.</p>
+                        <h3 class="property-title">
+                            <i class="fas fa-leaf"></i> Bio Residence Ω
+                        </h3>
+                        <div class="property-price">€ 850,000</div>
+                        <p>Architecture biomimétique avec matériaux auto-régénérants et écosystème intégré. Purification d'air naturelle.</p>
                         
                         <div class="property-features">
                             <div class="feature">
-                                <i class="fas fa-bed"></i>
-                                <span>3 Chambres</span>
+                                <i class="fas fa-recycle"></i>
+                                <span>Durabilité</span>
+                                <span class="feature-value">100%</span>
                             </div>
                             <div class="feature">
-                                <i class="fas fa-bath"></i>
-                                <span>2 Salles de bain</span>
+                                <i class="fas fa-seedling"></i>
+                                <span>Biomasse</span>
+                                <span class="feature-value">Active</span>
                             </div>
                             <div class="feature">
-                                <i class="fas fa-ruler-combined"></i>
-                                <span>120 m²</span>
+                                <i class="fas fa-water"></i>
+                                <span>Cycle Eau</span>
+                                <span class="feature-value">Fermé</span>
                             </div>
                         </div>
                         
                         <button class="btn btn-primary" style="width: 100%;">
-                            <i class="fas fa-eye"></i> Voir en 3D
+                            <i class="fas fa-vr-cardboard"></i> Visite Quantique
                         </button>
                     </div>
                 </div>
@@ -1405,31 +1920,36 @@
                 <!-- Property 3 -->
                 <div class="property-card">
                     <div class="property-image">
-                        <div class="property-badge">LOCATION</div>
-                        <img src="https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Maison Familiale">
+                        <div class="property-badge">NEURO HOME</div>
+                        <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Neuro Space">
                     </div>
                     <div class="property-info">
-                        <h3 class="property-title">Maison Familiale</h3>
-                        <div class="property-price">€ 3,200/mois</div>
-                        <p>Spacieuse maison familiale avec grand jardin et garage double. Parfaite pour les familles avec enfants.</p>
+                        <h3 class="property-title">
+                            <i class="fas fa-mind"></i> Neuro Space Σ
+                        </h3>
+                        <div class="property-price">€ 2,100,000</div>
+                        <p>Interface neuronale directe avec l'espace. L'environnement s'adapte à vos ondes cérébrales en temps réel.</p>
                         
                         <div class="property-features">
                             <div class="feature">
-                                <i class="fas fa-bed"></i>
-                                <span>4 Chambres</span>
+                                <i class="fas fa-brain"></i>
+                                <span>Interface</span>
+                                <span class="feature-value">Neuronale</span>
                             </div>
                             <div class="feature">
-                                <i class="fas fa-bath"></i>
-                                <span>3 Salles de bain</span>
+                                <i class="fas fa-heartbeat"></i>
+                                <span>Biofeedback</span>
+                                <span class="feature-value">Temps réel</span>
                             </div>
                             <div class="feature">
-                                <i class="fas fa-ruler-combined"></i>
-                                <span>280 m²</span>
+                                <i class="fas fa-project-diagram"></i>
+                                <span>Adaptation</span>
+                                <span class="feature-value">Instant</span>
                             </div>
                         </div>
                         
                         <button class="btn btn-primary" style="width: 100%;">
-                            <i class="fas fa-eye"></i> Voir en 3D
+                            <i class="fas fa-vr-cardboard"></i> Visite Quantique
                         </button>
                     </div>
                 </div>
@@ -1440,56 +1960,56 @@
     <!-- Features Section -->
     <section class="features" id="features">
         <div class="container">
-            <h2 class="section-title">Nos Services Exclusifs</h2>
-            <p class="section-subtitle">Découvrez pourquoi nous sommes le leader en design immobilier 3D.</p>
+            <h2 class="section-title">TECHNOLOGIES QUANTIQUES</h2>
+            <p class="section-subtitle">Notre arsenal technologique repousse les limites du réel et du virtuel.</p>
             
             <div class="features-grid">
                 <div class="feature-card">
                     <div class="feature-icon">
-                        <i class="fas fa-vr-cardboard"></i>
+                        <i class="fas fa-atom"></i>
                     </div>
-                    <h3>Visite Virtuelle 360°</h3>
-                    <p>Explorez chaque propriété comme si vous y étiez grâce à nos visites virtuelles immersives.</p>
+                    <h3>Design Quantique</h3>
+                    <p>Algorithmes quantiques optimisant chaque atome de votre espace pour une efficacité maximale.</p>
                 </div>
                 
                 <div class="feature-card">
                     <div class="feature-icon">
-                        <i class="fas fa-pencil-ruler"></i>
+                        <i class="fas fa-brain"></i>
                     </div>
-                    <h3>Personnalisation Totale</h3>
-                    <p>Modifiez chaque détail de votre futur espace : couleurs, matériaux, agencement...</p>
+                    <h3>IA Générative</h3>
+                    <p>Notre IA crée des designs uniques en analysant vos ondes cérébrales et préférences subliminales.</p>
                 </div>
                 
                 <div class="feature-card">
                     <div class="feature-icon">
-                        <i class="fas fa-file-contract"></i>
+                        <i class="fas fa-hologram"></i>
                     </div>
-                    <h3>Plans Détaillés</h3>
-                    <p>Recevez des plans architecturaux précis et conformes aux normes en vigueur.</p>
+                    <h3>Holographie 4D</h3>
+                    <p>Projection holographique interactive avec retour haptique pour une immersion totale.</p>
                 </div>
                 
                 <div class="feature-card">
                     <div class="feature-icon">
-                        <i class="fas fa-cube"></i>
+                        <i class="fas fa-network-wired"></i>
                     </div>
-                    <h3>Rendu 3D Photo-réaliste</h3>
-                    <p>Visualisez votre projet avec un réalisme photographique avant même le début des travaux.</p>
+                    <h3>Réseau Neural</h3>
+                    <p>Tous vos appareils communiquent via un réseau neuronal décentralisé pour une synergie parfaite.</p>
                 </div>
                 
                 <div class="feature-card">
                     <div class="feature-icon">
-                        <i class="fas fa-users"></i>
+                        <i class="fas fa-recycle"></i>
                     </div>
-                    <h3>Consultation Expert</h3>
-                    <p>Bénéficiez des conseils de nos architectes et designers d'intérieur.</p>
+                    <h3>Matériaux Smart</h3>
+                    <p>Matériaux qui changent de propriétés selon vos besoins : couleur, texture, transparence.</p>
                 </div>
                 
                 <div class="feature-card">
                     <div class="feature-icon">
-                        <i class="fas fa-mobile-alt"></i>
+                        <i class="fas fa-infinity"></i>
                     </div>
-                    <h3>Application Mobile</h3>
-                    <p>Gérez votre projet depuis votre smartphone avec notre application dédiée.</p>
+                    <h3>Énergie ∞</h3>
+                    <p>Système de collecte d'énergie ambiante rendant votre espace totalement auto-suffisant.</p>
                 </div>
             </div>
         </div>
@@ -1498,16 +2018,18 @@
     <!-- CTA Section -->
     <section class="cta" id="contact">
         <div class="container">
-            <h2 class="cta-title">Prêt à Donner Vie à Vos Idées ?</h2>
-            <p class="cta-subtitle">Rejoignez des centaines de clients satisfaits qui ont transformé leurs rêves immobiliers en réalité grâce à notre technologie 3D avancée.</p>
-            
-            <div class="cta-btns">
-                <button class="btn btn-white btn-large" id="cta-contact">
-                    <i class="fas fa-calendar-alt"></i> Prendre Rendez-vous
-                </button>
-                <button class="btn btn-outline-white btn-large" id="cta-demo">
-                    <i class="fas fa-headset"></i> Démo Gratuite
-                </button>
+            <div class="cta-content">
+                <h2 class="cta-title">PRÊT POUR LA PROCHAINE DIMENSION ?</h2>
+                <p class="cta-subtitle">Rejoignez l'élite qui habite déjà demain. Notre IA vous attend pour créer votre espace quantique.</p>
+                
+                <div class="cta-btns">
+                    <button class="btn btn-primary btn-large btn-glow" id="cta-contact">
+                        <i class="fas fa-calendar-alt"></i> Consultation IA
+                    </button>
+                    <button class="btn btn-secondary btn-large" id="cta-demo">
+                        <i class="fas fa-rocket"></i> Démo Quantique
+                    </button>
+                </div>
             </div>
         </div>
     </section>
@@ -1517,18 +2039,18 @@
         <div class="container">
             <div class="footer-grid">
                 <div class="footer-col">
-                    <a href="#" class="logo" style="color: white; margin-bottom: 1.5rem; display: inline-block;">
-                        <i class="fas fa-building"></i>
+                    <a href="#" class="logo" style="margin-bottom: 2rem; display: inline-block;">
+                        <i class="fas fa-atom"></i>
                         NEXUS IMMO
                     </a>
-                    <p>Leader en design immobilier 3D. Nous transformons vos visions en réalités tangibles grâce à la technologie de pointe.</p>
+                    <p>Pionniers du design spatial quantique. Nous créons des réalités, pas seulement des espaces.</p>
                     
                     <div class="social-links">
                         <a href="#" class="social-icon">
-                            <i class="fab fa-facebook-f"></i>
+                            <i class="fab fa-github"></i>
                         </a>
                         <a href="#" class="social-icon">
-                            <i class="fab fa-instagram"></i>
+                            <i class="fab fa-discord"></i>
                         </a>
                         <a href="#" class="social-icon">
                             <i class="fab fa-linkedin-in"></i>
@@ -1540,45 +2062,45 @@
                 </div>
                 
                 <div class="footer-col">
-                    <h3>Navigation</h3>
+                    <h3>Dimensions</h3>
                     <ul class="footer-links">
-                        <li><a href="#home">Accueil</a></li>
-                        <li><a href="#designer">Designer 3D</a></li>
-                        <li><a href="#properties">Propriétés</a></li>
-                        <li><a href="#features">Services</a></li>
-                        <li><a href="#contact">Contact</a></li>
+                        <li><a href="#home"><i class="fas fa-chevron-right"></i> Espace-Temps</a></li>
+                        <li><a href="#designer"><i class="fas fa-chevron-right"></i> Quantique</a></li>
+                        <li><a href="#properties"><i class="fas fa-chevron-right"></i> Holographique</a></li>
+                        <li><a href="#features"><i class="fas fa-chevron-right"></i> Neural</a></li>
+                        <li><a href="#contact"><i class="fas fa-chevron-right"></i> Interface</a></li>
                     </ul>
                 </div>
                 
                 <div class="footer-col">
-                    <h3>Services</h3>
+                    <h3>Technologies</h3>
                     <ul class="footer-links">
-                        <li><a href="#">Design 3D Personnalisé</a></li>
-                        <li><a href="#">Visites Virtuelles</a></li>
-                        <li><a href="#">Plans Architecturaux</a></li>
-                        <li><a href="#">Consultation Expert</a></li>
-                        <li><a href="#">Rendu Photo-réaliste</a></li>
+                        <li><a href="#"><i class="fas fa-microchip"></i> IA Générative</a></li>
+                        <li><a href="#"><i class="fas fa-atom"></i> Calcul Quantique</a></li>
+                        <li><a href="#"><i class="fas fa-hologram"></i> Réalité 4D</a></li>
+                        <li><a href="#"><i class="fas fa-brain"></i> Réseaux Neuraux</a></li>
+                        <li><a href="#"><i class="fas fa-infinity"></i> Énergie Libre</a></li>
                     </ul>
                 </div>
                 
                 <div class="footer-col">
-                    <h3>Newsletter</h3>
+                    <h3>Newsletter Quantique</h3>
                     <div class="newsletter">
-                        <p>Inscrivez-vous pour recevoir nos dernières nouveautés et offres exclusives.</p>
-                        <input type="email" placeholder="Votre email">
+                        <p>Recevez les dernières découvertes directement dans votre conscience.</p>
+                        <input type="email" placeholder="Votre email quantique">
                         <button class="btn btn-primary" style="width: 100%;">
-                            <i class="fas fa-paper-plane"></i> S'inscrire
+                            <i class="fas fa-paper-plane"></i> S'abonner
                         </button>
                     </div>
                 </div>
             </div>
             
             <div class="footer-bottom">
-                <p>&copy; 2023 NEXUS IMMO. Tous droits réservés.</p>
+                <p>&copy; 2024 NEXUS IMMO QUANTUM. Tous les droits sont relatifs.</p>
                 <p style="margin-top: 0.5rem;">
-                    <a href="#" style="color: rgba(255, 255, 255, 0.7); margin: 0 1rem;">Mentions légales</a> | 
-                    <a href="#" style="color: rgba(255, 255, 255, 0.7); margin: 0 1rem;">Politique de confidentialité</a> | 
-                    <a href="#" style="color: rgba(255, 255, 255, 0.7); margin: 0 1rem;">Conditions d'utilisation</a>
+                    <a href="#" style="color: rgba(255, 255, 255, 0.7); margin: 0 1rem;">Multivers légal</a> | 
+                    <a href="#" style="color: rgba(255, 255, 255, 0.7); margin: 0 1rem;">Politique quantique</a> | 
+                    <a href="#" style="color: rgba(255, 255, 255, 0.7); margin: 0 1rem;">Conditions temporelles</a>
                 </p>
             </div>
         </div>
@@ -1590,82 +2112,38 @@
             <div class="close-modal" id="close-contact-modal">
                 <i class="fas fa-times"></i>
             </div>
-            <h3 class="modal-title">Prendre Rendez-vous</h3>
-            <p class="modal-subtitle">Un de nos experts vous contactera dans les 24h pour discuter de votre projet.</p>
+            <h3 class="modal-title">Consultation IA</h3>
+            <p class="modal-subtitle">Notre intelligence artificielle analysera vos besoins et vous proposera un design quantique personnalisé.</p>
             
             <form class="modal-form" id="contact-form">
                 <div class="form-group">
-                    <label for="name">Nom complet</label>
-                    <input type="text" id="name" required>
+                    <label for="name">Identité Quantique</label>
+                    <input type="text" id="name" required style="background: rgba(255, 255, 255, 0.05); color: white;">
                 </div>
                 
                 <div class="form-group">
-                    <label for="email">Adresse email</label>
-                    <input type="email" id="email" required>
+                    <label for="email">Fréquence de Contact</label>
+                    <input type="email" id="email" required style="background: rgba(255, 255, 255, 0.05); color: white;">
                 </div>
                 
                 <div class="form-group">
-                    <label for="phone">Téléphone</label>
-                    <input type="tel" id="phone">
-                </div>
-                
-                <div class="form-group">
-                    <label for="project-type">Type de projet</label>
-                    <select id="project-type">
-                        <option value="residence">Résidence principale</option>
-                        <option value="investment">Investissement locatif</option>
-                        <option value="commercial">Local commercial</option>
-                        <option value="renovation">Rénovation</option>
-                        <option value="other">Autre</option>
+                    <label for="dimension">Dimension Préférée</label>
+                    <select id="dimension" style="background: rgba(255, 255, 255, 0.05); color: white;">
+                        <option value="quantum">Quantique</option>
+                        <option value="holographic">Holographique</option>
+                        <option value="neural">Neurale</option>
+                        <option value="biotech">BioTech</option>
                     </select>
                 </div>
                 
                 <div class="form-group">
-                    <label for="message">Message</label>
-                    <textarea id="message" rows="4"></textarea>
+                    <label for="message">Vibrations Mentales</label>
+                    <textarea id="message" rows="4" style="background: rgba(255, 255, 255, 0.05); color: white;"></textarea>
                 </div>
                 
                 <button type="submit" class="btn btn-primary">
-                    <i class="fas fa-paper-plane"></i> Envoyer la Demande
+                    <i class="fas fa-paper-plane"></i> Transmettre à l'IA
                 </button>
-            </form>
-        </div>
-    </div>
-
-    <div class="modal" id="login-modal">
-        <div class="modal-content">
-            <div class="close-modal" id="close-login-modal">
-                <i class="fas fa-times"></i>
-            </div>
-            <h3 class="modal-title">Connexion</h3>
-            <p class="modal-subtitle">Accédez à votre espace personnel pour gérer vos projets.</p>
-            
-            <form class="modal-form" id="login-form">
-                <div class="form-group">
-                    <label for="login-email">Adresse email</label>
-                    <input type="email" id="login-email" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="login-password">Mot de passe</label>
-                    <input type="password" id="login-password" required>
-                </div>
-                
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-                    <div>
-                        <input type="checkbox" id="remember">
-                        <label for="remember" style="display: inline; margin-left: 0.5rem;">Se souvenir de moi</label>
-                    </div>
-                    <a href="#" style="color: var(--primary); font-size: 0.9rem;">Mot de passe oublié ?</a>
-                </div>
-                
-                <button type="submit" class="btn btn-primary">
-                    <i class="fas fa-sign-in-alt"></i> Se connecter
-                </button>
-                
-                <p style="text-align: center; margin-top: 1.5rem; color: var(--gray);">
-                    Pas encore de compte ? <a href="#" style="color: var(--primary);" id="show-register">S'inscrire</a>
-                </p>
             </form>
         </div>
     </div>
@@ -1673,37 +2151,81 @@
     <!-- JavaScript -->
     <script>
         // ===== GLOBAL VARIABLES =====
-        let heroScene, heroCamera, heroRenderer;
+        let heroScene, heroCamera, heroRenderer, heroControls;
         let designerScene, designerCamera, designerRenderer, designerControls;
         let room = null;
-        let currentWallColor = "#F5F5F5";
-        let currentFloorType = "wood";
-        let decorationItems = [];
-        let isRotating = false;
-        let isPanning = false;
+        let currentRoom = { length: 12, width: 8, height: 3 };
+        let animationId = null;
+        let particles = [];
 
-        // ===== DOM CONTENT LOADED =====
+        // ===== INITIALIZATION =====
         document.addEventListener('DOMContentLoaded', function() {
-            // Initialize all components
-            initLoadingScreen();
+            initLoading();
+            initParticles();
             initNavigation();
             initHero3D();
             initDesigner3D();
             initEventListeners();
             initModals();
-            
-            // Hide loading screen after 2 seconds
-            setTimeout(() => {
-                document.getElementById('loading').style.opacity = '0';
-                setTimeout(() => {
-                    document.getElementById('loading').style.display = 'none';
-                }, 500);
-            }, 2000);
+            initAnimations();
+            initGSAP();
         });
 
         // ===== LOADING SCREEN =====
-        function initLoadingScreen() {
-            // Loading screen will auto-hide after 2 seconds (see above)
+        function initLoading() {
+            const loadingProgress = document.getElementById('loading-progress');
+            let progress = 0;
+            
+            const interval = setInterval(() => {
+                progress += Math.random() * 10;
+                if (progress > 100) progress = 100;
+                loadingProgress.style.width = `${progress}%`;
+                
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        document.getElementById('loading').style.opacity = '0';
+                        setTimeout(() => {
+                            document.getElementById('loading').style.display = 'none';
+                        }, 800);
+                    }, 500);
+                }
+            }, 100);
+        }
+
+        // ===== PARTICLES BACKGROUND =====
+        function initParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 50;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                
+                const size = Math.random() * 4 + 1;
+                const x = Math.random() * 100;
+                const delay = Math.random() * 20;
+                const duration = Math.random() * 10 + 10;
+                
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.left = `${x}%`;
+                particle.style.animationDelay = `${delay}s`;
+                particle.style.animationDuration = `${duration}s`;
+                
+                // Random color based on theme
+                const colors = ['#0066FF', '#00D4AA', '#FF6B6B', '#9D4EDD'];
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                particle.style.background = color;
+                particle.style.opacity = Math.random() * 0.5 + 0.3;
+                
+                particlesContainer.appendChild(particle);
+                particles.push({
+                    element: particle,
+                    x: x,
+                    delay: delay
+                });
+            }
         }
 
         // ===== NAVIGATION =====
@@ -1721,14 +2243,16 @@
                     header.classList.remove('scrolled');
                 }
                 
-                // Update active nav link based on scroll position
                 updateActiveNavLink();
             });
 
             // Mobile menu toggle
             mobileMenuBtn.addEventListener('click', () => {
-                navLinksContainer.style.display = 
-                    navLinksContainer.style.display === 'flex' ? 'none' : 'flex';
+                const isVisible = navLinksContainer.style.display === 'flex';
+                navLinksContainer.style.display = isVisible ? 'none' : 'flex';
+                mobileMenuBtn.innerHTML = isVisible ? 
+                    '<i class="fas fa-bars"></i>' : 
+                    '<i class="fas fa-times"></i>';
             });
 
             // Nav link click handlers
@@ -1739,19 +2263,17 @@
                     const targetSection = document.getElementById(targetId);
                     
                     if (targetSection) {
-                        // Update active link
                         navLinks.forEach(l => l.classList.remove('active'));
                         link.classList.add('active');
                         
-                        // Scroll to section
                         window.scrollTo({
                             top: targetSection.offsetTop - 80,
                             behavior: 'smooth'
                         });
                         
-                        // Close mobile menu if open
                         if (window.innerWidth <= 992) {
                             navLinksContainer.style.display = 'none';
+                            mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
                         }
                     }
                 });
@@ -1786,16 +2308,16 @@
 
             // Scene setup
             heroScene = new THREE.Scene();
-            heroScene.background = new THREE.Color(0xf8f9fa);
+            heroScene.background = new THREE.Color(0x0a0a14);
 
             // Camera setup
             heroCamera = new THREE.PerspectiveCamera(
-                45,
+                60,
                 canvas.clientWidth / canvas.clientHeight,
                 0.1,
                 1000
             );
-            heroCamera.position.set(5, 5, 10);
+            heroCamera.position.set(8, 6, 12);
 
             // Renderer setup
             heroRenderer = new THREE.WebGLRenderer({ 
@@ -1805,17 +2327,40 @@
             });
             heroRenderer.setSize(canvas.clientWidth, canvas.clientHeight);
             heroRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            heroRenderer.shadowMap.enabled = true;
+            heroRenderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
-            // Lighting
-            const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+            // Controls
+            heroControls = new THREE.OrbitControls(heroCamera, heroRenderer.domElement);
+            heroControls.enableDamping = true;
+            heroControls.dampingFactor = 0.05;
+            heroControls.enableZoom = false;
+            heroControls.enablePan = false;
+            heroControls.autoRotate = true;
+            heroControls.autoRotateSpeed = 0.5;
+
+            // Advanced lighting
+            const ambientLight = new THREE.AmbientLight(0x0066FF, 0.3);
             heroScene.add(ambientLight);
 
-            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
-            directionalLight.position.set(10, 20, 15);
+            const directionalLight = new THREE.DirectionalLight(0x00D4AA, 0.8);
+            directionalLight.position.set(15, 20, 10);
+            directionalLight.castShadow = true;
+            directionalLight.shadow.mapSize.width = 2048;
+            directionalLight.shadow.mapSize.height = 2048;
             heroScene.add(directionalLight);
 
-            // Create a simple 3D house model for hero
-            createHeroHouse();
+            // Point lights for futuristic effect
+            const pointLight1 = new THREE.PointLight(0x0066FF, 2, 30);
+            pointLight1.position.set(5, 8, 5);
+            heroScene.add(pointLight1);
+
+            const pointLight2 = new THREE.PointLight(0x00D4AA, 2, 30);
+            pointLight2.position.set(-5, 8, -5);
+            heroScene.add(pointLight2);
+
+            // Create futuristic room
+            createHeroRoom();
 
             // Handle window resize
             window.addEventListener('resize', onHeroResize);
@@ -1824,68 +2369,256 @@
             animateHero();
         }
 
-        function createHeroHouse() {
-            // Create house base
-            const houseGroup = new THREE.Group();
+        function createHeroRoom() {
+            const roomGroup = new THREE.Group();
 
-            // Base (walls)
-            const wallGeometry = new THREE.BoxGeometry(8, 4, 8);
-            const wallMaterial = new THREE.MeshPhongMaterial({ 
-                color: 0x2A5CAA,
-                shininess: 30
+            // Advanced floor with grid pattern
+            const floorGeometry = new THREE.PlaneGeometry(15, 10);
+            const floorMaterial = new THREE.MeshPhongMaterial({ 
+                color: 0x1a1a24,
+                emissive: 0x0066FF,
+                emissiveIntensity: 0.1,
+                shininess: 100
             });
-            const walls = new THREE.Mesh(wallGeometry, wallMaterial);
-            walls.position.y = 2;
-            houseGroup.add(walls);
+            const floor = new THREE.Mesh(floorGeometry, floorMaterial);
+            floor.rotation.x = -Math.PI / 2;
+            floor.receiveShadow = true;
+            roomGroup.add(floor);
 
-            // Roof
-            const roofGeometry = new THREE.ConeGeometry(6, 3, 4);
-            const roofMaterial = new THREE.MeshPhongMaterial({ 
-                color: 0xE74C3C,
-                shininess: 30
+            // Add grid lines on floor
+            const gridHelper = new THREE.GridHelper(15, 15, 0x0066FF, 0x0066FF);
+            gridHelper.position.y = 0.01;
+            gridHelper.material.opacity = 0.3;
+            gridHelper.material.transparent = true;
+            roomGroup.add(gridHelper);
+
+            // Smart bed
+            const bedGroup = createSmartBed();
+            bedGroup.position.set(0, 1, -3);
+            roomGroup.add(bedGroup);
+
+            // Holographic table
+            const tableGroup = createHolographicTable();
+            tableGroup.position.set(0, 1, 3);
+            roomGroup.add(tableGroup);
+
+            // Floating shelves
+            const shelfGroup = createFloatingShelves();
+            shelfGroup.position.set(-5, 2.5, 0);
+            roomGroup.add(shelfGroup);
+
+            // Smart wall panels
+            createSmartWallPanels(roomGroup);
+
+            // Particle system for futuristic effect
+            createParticleSystem(roomGroup);
+
+            heroScene.add(roomGroup);
+        }
+
+        function createSmartBed() {
+            const group = new THREE.Group();
+
+            // Bed base with glowing edges
+            const bedGeometry = new THREE.BoxGeometry(2.5, 0.3, 2);
+            const bedMaterial = new THREE.MeshPhongMaterial({
+                color: 0x1a1a24,
+                emissive: 0x0066FF,
+                emissiveIntensity: 0.3,
+                shininess: 100
             });
-            const roof = new THREE.Mesh(roofGeometry, roofMaterial);
-            roof.position.y = 5.5;
-            roof.rotation.y = Math.PI / 4;
-            houseGroup.add(roof);
+            const bed = new THREE.Mesh(bedGeometry, bedMaterial);
+            bed.castShadow = true;
+            group.add(bed);
 
-            // Windows
-            const windowGeometry = new THREE.BoxGeometry(1, 1.5, 0.1);
-            const windowMaterial = new THREE.MeshPhongMaterial({ 
-                color: 0x87CEEB,
+            // Mattress
+            const mattressGeometry = new THREE.BoxGeometry(2.4, 0.3, 1.9);
+            const mattressMaterial = new THREE.MeshPhongMaterial({ 
+                color: 0x00D4AA,
+                emissive: 0x00D4AA,
+                emissiveIntensity: 0.1
+            });
+            const mattress = new THREE.Mesh(mattressGeometry, mattressMaterial);
+            mattress.position.y = 0.3;
+            mattress.castShadow = true;
+            group.add(mattress);
+
+            // Holographic headboard
+            const headboardGeometry = new THREE.PlaneGeometry(2.5, 1);
+            const headboardMaterial = new THREE.MeshPhongMaterial({
+                color: 0x0066FF,
+                transparent: true,
+                opacity: 0.5,
+                side: THREE.DoubleSide
+            });
+            const headboard = new THREE.Mesh(headboardGeometry, headboardMaterial);
+            headboard.position.set(0, 0.8, -1);
+            headboard.rotation.y = Math.PI;
+            group.add(headboard);
+
+            return group;
+        }
+
+        function createHolographicTable() {
+            const group = new THREE.Group();
+
+            // Transparent table top
+            const tableTopGeometry = new THREE.CylinderGeometry(0.8, 0.8, 0.05, 32);
+            const tableTopMaterial = new THREE.MeshPhongMaterial({
+                color: 0x0066FF,
+                transparent: true,
+                opacity: 0.3,
+                emissive: 0x0066FF,
+                emissiveIntensity: 0.5
+            });
+            const tableTop = new THREE.Mesh(tableTopGeometry, tableTopMaterial);
+            tableTop.position.y = 0.8;
+            tableTop.castShadow = true;
+            group.add(tableTop);
+
+            // Holographic legs with particle effect
+            const legGeometry = new THREE.CylinderGeometry(0.05, 0.05, 0.8, 16);
+            const legMaterial = new THREE.MeshPhongMaterial({
+                color: 0x00D4AA,
+                emissive: 0x00D4AA,
+                emissiveIntensity: 0.8,
                 transparent: true,
                 opacity: 0.7
             });
 
-            const window1 = new THREE.Mesh(windowGeometry, windowMaterial);
-            window1.position.set(-3, 2.5, 4.1);
-            houseGroup.add(window1);
+            for (let i = 0; i < 3; i++) {
+                const angle = (i / 3) * Math.PI * 2;
+                const leg = new THREE.Mesh(legGeometry, legMaterial);
+                leg.position.set(
+                    Math.cos(angle) * 0.6,
+                    0.4,
+                    Math.sin(angle) * 0.6
+                );
+                leg.castShadow = true;
+                group.add(leg);
+            }
 
-            const window2 = new THREE.Mesh(windowGeometry, windowMaterial);
-            window2.position.set(3, 2.5, 4.1);
-            houseGroup.add(window2);
-
-            // Door
-            const doorGeometry = new THREE.BoxGeometry(1.5, 2.5, 0.1);
-            const doorMaterial = new THREE.MeshPhongMaterial({ 
-                color: 0x8B4513
+            // Floating holographic display above table
+            const displayGeometry = new THREE.BoxGeometry(0.8, 0.5, 0.01);
+            const displayMaterial = new THREE.MeshPhongMaterial({
+                color: 0x00D4AA,
+                transparent: true,
+                opacity: 0.5,
+                emissive: 0x00D4AA,
+                emissiveIntensity: 0.8
             });
-            const door = new THREE.Mesh(doorGeometry, doorMaterial);
-            door.position.set(0, 1, 4.1);
-            houseGroup.add(door);
+            const display = new THREE.Mesh(displayGeometry, displayMaterial);
+            display.position.y = 1.3;
+            group.add(display);
 
-            // Ground
-            const groundGeometry = new THREE.PlaneGeometry(30, 30);
-            const groundMaterial = new THREE.MeshPhongMaterial({ 
-                color: 0x27AE60,
-                shininess: 10
+            return group;
+        }
+
+        function createFloatingShelves() {
+            const group = new THREE.Group();
+
+            // Create floating shelves with glow effect
+            const shelfGeometry = new THREE.BoxGeometry(1.5, 0.05, 0.4);
+            const shelfMaterial = new THREE.MeshPhongMaterial({
+                color: 0x1a1a24,
+                emissive: 0x0066FF,
+                emissiveIntensity: 0.3
             });
-            const ground = new THREE.Mesh(groundGeometry, groundMaterial);
-            ground.rotation.x = -Math.PI / 2;
-            ground.position.y = -0.1;
-            houseGroup.add(ground);
 
-            heroScene.add(houseGroup);
+            for (let i = 0; i < 3; i++) {
+                const shelf = new THREE.Mesh(shelfGeometry, shelfMaterial);
+                shelf.position.y = i * 0.5;
+                shelf.castShadow = true;
+                group.add(shelf);
+
+                // Add glowing edges
+                const edgeGeometry = new THREE.BoxGeometry(1.5, 0.01, 0.01);
+                const edgeMaterial = new THREE.MeshPhongMaterial({
+                    color: 0x00D4AA,
+                    emissive: 0x00D4AA,
+                    emissiveIntensity: 1
+                });
+
+                const topEdge = new THREE.Mesh(edgeGeometry, edgeMaterial);
+                topEdge.position.set(0, 0.025, 0.2);
+                shelf.add(topEdge);
+
+                const bottomEdge = new THREE.Mesh(edgeGeometry, edgeMaterial);
+                bottomEdge.position.set(0, -0.025, 0.2);
+                shelf.add(bottomEdge);
+            }
+
+            return group;
+        }
+
+        function createSmartWallPanels(group) {
+            // Create interactive wall panels
+            const panelGeometry = new THREE.PlaneGeometry(3, 2);
+            const panelMaterial = new THREE.MeshPhongMaterial({
+                color: 0x1a1a24,
+                emissive: 0x0066FF,
+                emissiveIntensity: 0.1,
+                side: THREE.DoubleSide
+            });
+
+            // Left wall panel
+            const leftPanel = new THREE.Mesh(panelGeometry, panelMaterial);
+            leftPanel.position.set(-7.4, 2, 0);
+            leftPanel.rotation.y = Math.PI / 2;
+            leftPanel.receiveShadow = true;
+            group.add(leftPanel);
+
+            // Right wall panel
+            const rightPanel = new THREE.Mesh(panelGeometry, panelMaterial);
+            rightPanel.position.set(7.4, 2, 0);
+            rightPanel.rotation.y = -Math.PI / 2;
+            rightPanel.receiveShadow = true;
+            group.add(rightPanel);
+
+            // Back wall panel
+            const backPanel = new THREE.Mesh(panelGeometry, panelMaterial);
+            backPanel.position.set(0, 2, -4.9);
+            backPanel.receiveShadow = true;
+            group.add(backPanel);
+        }
+
+        function createParticleSystem(group) {
+            // Create particle system for futuristic effect
+            const particleCount = 100;
+            const particles = new THREE.BufferGeometry();
+            const positions = new Float32Array(particleCount * 3);
+            const colors = new Float32Array(particleCount * 3);
+
+            for (let i = 0; i < particleCount; i++) {
+                const i3 = i * 3;
+                
+                // Random positions in room
+                positions[i3] = (Math.random() - 0.5) * 14;
+                positions[i3 + 1] = Math.random() * 5;
+                positions[i3 + 2] = (Math.random() - 0.5) * 9;
+
+                // Random colors (blue or green)
+                const color = Math.random() > 0.5 ? 
+                    new THREE.Color(0x0066FF) : 
+                    new THREE.Color(0x00D4AA);
+                
+                colors[i3] = color.r;
+                colors[i3 + 1] = color.g;
+                colors[i3 + 2] = color.b;
+            }
+
+            particles.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+            particles.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+            const particleMaterial = new THREE.PointsMaterial({
+                size: 0.1,
+                vertexColors: true,
+                transparent: true,
+                opacity: 0.8
+            });
+
+            const particleSystem = new THREE.Points(particles, particleMaterial);
+            group.add(particleSystem);
         }
 
         function onHeroResize() {
@@ -1899,10 +2632,20 @@
 
         function animateHero() {
             requestAnimationFrame(animateHero);
+            heroControls.update();
             
-            // Rotate the scene slowly
-            if (heroScene.children[0]) {
-                heroScene.children[0].rotation.y += 0.005;
+            // Animate holographic elements
+            if (heroScene.children.length > 0) {
+                const roomGroup = heroScene.children[0];
+                
+                // Rotate holographic displays
+                roomGroup.traverse((child) => {
+                    if (child.material && child.material.emissive) {
+                        // Pulse effect for emissive materials
+                        child.material.emissiveIntensity = 
+                            0.5 + Math.sin(Date.now() * 0.002) * 0.3;
+                    }
+                });
             }
             
             heroRenderer.render(heroScene, heroCamera);
@@ -1915,16 +2658,16 @@
 
             // Scene setup
             designerScene = new THREE.Scene();
-            designerScene.background = new THREE.Color(0xf8f9fa);
+            designerScene.background = new THREE.Color(0x0a0a14);
 
             // Camera setup
             designerCamera = new THREE.PerspectiveCamera(
-                45,
+                60,
                 canvas.clientWidth / canvas.clientHeight,
                 0.1,
                 1000
             );
-            designerCamera.position.set(15, 10, 15);
+            designerCamera.position.set(15, 12, 15);
 
             // Renderer setup
             designerRenderer = new THREE.WebGLRenderer({ 
@@ -1945,8 +2688,8 @@
             designerControls.maxDistance = 50;
             designerControls.maxPolarAngle = Math.PI / 2;
 
-            // Lighting
-            const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+            // Advanced lighting
+            const ambientLight = new THREE.AmbientLight(0x0066FF, 0.2);
             designerScene.add(ambientLight);
 
             const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
@@ -1958,8 +2701,17 @@
             directionalLight.shadow.camera.bottom = -20;
             designerScene.add(directionalLight);
 
-            // Create initial room
-            createRoom(10, 8, 3);
+            // Point lights for futuristic effect
+            const pointLight1 = new THREE.PointLight(0x0066FF, 1, 20);
+            pointLight1.position.set(5, 5, 5);
+            designerScene.add(pointLight1);
+
+            const pointLight2 = new THREE.PointLight(0x00D4AA, 1, 20);
+            pointLight2.position.set(-5, 5, -5);
+            designerScene.add(pointLight2);
+
+            // Create initial smart room
+            createSmartRoom();
 
             // Handle window resize
             window.addEventListener('resize', onDesignerResize);
@@ -1968,35 +2720,31 @@
             animateDesigner();
         }
 
-        function createRoom(length, width, height) {
-            // Remove existing room if any
+        function createSmartRoom() {
             if (room) {
                 designerScene.remove(room);
             }
 
             room = new THREE.Group();
 
-            // Floor
-            const floorGeometry = new THREE.PlaneGeometry(length, width);
-            let floorTexture;
-            
-            switch(currentFloorType) {
-                case 'wood':
-                    floorTexture = createWoodTexture();
-                    break;
-                case 'tile':
-                    floorTexture = createTileTexture();
-                    break;
-                case 'marble':
-                    floorTexture = createMarbleTexture();
-                    break;
-                case 'carpet':
-                    floorTexture = createCarpetTexture();
-                    break;
-            }
-            
+            // Create room with smart materials
+            createAdvancedFloor(room);
+            createSmartWalls(room);
+            createIntelligentCeiling(room);
+            createRoomElements(room);
+
+            designerScene.add(room);
+            updateRoomDimensions();
+        }
+
+        function createAdvancedFloor(room) {
+            // Floor with futuristic grid pattern
+            const floorGeometry = new THREE.PlaneGeometry(currentRoom.length, currentRoom.width);
             const floorMaterial = new THREE.MeshPhongMaterial({ 
-                map: floorTexture,
+                color: 0x1a1a24,
+                emissive: 0x0066FF,
+                emissiveIntensity: 0.1,
+                shininess: 100,
                 side: THREE.DoubleSide
             });
             const floor = new THREE.Mesh(floorGeometry, floorMaterial);
@@ -2004,193 +2752,317 @@
             floor.receiveShadow = true;
             room.add(floor);
 
-            // Walls
+            // Dynamic grid overlay
+            const gridHelper = new THREE.GridHelper(
+                Math.max(currentRoom.length, currentRoom.width) * 1.5, 
+                20, 
+                0x0066FF, 
+                0x0066FF
+            );
+            gridHelper.position.y = 0.01;
+            gridHelper.material.opacity = 0.3;
+            gridHelper.material.transparent = true;
+            room.add(gridHelper);
+
+            // Floating particle effect on floor
+            createFloorParticles(room);
+        }
+
+        function createSmartWalls(room) {
             const wallMaterial = new THREE.MeshPhongMaterial({ 
-                color: new THREE.Color(currentWallColor),
+                color: 0x1a1a24,
+                emissive: 0x0066FF,
+                emissiveIntensity: 0.05,
+                shininess: 50,
                 side: THREE.DoubleSide
             });
 
-            // Back wall
+            // Back wall with interactive panels
             const backWall = new THREE.Mesh(
-                new THREE.PlaneGeometry(length, height),
+                new THREE.PlaneGeometry(currentRoom.length, currentRoom.height),
                 wallMaterial
             );
-            backWall.position.set(0, height/2, -width/2);
+            backWall.position.set(0, currentRoom.height/2, -currentRoom.width/2);
             backWall.receiveShadow = true;
             room.add(backWall);
 
-            // Front wall (with opening for door)
+            // Front wall with smart door
             const frontWall = new THREE.Mesh(
-                new THREE.PlaneGeometry(length, height),
+                new THREE.PlaneGeometry(currentRoom.length, currentRoom.height),
                 wallMaterial
             );
-            frontWall.position.set(0, height/2, width/2);
+            frontWall.position.set(0, currentRoom.height/2, currentRoom.width/2);
             frontWall.receiveShadow = true;
             room.add(frontWall);
 
-            // Left wall
+            // Side walls with window cutouts
             const leftWall = new THREE.Mesh(
-                new THREE.PlaneGeometry(width, height),
+                new THREE.PlaneGeometry(currentRoom.width, currentRoom.height),
                 wallMaterial
             );
             leftWall.rotation.y = Math.PI / 2;
-            leftWall.position.set(-length/2, height/2, 0);
+            leftWall.position.set(-currentRoom.length/2, currentRoom.height/2, 0);
             leftWall.receiveShadow = true;
             room.add(leftWall);
 
-            // Right wall
             const rightWall = new THREE.Mesh(
-                new THREE.PlaneGeometry(width, height),
+                new THREE.PlaneGeometry(currentRoom.width, currentRoom.height),
                 wallMaterial
             );
             rightWall.rotation.y = Math.PI / 2;
-            rightWall.position.set(length/2, height/2, 0);
+            rightWall.position.set(currentRoom.length/2, currentRoom.height/2, 0);
             rightWall.receiveShadow = true;
             room.add(rightWall);
 
-            // Ceiling
-            const ceilingGeometry = new THREE.PlaneGeometry(length, width);
+            // Add smart windows
+            createSmartWindows(room);
+        }
+
+        function createIntelligentCeiling(room) {
+            const ceilingGeometry = new THREE.PlaneGeometry(currentRoom.length, currentRoom.width);
             const ceilingMaterial = new THREE.MeshPhongMaterial({ 
-                color: 0xf8f9fa,
+                color: 0x0a0a14,
+                emissive: 0x0066FF,
+                emissiveIntensity: 0.02,
                 side: THREE.DoubleSide
             });
             const ceiling = new THREE.Mesh(ceilingGeometry, ceilingMaterial);
             ceiling.rotation.x = Math.PI / 2;
-            ceiling.position.y = height;
+            ceiling.position.y = currentRoom.height;
             ceiling.receiveShadow = true;
             room.add(ceiling);
 
-            // Add grid helper
-            const gridHelper = new THREE.GridHelper(Math.max(length, width) * 2, 20, 0x000000, 0x000000);
-            gridHelper.position.y = 0.01;
-            room.add(gridHelper);
-
-            // Add axis helper
-            const axesHelper = new THREE.AxesHelper(5);
-            room.add(axesHelper);
-
-            designerScene.add(room);
+            // Smart lighting fixtures
+            createSmartLighting(room);
         }
 
-        function createWoodTexture() {
-            const canvas = document.createElement('canvas');
-            canvas.width = 512;
-            canvas.height = 512;
-            const ctx = canvas.getContext('2d');
+        function createRoomElements(room) {
+            // Add AI-recommended furniture
+            addAIFurniture(room);
             
-            // Create wood grain pattern
-            ctx.fillStyle = '#8B4513';
-            ctx.fillRect(0, 0, 512, 512);
+            // Add ambient particle system
+            createAmbientParticles(room);
             
-            ctx.strokeStyle = '#A0522D';
-            ctx.lineWidth = 2;
-            
-            for (let i = 0; i < 512; i += 20) {
-                ctx.beginPath();
-                ctx.moveTo(i, 0);
-                ctx.bezierCurveTo(i + 10, 256, i - 10, 256, i, 512);
-                ctx.stroke();
+            // Add data visualization elements
+            createDataVisualizations(room);
+        }
+
+        function createSmartWindows(room) {
+            // Create holographic windows
+            const windowGeometry = new THREE.PlaneGeometry(2, 1.5);
+            const windowMaterial = new THREE.MeshPhongMaterial({
+                color: 0x00D4AA,
+                transparent: true,
+                opacity: 0.3,
+                emissive: 0x00D4AA,
+                emissiveIntensity: 0.5,
+                side: THREE.DoubleSide
+            });
+
+            // Windows on side walls
+            const leftWindow = new THREE.Mesh(windowGeometry, windowMaterial);
+            leftWindow.position.set(-currentRoom.length/2, currentRoom.height/2, 0);
+            leftWindow.rotation.y = Math.PI / 2;
+            room.add(leftWindow);
+
+            const rightWindow = new THREE.Mesh(windowGeometry, windowMaterial);
+            rightWindow.position.set(currentRoom.length/2, currentRoom.height/2, 0);
+            rightWindow.rotation.y = -Math.PI / 2;
+            room.add(rightWindow);
+
+            // Animated particle stream through windows
+            createWindowParticles(room);
+        }
+
+        function createSmartLighting(room) {
+            // Create floating light orbs
+            const lightOrbGeometry = new THREE.SphereGeometry(0.3, 16, 16);
+            const lightOrbMaterial = new THREE.MeshPhongMaterial({
+                color: 0x00D4AA,
+                emissive: 0x00D4AA,
+                emissiveIntensity: 0.8,
+                transparent: true,
+                opacity: 0.7
+            });
+
+            // Multiple floating orbs
+            const orbPositions = [
+                { x: -3, y: currentRoom.height - 0.5, z: -2 },
+                { x: 3, y: currentRoom.height - 0.5, z: 2 },
+                { x: 0, y: currentRoom.height - 0.5, z: 0 }
+            ];
+
+            orbPositions.forEach(pos => {
+                const orb = new THREE.Mesh(lightOrbGeometry, lightOrbMaterial);
+                orb.position.set(pos.x, pos.y, pos.z);
+                orb.castShadow = true;
+                room.add(orb);
+
+                // Add point light
+                const pointLight = new THREE.PointLight(0x00D4AA, 1, 10);
+                pointLight.position.copy(orb.position);
+                room.add(pointLight);
+            });
+        }
+
+        function addAIFurniture(room) {
+            // Smart bed at optimal position
+            const bed = createSmartBed();
+            bed.position.set(-currentRoom.length/3, 0, -currentRoom.width/3);
+            bed.scale.set(0.8, 0.8, 0.8);
+            room.add(bed);
+
+            // Holographic work desk
+            const desk = createHolographicTable();
+            desk.position.set(currentRoom.length/4, 0, currentRoom.width/4);
+            desk.scale.set(1.2, 1.2, 1.2);
+            room.add(desk);
+
+            // Floating shelves
+            const shelves = createFloatingShelves();
+            shelves.position.set(-currentRoom.length/2 + 1, currentRoom.height/3, 0);
+            room.add(shelves);
+
+            // Smart seating area
+            createSmartSeating(room);
+        }
+
+        function createSmartSeating(room) {
+            // Create futuristic seating
+            const chairGeometry = new THREE.BoxGeometry(0.5, 0.8, 0.5);
+            const chairMaterial = new THREE.MeshPhongMaterial({
+                color: 0x0066FF,
+                emissive: 0x0066FF,
+                emissiveIntensity: 0.3
+            });
+
+            const chair = new THREE.Mesh(chairGeometry, chairMaterial);
+            chair.position.set(currentRoom.length/3, 0.4, -currentRoom.width/4);
+            chair.castShadow = true;
+            room.add(chair);
+        }
+
+        function createFloorParticles(room) {
+            // Particle system for floor effects
+            const particleCount = 50;
+            const particles = new THREE.BufferGeometry();
+            const positions = new Float32Array(particleCount * 3);
+            const colors = new Float32Array(particleCount * 3);
+
+            for (let i = 0; i < particleCount; i++) {
+                const i3 = i * 3;
+                
+                positions[i3] = (Math.random() - 0.5) * currentRoom.length;
+                positions[i3 + 1] = 0.1; // Just above floor
+                positions[i3 + 2] = (Math.random() - 0.5) * currentRoom.width;
+
+                const color = Math.random() > 0.5 ? 
+                    new THREE.Color(0x0066FF) : 
+                    new THREE.Color(0x00D4AA);
+                
+                colors[i3] = color.r;
+                colors[i3 + 1] = color.g;
+                colors[i3 + 2] = color.b;
             }
-            
-            const texture = new THREE.CanvasTexture(canvas);
-            texture.wrapS = THREE.RepeatWrapping;
-            texture.wrapT = THREE.RepeatWrapping;
-            texture.repeat.set(4, 4);
-            
-            return texture;
+
+            particles.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+            particles.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+            const particleMaterial = new THREE.PointsMaterial({
+                size: 0.05,
+                vertexColors: true,
+                transparent: true,
+                opacity: 0.6
+            });
+
+            const particleSystem = new THREE.Points(particles, particleMaterial);
+            room.add(particleSystem);
         }
 
-        function createTileTexture() {
-            const canvas = document.createElement('canvas');
-            canvas.width = 256;
-            canvas.height = 256;
-            const ctx = canvas.getContext('2d');
-            
-            // Create tile pattern
-            ctx.fillStyle = '#808080';
-            ctx.fillRect(0, 0, 256, 256);
-            
-            ctx.strokeStyle = '#696969';
-            ctx.lineWidth = 4;
-            
-            for (let x = 0; x < 256; x += 64) {
-                for (let y = 0; y < 256; y += 64) {
-                    ctx.strokeRect(x + 2, y + 2, 60, 60);
-                }
+        function createAmbientParticles(room) {
+            // Ambient particle system for room atmosphere
+            const particleCount = 200;
+            const particles = new THREE.BufferGeometry();
+            const positions = new Float32Array(particleCount * 3);
+
+            for (let i = 0; i < particleCount; i++) {
+                const i3 = i * 3;
+                
+                // Random positions throughout room
+                positions[i3] = (Math.random() - 0.5) * currentRoom.length;
+                positions[i3 + 1] = Math.random() * currentRoom.height;
+                positions[i3 + 2] = (Math.random() - 0.5) * currentRoom.width;
             }
-            
-            const texture = new THREE.CanvasTexture(canvas);
-            texture.wrapS = THREE.RepeatWrapping;
-            texture.wrapT = THREE.RepeatWrapping;
-            texture.repeat.set(4, 4);
-            
-            return texture;
+
+            particles.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+
+            const particleMaterial = new THREE.PointsMaterial({
+                size: 0.02,
+                color: 0x00D4AA,
+                transparent: true,
+                opacity: 0.3
+            });
+
+            const particleSystem = new THREE.Points(particles, particleMaterial);
+            room.add(particleSystem);
         }
 
-        function createMarbleTexture() {
-            const canvas = document.createElement('canvas');
-            canvas.width = 512;
-            canvas.height = 512;
-            const ctx = canvas.getContext('2d');
-            
-            // Create marble pattern
-            const gradient = ctx.createLinearGradient(0, 0, 512, 512);
-            gradient.addColorStop(0, '#2C3E50');
-            gradient.addColorStop(0.5, '#34495E');
-            gradient.addColorStop(1, '#2C3E50');
-            
-            ctx.fillStyle = gradient;
-            ctx.fillRect(0, 0, 512, 512);
-            
-            // Add veins
-            ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
-            ctx.lineWidth = 1;
-            
-            for (let i = 0; i < 20; i++) {
-                ctx.beginPath();
-                ctx.moveTo(Math.random() * 512, Math.random() * 512);
-                ctx.bezierCurveTo(
-                    Math.random() * 512, Math.random() * 512,
-                    Math.random() * 512, Math.random() * 512,
-                    Math.random() * 512, Math.random() * 512
+        function createWindowParticles(room) {
+            // Particle stream through windows
+            const particleCount = 100;
+            const particles = new THREE.BufferGeometry();
+            const positions = new Float32Array(particleCount * 3);
+
+            for (let i = 0; i < particleCount; i++) {
+                const i3 = i * 3;
+                
+                // Particles coming through left window
+                positions[i3] = -currentRoom.length/2 - 0.1;
+                positions[i3 + 1] = Math.random() * currentRoom.height;
+                positions[i3 + 2] = (Math.random() - 0.5) * 1;
+            }
+
+            particles.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+
+            const particleMaterial = new THREE.PointsMaterial({
+                size: 0.03,
+                color: 0x00D4AA,
+                transparent: true,
+                opacity: 0.5
+            });
+
+            const particleSystem = new THREE.Points(particles, particleMaterial);
+            room.add(particleSystem);
+        }
+
+        function createDataVisualizations(room) {
+            // Create holographic data visualizations
+            const dataGeometry = new THREE.BoxGeometry(0.1, 1, 0.1);
+            const dataMaterial = new THREE.MeshPhongMaterial({
+                color: 0x0066FF,
+                emissive: 0x0066FF,
+                emissiveIntensity: 0.8
+            });
+
+            // Create data bars
+            for (let i = 0; i < 5; i++) {
+                const bar = new THREE.Mesh(dataGeometry, dataMaterial);
+                bar.position.set(
+                    currentRoom.length/2 - 0.5,
+                    Math.random() * currentRoom.height/2 + 0.5,
+                    -currentRoom.width/2 + i * 0.5
                 );
-                ctx.stroke();
+                bar.castShadow = true;
+                room.add(bar);
             }
-            
-            const texture = new THREE.CanvasTexture(canvas);
-            texture.wrapS = THREE.RepeatWrapping;
-            texture.wrapT = THREE.RepeatWrapping;
-            texture.repeat.set(2, 2);
-            
-            return texture;
         }
 
-        function createCarpetTexture() {
-            const canvas = document.createElement('canvas');
-            canvas.width = 256;
-            canvas.height = 256;
-            const ctx = canvas.getContext('2d');
-            
-            // Create carpet pattern
-            ctx.fillStyle = '#D7CCC8';
-            ctx.fillRect(0, 0, 256, 256);
-            
-            // Add subtle pattern
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
-            for (let x = 0; x < 256; x += 16) {
-                for (let y = 0; y < 256; y += 16) {
-                    if ((x + y) % 32 === 0) {
-                        ctx.fillRect(x, y, 8, 8);
-                    }
-                }
+        function updateRoomDimensions() {
+            const dimensionsElement = document.getElementById('room-dimensions');
+            if (dimensionsElement) {
+                dimensionsElement.textContent = 
+                    `${currentRoom.length}m × ${currentRoom.width}m × ${currentRoom.height}m`;
             }
-            
-            const texture = new THREE.CanvasTexture(canvas);
-            texture.wrapS = THREE.RepeatWrapping;
-            texture.wrapT = THREE.RepeatWrapping;
-            texture.repeat.set(4, 4);
-            
-            return texture;
         }
 
         function onDesignerResize() {
@@ -2205,76 +3077,51 @@
         function animateDesigner() {
             requestAnimationFrame(animateDesigner);
             designerControls.update();
+
+            // Animate room elements
+            if (room) {
+                // Pulsate emissive materials
+                room.traverse((child) => {
+                    if (child.material && child.material.emissive) {
+                        const pulse = Math.sin(Date.now() * 0.002) * 0.2 + 0.8;
+                        child.material.emissiveIntensity = pulse * 0.3;
+                    }
+
+                    // Animate floating particles
+                    if (child.type === 'Points') {
+                        const positions = child.geometry.attributes.position.array;
+                        for (let i = 0; i < positions.length; i += 3) {
+                            positions[i] += (Math.random() - 0.5) * 0.01;
+                            positions[i + 1] += (Math.random() - 0.5) * 0.01;
+                            positions[i + 2] += (Math.random() - 0.5) * 0.01;
+                        }
+                        child.geometry.attributes.position.needsUpdate = true;
+                    }
+                });
+            }
+
             designerRenderer.render(designerScene, designerCamera);
         }
 
         // ===== EVENT LISTENERS =====
         function initEventListeners() {
-            // Sliders
-            const lengthSlider = document.getElementById('length-slider');
-            const widthSlider = document.getElementById('width-slider');
-            const heightSlider = document.getElementById('height-slider');
-            const lengthValue = document.getElementById('length-value');
-            const widthValue = document.getElementById('width-value');
-            const heightValue = document.getElementById('height-value');
-
-            lengthSlider.addEventListener('input', (e) => {
-                const value = e.target.value;
-                lengthValue.textContent = `${value}m`;
-                if (room) {
-                    createRoom(parseFloat(value), parseFloat(widthSlider.value), parseFloat(heightSlider.value));
-                }
-            });
-
-            widthSlider.addEventListener('input', (e) => {
-                const value = e.target.value;
-                widthValue.textContent = `${value}m`;
-                if (room) {
-                    createRoom(parseFloat(lengthSlider.value), parseFloat(value), parseFloat(heightSlider.value));
-                }
-            });
-
-            heightSlider.addEventListener('input', (e) => {
-                const value = e.target.value;
-                heightValue.textContent = `${value}m`;
-                if (room) {
-                    createRoom(parseFloat(lengthSlider.value), parseFloat(widthSlider.value), parseFloat(value));
-                }
-            });
-
-            // Color pickers
-            const colorOptions = document.querySelectorAll('.color-option[data-color]');
-            colorOptions.forEach(option => {
-                option.addEventListener('click', () => {
-                    colorOptions.forEach(o => o.classList.remove('active'));
-                    option.classList.add('active');
-                    currentWallColor = option.getAttribute('data-color');
-                    
-                    if (room) {
-                        createRoom(
-                            parseFloat(lengthSlider.value),
-                            parseFloat(widthSlider.value),
-                            parseFloat(heightSlider.value)
-                        );
-                    }
+            // AI Suggestions
+            const aiSuggestions = document.querySelectorAll('.ai-suggestion');
+            aiSuggestions.forEach(suggestion => {
+                suggestion.addEventListener('click', () => {
+                    aiSuggestions.forEach(s => s.classList.remove('active'));
+                    suggestion.classList.add('active');
+                    applyAISuggestion(suggestion.querySelector('.suggestion-title').textContent);
                 });
             });
 
-            // Floor type pickers
-            const floorOptions = document.querySelectorAll('.color-option[data-floor]');
-            floorOptions.forEach(option => {
-                option.addEventListener('click', () => {
-                    floorOptions.forEach(o => o.classList.remove('active'));
-                    option.classList.add('active');
-                    currentFloorType = option.getAttribute('data-floor');
-                    
-                    if (room) {
-                        createRoom(
-                            parseFloat(lengthSlider.value),
-                            parseFloat(widthSlider.value),
-                            parseFloat(heightSlider.value)
-                        );
-                    }
+            // Category tabs
+            const categoryTabs = document.querySelectorAll('.category-tab');
+            categoryTabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    categoryTabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    switchCategory(tab.getAttribute('data-category'));
                 });
             });
 
@@ -2284,235 +3131,440 @@
                 item.addEventListener('click', () => {
                     decorationItems.forEach(i => i.classList.remove('active'));
                     item.classList.add('active');
-                    
-                    const type = item.getAttribute('data-type');
-                    addDecorationItem(type);
+                    addSmartFurniture(item.getAttribute('data-type'));
                 });
             });
 
+            // Sliders
+            const lightSlider = document.getElementById('light-slider');
+            const tempSlider = document.getElementById('temp-slider');
+            const soundSlider = document.getElementById('sound-slider');
+            const lightValue = document.getElementById('light-value');
+            const tempValue = document.getElementById('temp-value');
+            const soundValue = document.getElementById('sound-value');
+
+            lightSlider.addEventListener('input', (e) => {
+                const value = e.target.value;
+                lightValue.textContent = `${value}%`;
+                adjustRoomLighting(value);
+            });
+
+            tempSlider.addEventListener('input', (e) => {
+                const value = e.target.value;
+                tempValue.textContent = `${value}°C`;
+                adjustRoomTemperature(value);
+            });
+
+            soundSlider.addEventListener('input', (e) => {
+                const value = e.target.value;
+                const labels = ['Silencieux', 'Calme', 'Modéré', 'Animé', 'Énergique'];
+                const index = Math.floor(value / 20);
+                soundValue.textContent = labels[index] || labels[labels.length - 1];
+                adjustRoomAmbiance(value);
+            });
+
             // Viewer controls
-            const rotateBtn = document.getElementById('rotate-btn');
-            const panBtn = document.getElementById('pan-btn');
-            const zoomInBtn = document.getElementById('zoom-in-btn');
-            const zoomOutBtn = document.getElementById('zoom-out-btn');
-            const resetBtn = document.getElementById('reset-btn');
-            const clearDecorationBtn = document.getElementById('clear-decoration');
-            const saveDesignBtn = document.getElementById('save-design');
-
-            rotateBtn.addEventListener('click', () => {
-                designerControls.enableRotate = true;
-                designerControls.enablePan = false;
-                rotateBtn.style.background = 'var(--primary)';
-                rotateBtn.style.color = 'white';
-                panBtn.style.background = 'white';
-                panBtn.style.color = 'var(--dark)';
+            const viewerBtns = document.querySelectorAll('.viewer-btn');
+            viewerBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const action = btn.id.replace('-btn', '');
+                    handleViewerAction(action);
+                });
             });
 
-            panBtn.addEventListener('click', () => {
-                designerControls.enableRotate = false;
-                designerControls.enablePan = true;
-                panBtn.style.background = 'var(--primary)';
-                panBtn.style.color = 'white';
-                rotateBtn.style.background = 'white';
-                rotateBtn.style.color = 'var(--dark)';
-            });
-
-            zoomInBtn.addEventListener('click', () => {
-                designerCamera.position.multiplyScalar(0.9);
-                designerControls.update();
-            });
-
-            zoomOutBtn.addEventListener('click', () => {
-                designerCamera.position.multiplyScalar(1.1);
-                designerControls.update();
-            });
-
-            resetBtn.addEventListener('click', () => {
-                designerCamera.position.set(15, 10, 15);
-                designerControls.reset();
-                designerControls.enableRotate = true;
-                designerControls.enablePan = true;
-                rotateBtn.style.background = 'white';
-                rotateBtn.style.color = 'var(--dark)';
-                panBtn.style.background = 'white';
-                panBtn.style.color = 'var(--dark)';
-            });
-
-            clearDecorationBtn.addEventListener('click', () => {
-                // Remove all decoration items
-                decorationItems.forEach(item => item.classList.remove('active'));
-                // In a real implementation, you would remove the 3D objects from the scene
-                alert('Décoration effacée !');
-            });
-
-            saveDesignBtn.addEventListener('click', () => {
-                const designData = {
-                    length: lengthSlider.value,
-                    width: widthSlider.value,
-                    height: heightSlider.value,
-                    wallColor: currentWallColor,
-                    floorType: currentFloorType,
-                    timestamp: new Date().toISOString()
-                };
-                
-                localStorage.setItem('nexusImmoDesign', JSON.stringify(designData));
-                alert('Design sauvegardé avec succès !');
-            });
+            // Generate AI design
+            document.getElementById('generate-ai').addEventListener('click', generateAIDesign);
+            
+            // Export design
+            document.getElementById('export-design').addEventListener('click', exportDesign);
 
             // Hero buttons
-            const startDesignBtn = document.getElementById('start-design');
-            const viewPropertiesBtn = document.getElementById('view-properties');
-            const demoBtn = document.getElementById('demo-btn');
-
-            startDesignBtn.addEventListener('click', () => {
-                document.getElementById('designer').scrollIntoView({ behavior: 'smooth' });
+            document.getElementById('start-design').addEventListener('click', () => {
+                scrollToSection('designer');
             });
 
-            viewPropertiesBtn.addEventListener('click', () => {
-                document.getElementById('properties').scrollIntoView({ behavior: 'smooth' });
+            document.getElementById('view-properties').addEventListener('click', () => {
+                scrollToSection('properties');
             });
 
-            demoBtn.addEventListener('click', () => {
-                document.getElementById('designer').scrollIntoView({ behavior: 'smooth' });
+            document.getElementById('demo-btn').addEventListener('click', () => {
+                startAIDemo();
             });
 
             // Property cards
             const propertyCards = document.querySelectorAll('.property-card .btn-primary');
             propertyCards.forEach((card, index) => {
                 card.addEventListener('click', () => {
-                    // Load different room presets based on property
-                    const presets = [
-                        { length: 12, width: 10, height: 3.5, color: '#F5F5F5', floor: 'marble' },
-                        { length: 8, width: 6, height: 2.8, color: '#E8F4F8', floor: 'wood' },
-                        { length: 10, width: 8, height: 3, color: '#FFF8E1', floor: 'carpet' }
-                    ];
-                    
-                    const preset = presets[index];
-                    
-                    lengthSlider.value = preset.length;
-                    widthSlider.value = preset.width;
-                    heightSlider.value = preset.height;
-                    lengthValue.textContent = `${preset.length}m`;
-                    widthValue.textContent = `${preset.width}m`;
-                    heightValue.textContent = `${preset.height}m`;
-                    
-                    currentWallColor = preset.color;
-                    currentFloorType = preset.floor;
-                    
-                    // Update color pickers
-                    colorOptions.forEach(o => {
-                        if (o.getAttribute('data-color') === preset.color) {
-                            colorOptions.forEach(c => c.classList.remove('active'));
-                            o.classList.add('active');
-                        }
-                    });
-                    
-                    floorOptions.forEach(o => {
-                        if (o.getAttribute('data-floor') === preset.floor) {
-                            floorOptions.forEach(f => f.classList.remove('active'));
-                            o.classList.add('active');
-                        }
-                    });
-                    
-                    // Update room
-                    createRoom(preset.length, preset.width, preset.height);
-                    
-                    // Scroll to designer
-                    document.getElementById('designer').scrollIntoView({ behavior: 'smooth' });
+                    loadPropertyTemplate(index);
                 });
             });
 
             // CTA buttons
-            const ctaContactBtn = document.getElementById('cta-contact');
-            const ctaDemoBtn = document.getElementById('cta-demo');
-
-            ctaContactBtn.addEventListener('click', () => {
+            document.getElementById('cta-contact').addEventListener('click', () => {
                 document.getElementById('contact-modal').classList.add('active');
             });
 
-            ctaDemoBtn.addEventListener('click', () => {
-                document.getElementById('designer').scrollIntoView({ behavior: 'smooth' });
+            document.getElementById('cta-demo').addEventListener('click', () => {
+                startAIDemo();
             });
         }
 
-        function addDecorationItem(type) {
-            if (!room) return;
-
-            const geometryMap = {
-                'sofa': new THREE.BoxGeometry(2, 0.8, 0.8),
-                'table': new THREE.CylinderGeometry(0.8, 0.8, 0.05, 32),
-                'bed': new THREE.BoxGeometry(2, 0.5, 1.5),
-                'chair': new THREE.BoxGeometry(0.5, 1, 0.5),
-                'desk': new THREE.BoxGeometry(1.5, 0.8, 0.7),
-                'cabinet': new THREE.BoxGeometry(1, 2, 0.5),
-                'ceiling-light': new THREE.SphereGeometry(0.3, 16, 16),
-                'floor-lamp': new THREE.CylinderGeometry(0.05, 0.05, 2, 16),
-                'wall-light': new THREE.BoxGeometry(0.3, 0.1, 0.1),
-                'window': new THREE.BoxGeometry(1.5, 1.5, 0.1),
-                'door': new THREE.BoxGeometry(1, 2, 0.1),
-                'french-door': new THREE.BoxGeometry(2, 2.5, 0.1)
-            };
-
-            const colorMap = {
-                'sofa': 0x8B4513,
-                'table': 0xD2691E,
-                'bed': 0x4169E1,
-                'chair': 0xDC143C,
-                'desk': 0x228B22,
-                'cabinet': 0x2F4F4F,
-                'ceiling-light': 0xFFD700,
-                'floor-lamp': 0xC0C0C0,
-                'wall-light': 0xFFD700,
-                'window': 0x87CEEB,
-                'door': 0x8B4513,
-                'french-door': 0x8B4513
-            };
-
-            const geometry = geometryMap[type];
-            if (!geometry) return;
-
-            const material = new THREE.MeshPhongMaterial({ 
-                color: colorMap[type] || 0x808080,
-                shininess: 30
-            });
-
-            const item = new THREE.Mesh(geometry, material);
+        function applyAISuggestion(suggestion) {
+            let newRoomConfig = { ...currentRoom };
             
-            // Position based on type
-            switch(type) {
-                case 'ceiling-light':
-                    item.position.set(0, 2.8, 0);
+            switch(suggestion) {
+                case 'Design Minimaliste':
+                    newRoomConfig = { length: 10, width: 7, height: 3 };
+                    applyMinimalistDesign();
                     break;
-                case 'floor-lamp':
-                    item.position.set(3, 1, 2);
+                case 'Éclairage Intelligent':
+                    adjustRoomLighting(90);
+                    document.getElementById('light-slider').value = 90;
+                    document.getElementById('light-value').textContent = '90%';
                     break;
-                case 'wall-light':
-                    item.position.set(0, 2, -3.9);
+                case 'Éco-Design':
+                    applyEcoDesign();
                     break;
-                case 'window':
-                    item.position.set(0, 1.5, -3.9);
+                case 'Connectivité 5G':
+                    addTechElements();
                     break;
-                case 'door':
-                    item.position.set(0, 1, 3.9);
-                    break;
-                case 'french-door':
-                    item.position.set(0, 1.25, 3.9);
-                    break;
-                default:
-                    // Random position for furniture
-                    const length = parseFloat(document.getElementById('length-slider').value);
-                    const width = parseFloat(document.getElementById('width-slider').value);
-                    item.position.set(
-                        (Math.random() - 0.5) * (length - 2),
-                        0.5,
-                        (Math.random() - 0.5) * (width - 2)
-                    );
             }
+            
+            currentRoom = newRoomConfig;
+            createSmartRoom();
+            
+            // Show success message
+            showNotification(`Design "${suggestion}" appliqué avec succès !`);
+        }
 
-            item.castShadow = true;
-            item.receiveShadow = true;
-            room.add(item);
-            decorationItems.push(item);
+        function applyMinimalistDesign() {
+            // Apply minimalist design settings
+            const decorations = document.querySelectorAll('.decoration-item');
+            decorations.forEach(deco => deco.classList.remove('active'));
+            
+            // Activate minimal furniture
+            const minimalItems = ['smart-bed', 'floating-shelf'];
+            minimalItems.forEach(id => {
+                const item = document.querySelector(`[data-type="${id}"]`);
+                if (item) item.classList.add('active');
+            });
+            
+            // Adjust lighting
+            adjustRoomLighting(80);
+            document.getElementById('light-slider').value = 80;
+            document.getElementById('light-value').textContent = '80%';
+        }
+
+        function applyEcoDesign() {
+            // Apply eco-friendly design
+            const materials = ['wood', 'stone', 'bamboo'];
+            const randomMaterial = materials[Math.floor(Math.random() * materials.length)];
+            
+            // Change room ambiance
+            adjustRoomAmbiance(20);
+            document.getElementById('sound-slider').value = 20;
+            document.getElementById('sound-value').textContent = 'Calme';
+            
+            showNotification(`Design écologique appliqué avec matériaux ${randomMaterial}`);
+        }
+
+        function addTechElements() {
+            // Add technology elements to room
+            if (!room) return;
+            
+            // Create holographic tech displays
+            const techGeometry = new THREE.BoxGeometry(1, 0.5, 0.01);
+            const techMaterial = new THREE.MeshPhongMaterial({
+                color: 0x00D4AA,
+                transparent: true,
+                opacity: 0.7,
+                emissive: 0x00D4AA,
+                emissiveIntensity: 0.5
+            });
+            
+            const techDisplay = new THREE.Mesh(techGeometry, techMaterial);
+            techDisplay.position.set(
+                0,
+                currentRoom.height - 1,
+                -currentRoom.width/2 + 0.1
+            );
+            room.add(techDisplay);
+            
+            showNotification('Éléments technologiques ajoutés à votre design');
+        }
+
+        function switchCategory(category) {
+            const furnitureGrid = document.getElementById('furniture-grid');
+            
+            // In a real implementation, you would load different items based on category
+            const categories = {
+                'furniture': 'Meubles IA',
+                'lighting': 'Éclairage Smart',
+                'tech': 'Technologies',
+                'materials': 'Matériaux',
+                'decor': 'Décoration'
+            };
+            
+            showNotification(`Catégorie "${categories[category]}" chargée`);
+        }
+
+        function addSmartFurniture(type) {
+            if (!room) return;
+            
+            let furniture;
+            
+            switch(type) {
+                case 'smart-bed':
+                    furniture = createSmartBed();
+                    furniture.position.set(-currentRoom.length/4, 0, -currentRoom.width/4);
+                    break;
+                case 'holographic-table':
+                    furniture = createHolographicTable();
+                    furniture.position.set(currentRoom.length/4, 0, currentRoom.width/4);
+                    break;
+                case 'ergonomic-chair':
+                    furniture = createSmartSeating();
+                    furniture.position.set(0, 0, currentRoom.width/3);
+                    break;
+                case 'floating-shelf':
+                    furniture = createFloatingShelves();
+                    furniture.position.set(-currentRoom.length/2 + 1, currentRoom.height/2, 0);
+                    break;
+                case 'smart-closet':
+                    // Create smart closet
+                    const closetGeometry = new THREE.BoxGeometry(1, 2, 0.5);
+                    const closetMaterial = new THREE.MeshPhongMaterial({
+                        color: 0x1a1a24,
+                        emissive: 0x0066FF,
+                        emissiveIntensity: 0.2
+                    });
+                    furniture = new THREE.Mesh(closetGeometry, closetMaterial);
+                    furniture.position.set(currentRoom.length/3, 1, -currentRoom.width/3);
+                    break;
+                case 'media-wall':
+                    // Create media wall
+                    const mediaGeometry = new THREE.PlaneGeometry(3, 2);
+                    const mediaMaterial = new THREE.MeshPhongMaterial({
+                        color: 0x0066FF,
+                        emissive: 0x0066FF,
+                        emissiveIntensity: 0.5,
+                        side: THREE.DoubleSide
+                    });
+                    furniture = new THREE.Mesh(mediaGeometry, mediaMaterial);
+                    furniture.position.set(0, currentRoom.height/2, -currentRoom.width/2 + 0.1);
+                    break;
+            }
+            
+            if (furniture) {
+                furniture.castShadow = true;
+                furniture.receiveShadow = true;
+                room.add(furniture);
+                showNotification(`${type} ajouté à votre design`);
+            }
+        }
+
+        function adjustRoomLighting(value) {
+            // Adjust room lighting based on slider value
+            const intensity = value / 100;
+            
+            if (room) {
+                room.traverse((child) => {
+                    if (child.isPointLight) {
+                        child.intensity = intensity * 2;
+                    }
+                    if (child.material && child.material.emissive) {
+                        child.material.emissiveIntensity = intensity * 0.3;
+                    }
+                });
+            }
+        }
+
+        function adjustRoomTemperature(value) {
+            // Adjust color temperature based on value
+            const warmColor = new THREE.Color(0xFF8C00);
+            const coolColor = new THREE.Color(0x0066FF);
+            const temp = (value - 16) / 12; // Normalize 16-28 to 0-1
+            
+            // Interpolate between warm and cool colors
+            const color = new THREE.Color();
+            color.lerpColors(warmColor, coolColor, temp);
+            
+            if (room) {
+                room.traverse((child) => {
+                    if (child.material && child.material.emissive) {
+                        child.material.emissive = color;
+                    }
+                });
+            }
+        }
+
+        function adjustRoomAmbiance(value) {
+            // Adjust room ambiance based on sound level
+            const particleCount = Math.floor(value / 10);
+            
+            // In a real implementation, you would adjust particle systems
+            // and animation speeds based on the ambiance value
+            showNotification(`Ambiance sonore ajustée à ${value}%`);
+        }
+
+        function handleViewerAction(action) {
+            switch(action) {
+                case 'rotate':
+                    designerControls.enableRotate = !designerControls.enableRotate;
+                    document.getElementById('rotate-btn').style.background = 
+                        designerControls.enableRotate ? 'var(--primary)' : '';
+                    break;
+                case 'pan':
+                    designerControls.enablePan = !designerControls.enablePan;
+                    document.getElementById('pan-btn').style.background = 
+                        designerControls.enablePan ? 'var(--primary)' : '';
+                    break;
+                case 'zoom-in':
+                    designerCamera.position.multiplyScalar(0.9);
+                    designerControls.update();
+                    break;
+                case 'zoom-out':
+                    designerCamera.position.multiplyScalar(1.1);
+                    designerControls.update();
+                    break;
+                case 'vr':
+                    enterVRMode();
+                    break;
+                case 'reset':
+                    designerCamera.position.set(15, 12, 15);
+                    designerControls.reset();
+                    break;
+            }
+        }
+
+        function enterVRMode() {
+            showNotification('Mode VR activé - Préparez votre casque de réalité virtuelle');
+            // In a real implementation, this would enable WebXR
+        }
+
+        function generateAIDesign() {
+            showNotification('IA en cours de génération de votre design optimal...');
+            
+            // Simulate AI thinking
+            setTimeout(() => {
+                // Generate random room configuration
+                currentRoom = {
+                    length: 8 + Math.random() * 8,
+                    width: 6 + Math.random() * 6,
+                    height: 2.8 + Math.random() * 1.2
+                };
+                
+                createSmartRoom();
+                showNotification('Nouveau design IA généré avec succès !');
+            }, 2000);
+        }
+
+        function exportDesign() {
+            const designData = {
+                room: currentRoom,
+                timestamp: new Date().toISOString(),
+                aiVersion: 'Nexus Core v5.2',
+                format: 'BIM Quantum'
+            };
+            
+            // In a real implementation, this would export to a file
+            const dataStr = JSON.stringify(designData, null, 2);
+            const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+            
+            const exportFileDefaultName = `nexus-design-${Date.now()}.json`;
+            
+            const linkElement = document.createElement('a');
+            linkElement.setAttribute('href', dataUri);
+            linkElement.setAttribute('download', exportFileDefaultName);
+            linkElement.click();
+            
+            showNotification('Design exporté en format BIM Quantum');
+        }
+
+        function loadPropertyTemplate(index) {
+            const templates = [
+                { length: 12, width: 8, height: 3.5, name: 'Smart Loft' },
+                { length: 10, width: 7, height: 3, name: 'Bio Residence' },
+                { length: 14, width: 9, height: 4, name: 'Neuro Space' }
+            ];
+            
+            const template = templates[index] || templates[0];
+            currentRoom = template;
+            
+            createSmartRoom();
+            showNotification(`Template "${template.name}" chargé avec succès`);
+            
+            // Scroll to designer
+            scrollToSection('designer');
+        }
+
+        function startAIDemo() {
+            showNotification('Démo IA quantique lancée - Préparation de l\'immersion...');
+            
+            // Create impressive animation sequence
+            gsap.to(designerCamera.position, {
+                x: 5,
+                y: 8,
+                z: 10,
+                duration: 2,
+                ease: "power2.inOut"
+            });
+            
+            // Rotate room
+            if (room) {
+                gsap.to(room.rotation, {
+                    y: Math.PI * 2,
+                    duration: 10,
+                    ease: "none",
+                    repeat: -1
+                });
+            }
+            
+            // Add special effects
+            setTimeout(() => {
+                addDemoEffects();
+            }, 1000);
+        }
+
+        function addDemoEffects() {
+            if (!room) return;
+            
+            // Add particle explosion
+            const particleCount = 500;
+            const particles = new THREE.BufferGeometry();
+            const positions = new Float32Array(particleCount * 3);
+            
+            for (let i = 0; i < particleCount; i++) {
+                const i3 = i * 3;
+                positions[i3] = (Math.random() - 0.5) * 10;
+                positions[i3 + 1] = (Math.random() - 0.5) * 10;
+                positions[i3 + 2] = (Math.random() - 0.5) * 10;
+            }
+            
+            particles.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+            
+            const particleMaterial = new THREE.PointsMaterial({
+                size: 0.1,
+                color: 0x00D4AA,
+                transparent: true,
+                opacity: 0.8
+            });
+            
+            const particleSystem = new THREE.Points(particles, particleMaterial);
+            particleSystem.position.set(0, currentRoom.height/2, 0);
+            room.add(particleSystem);
+            
+            // Animate particles
+            gsap.to(particleSystem.scale, {
+                x: 0,
+                y: 0,
+                z: 0,
+                duration: 3,
+                ease: "power2.out",
+                onComplete: () => {
+                    room.remove(particleSystem);
+                }
+            });
         }
 
         // ===== MODALS =====
@@ -2523,13 +3575,8 @@
             const closeLoginModal = document.getElementById('close-login-modal');
 
             loginBtn.addEventListener('click', () => {
-                loginModal.classList.add('active');
-                document.body.style.overflow = 'hidden';
-            });
-
-            closeLoginModal.addEventListener('click', () => {
-                loginModal.classList.remove('active');
-                document.body.style.overflow = 'auto';
+                // Show login modal
+                showNotification('Système d\'authentification quantique en développement');
             });
 
             // Contact modal
@@ -2551,42 +3598,210 @@
                 });
             });
 
-            // Form submissions
+            // Form submission
             const contactForm = document.getElementById('contact-form');
-            const loginForm = document.getElementById('login-form');
-
             contactForm.addEventListener('submit', (e) => {
                 e.preventDefault();
-                alert('Merci ! Votre demande a été envoyée. Nous vous contacterons dans les 24h.');
+                showNotification('Vibrations transmises à l\'IA - Attendez une réponse quantique');
                 contactModal.classList.remove('active');
                 document.body.style.overflow = 'auto';
                 contactForm.reset();
             });
+        }
 
-            loginForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-                alert('Connexion réussie ! Redirection vers votre espace personnel...');
-                loginModal.classList.remove('active');
-                document.body.style.overflow = 'auto';
-                loginForm.reset();
+        // ===== ANIMATIONS =====
+        function initAnimations() {
+            // Add floating animation to stat items
+            const statItems = document.querySelectorAll('.stat-item');
+            statItems.forEach((item, index) => {
+                item.style.animationDelay = `${index * 0.2}s`;
+                item.classList.add('fade-in');
             });
 
-            // Show register form
-            const showRegister = document.getElementById('show-register');
-            showRegister.addEventListener('click', (e) => {
-                e.preventDefault();
-                alert('Fonctionnalité d\'inscription à venir prochainement !');
+            // Add animation to feature cards
+            const featureCards = document.querySelectorAll('.feature-card');
+            featureCards.forEach((card, index) => {
+                card.style.animationDelay = `${index * 0.1}s`;
+                card.classList.add('fade-in');
+            });
+
+            // Add animation to property cards
+            const propertyCards = document.querySelectorAll('.property-card');
+            propertyCards.forEach((card, index) => {
+                card.style.animationDelay = `${index * 0.15}s`;
+                card.classList.add('fade-in');
+            });
+
+            // Observer for scroll animations
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -100px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, observerOptions);
+
+            // Observe all fade-in elements
+            document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+        }
+
+        // ===== GSAP ANIMATIONS =====
+        function initGSAP() {
+            // Animate hero title
+            gsap.from('.hero-title', {
+                duration: 1.5,
+                y: 100,
+                opacity: 0,
+                ease: "power3.out"
+            });
+
+            // Animate hero subtitle with typewriter effect
+            gsap.from('.hero-subtitle', {
+                duration: 2,
+                width: 0,
+                ease: "power2.inOut",
+                delay: 0.5
+            });
+
+            // Animate buttons
+            gsap.from('.hero-btns', {
+                duration: 1,
+                y: 50,
+                opacity: 0,
+                delay: 1.5,
+                ease: "back.out(1.7)"
+            });
+
+            // Animate stats
+            gsap.from('.stat-item', {
+                duration: 1,
+                scale: 0,
+                opacity: 0,
+                stagger: 0.2,
+                delay: 2,
+                ease: "elastic.out(1, 0.5)"
+            });
+
+            // ScrollTrigger animations
+            gsap.registerPlugin(ScrollTrigger);
+
+            // Animate section titles on scroll
+            gsap.utils.toArray('.section-title').forEach(title => {
+                gsap.from(title, {
+                    scrollTrigger: {
+                        trigger: title,
+                        start: 'top 80%',
+                        end: 'bottom 20%',
+                        toggleActions: 'play none none reverse'
+                    },
+                    y: 50,
+                    opacity: 0,
+                    duration: 1,
+                    ease: "power2.out"
+                });
+            });
+
+            // Animate AI panel on scroll
+            gsap.from('.ai-panel', {
+                scrollTrigger: {
+                    trigger: '.designer-container',
+                    start: 'top 70%',
+                    end: 'bottom 30%',
+                    toggleActions: 'play none none reverse'
+                },
+                x: -100,
+                opacity: 0,
+                duration: 1,
+                delay: 0.3,
+                ease: "power2.out"
+            });
+
+            // Animate decoration panel on scroll
+            gsap.from('.decoration-panel', {
+                scrollTrigger: {
+                    trigger: '.designer-container',
+                    start: 'top 70%',
+                    end: 'bottom 30%',
+                    toggleActions: 'play none none reverse'
+                },
+                x: 100,
+                opacity: 0,
+                duration: 1,
+                delay: 0.3,
+                ease: "power2.out"
             });
         }
 
         // ===== UTILITY FUNCTIONS =====
+        function scrollToSection(sectionId) {
+            const section = document.getElementById(sectionId);
+            if (section) {
+                window.scrollTo({
+                    top: section.offsetTop - 80,
+                    behavior: 'smooth'
+                });
+            }
+        }
+
+        function showNotification(message) {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            notification.innerHTML = `
+                <i class="fas fa-check-circle"></i>
+                <span>${message}</span>
+            `;
+            
+            // Style notification
+            Object.assign(notification.style, {
+                position: 'fixed',
+                top: '100px',
+                right: '20px',
+                background: 'var(--dark-light)',
+                color: 'white',
+                padding: '1rem 1.5rem',
+                borderRadius: '12px',
+                border: '1px solid var(--primary)',
+                boxShadow: 'var(--shadow-lg)',
+                zIndex: '9999',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.8rem',
+                transform: 'translateX(150%)',
+                transition: 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)'
+            });
+            
+            document.body.appendChild(notification);
+            
+            // Animate in
+            setTimeout(() => {
+                notification.style.transform = 'translateX(0)';
+            }, 10);
+            
+            // Animate out and remove
+            setTimeout(() => {
+                notification.style.transform = 'translateX(150%)';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 500);
+            }, 3000);
+        }
+
+        // Handle window resize
         window.addEventListener('resize', () => {
             onHeroResize();
             onDesignerResize();
         });
 
-        // Initialize with default values
-        createRoom(10, 8, 3);
+        // Initialize with AI design
+        setTimeout(() => {
+            generateAIDesign();
+        }, 3000);
     </script>
 </body>
 </html>
